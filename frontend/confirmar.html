@@ -1,133 +1,203 @@
 <!DOCTYPE html>
-<html class="light" lang="es"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Reporte Enviado - BettSoft</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
-<script>
+<html lang="es" class="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reporte enviado - BettSoft</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <!-- Fuentes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
+    }
+  </style>
+
+  <script id="tailwind-config">
     tailwind.config = {
       darkMode: "class",
       theme: {
         extend: {
           colors: {
-            "primary": {
-              DEFAULT: "#003366",
-              light: "#EBF5FF"
-            },
-            "secondary": "#D4AF37",
-            "background-light": "#F4F6F8",
-            "background-dark": "#111621",
-            "text-light": "#333333",
-            "text-dark": "#EAEAEA",
-            "surface-light": "#FFFFFF",
-            "surface-dark": "#1E293B",
+            primary: "#003366",
+            accent: "#D4AF37",
+            "background-light": "#F0F2F5",
           },
           fontFamily: {
-            "display": ["Public Sans", "sans-serif"]
+            display: ["Public Sans", "sans-serif"],
           },
           borderRadius: {
-            "DEFAULT": "0.5rem",
-            "lg": "1rem",
-            "xl": "1.5rem",
-            "full": "9999px"
+            lg: "1rem",
           },
         },
       },
-    }
+    };
   </script>
-<style>
-    .material-symbols-outlined {
-      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
-    }
-    .nav-link {
-        @apply text-sm text-gray-300 hover:text-white transition-colors duration-200;
-    }
-  </style>
 </head>
-<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
-<div class="relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden">
-<div class="layout-container flex h-full grow flex-col">
-<header class="bg-primary dark:bg-surface-dark px-4 py-3 shadow-md">
-<div class="flex items-center justify-between text-white">
-<a class="text-lg font-bold" href="#">Fes Acatlán</a>
-<button class="md:hidden">
-<span class="material-symbols-outlined">menu</span>
-</button>
-<div class="hidden md:flex items-center gap-6">
-<a class="nav-link" href="#">Inicio</a>
-<a class="nav-link" href="#">Nuevo reporte</a>
-<a class="nav-link" href="#">Revisar reporte</a>
-</div>
-<button class="hidden md:block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md text-sm transition-colors duration-200">
-          Iniciar Sesión
+
+<body class="font-display bg-background-light">
+  <div class="min-h-screen flex flex-col">
+
+    <!-- HEADER -->
+    <header class="bg-primary text-white shadow-md">
+      <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
+        <!-- Izquierda -->
+        <a href="index.html" class="text-lg font-bold">
+          FES Acatlán
+        </a>
+
+        <!-- Menú central -->
+        <nav class="flex items-center gap-8 text-sm font-medium">
+          <a
+            href="index.html"
+            class="pb-1 border-b-2 border-transparent hover:border-white transition-colors"
+          >
+            Inicio
+          </a>
+          <a
+            href="reportar.html"
+            class="pb-1 border-b-2 border-transparent hover:border-white transition-colors"
+          >
+            Nuevo reporte
+          </a>
+          <a
+            href="consultar.html"
+            class="pb-1 border-b-2 border-white font-semibold"
+          >
+            Revisar reporte
+          </a>
+        </nav>
+
+        <!-- Botón derecha -->
+        <button
+          type="button"
+          class="rounded-md bg-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-600 transition-colors"
+        >
+          Iniciar sesión
         </button>
-</div>
-</header>
-<main class="flex-1 px-4 py-6 sm:px-6 lg:px-8">
-<div class="layout-content-container flex flex-col max-w-lg mx-auto flex-1">
-<h1 class="text-text-light dark:text-text-dark tracking-light text-2xl font-bold leading-tight text-center pb-4 pt-2">Reporte enviado con éxito</h1>
-<div class="w-full">
-<div class="flex flex-col items-center justify-start rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.08)] bg-surface-light dark:bg-surface-dark p-6">
-<span class="material-symbols-outlined text-green-500 text-6xl mb-4">
-                check_circle
+      </div>
+    </header>
+
+    <!-- CONTENIDO -->
+    <main class="flex-1 px-4 py-8 sm:px-6 lg:px-8">
+      <div class="mx-auto flex max-w-3xl flex-col items-center gap-6">
+
+        <h1 class="text-2xl sm:text-3xl font-bold text-primary text-center">
+          Reporte enviado con éxito
+        </h1>
+
+        <!-- Tarjeta principal -->
+        <section class="w-full rounded-lg bg-white p-6 shadow-sm sm:p-8">
+          <!-- Icono y mensaje -->
+          <div class="flex flex-col items-center text-center gap-3 mb-6">
+            <div class="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100">
+              <span class="material-symbols-outlined text-emerald-600 text-3xl">
+                check
               </span>
-<p class="text-text-light dark:text-text-dark text-lg font-bold leading-tight tracking-[-0.015em] text-center">Tu reporte ha sido registrado correctamente</p>
-<p class="text-[#636f88] dark:text-gray-400 text-sm font-normal leading-normal mt-1 text-center">Gracias por ayudarnos a mantener las instalaciones en óptimas condiciones.</p>
-<h2 class="text-text-light dark:text-text-dark text-xl font-bold leading-tight tracking-[-0.015em] w-full border-t border-t-[#dcdfe5] dark:border-t-gray-600 mt-6 pt-6">Datos del reporte</h2>
-<div class="w-full mt-4">
-<div class="col-span-2 flex flex-col items-start justify-center border-t border-t-[#dcdfe5] dark:border-t-gray-600 py-4">
-<p class="text-[#636f88] dark:text-gray-400 text-xs font-normal leading-normal">Folio del reporte</p>
-<p class="text-primary dark:text-secondary text-2xl font-bold leading-normal tracking-wider">FS-20240812-9875</p>
-</div>
-<div class="col-span-2 grid grid-cols-2 gap-x-4 border-t border-t-[#dcdfe5] dark:border-t-gray-600 py-3">
-<p class="text-[#636f88] dark:text-gray-400 text-sm font-normal leading-normal">Estado inicial</p>
-<p class="text-text-light dark:text-text-dark text-sm font-semibold leading-normal">Pendiente</p>
-</div>
-<div class="col-span-2 grid grid-cols-2 gap-x-4 border-t border-t-[#dcdfe5] dark:border-t-gray-600 py-3">
-<p class="text-[#636f88] dark:text-gray-400 text-sm font-normal leading-normal">Tipo de problema</p>
-<p class="text-text-light dark:text-text-dark text-sm font-normal leading-normal">Fuga de agua</p>
-</div>
-<div class="col-span-2 grid grid-cols-2 gap-x-4 border-t border-t-[#dcdfe5] dark:border-t-gray-600 py-3">
-<p class="text-[#636f88] dark:text-gray-400 text-sm font-normal leading-normal">Edificio</p>
-<p class="text-text-light dark:text-text-dark text-sm font-normal leading-normal">Edificio A-12</p>
-</div>
-<div class="col-span-2 grid grid-cols-2 gap-x-4 border-t border-t-[#dcdfe5] dark:border-t-gray-600 py-3">
-<p class="text-[#636f88] dark:text-gray-400 text-sm font-normal leading-normal">Piso</p>
-<p class="text-text-light dark:text-text-dark text-sm font-normal leading-normal">Planta Baja</p>
-</div>
-<div class="col-span-2 grid grid-cols-2 gap-x-4 border-t border-t-[#dcdfe5] dark:border-t-gray-600 py-3">
-<p class="text-[#636f88] dark:text-gray-400 text-sm font-normal leading-normal">Número de sanitario</p>
-<p class="text-text-light dark:text-text-dark text-sm font-normal leading-normal">3</p>
-</div>
-<div class="col-span-2 grid grid-cols-2 gap-x-4 border-t border-t-[#dcdfe5] dark:border-t-gray-600 py-3">
-<p class="text-[#636f88] dark:text-gray-400 text-sm font-normal leading-normal">Fecha y hora</p>
-<p class="text-text-light dark:text-text-dark text-sm font-normal leading-normal">12/08/2024 14:35</p>
-</div>
-</div>
-</div>
-</div>
-<div class="mt-6 flex items-start gap-4 rounded-lg bg-primary-light dark:bg-primary/20 p-4">
-<span class="material-symbols-outlined text-primary dark:text-secondary mt-1">
-              info
-            </span>
-<p class="flex-1 text-sm text-primary/80 dark:text-blue-200">
-<span class="font-bold">Guarda tu folio.</span> Lo necesitarás para consultar el estado de tu reporte.
-            </p>
-</div>
-<div class="mt-8 flex w-full flex-col gap-3">
-<button class="flex items-center justify-center gap-2 rounded bg-primary dark:bg-primary hover:bg-primary/90 dark:hover:bg-primary/80 px-4 py-3 text-base font-bold text-white transition-colors">
-              Consultar estado del reporte
-            </button>
-<button class="flex items-center justify-center gap-2 rounded border border-primary dark:border-primary/50 bg-transparent px-4 py-3 text-base font-bold text-primary dark:text-primary-light transition-colors hover:bg-primary/10">
-              Volver al inicio
-            </button>
-</div>
-</div>
-</main>
-</div>
-</div>
-</body></html>
+            </div>
+            <div>
+              <p class="text-lg font-semibold text-gray-900">
+                Tu reporte ha sido registrado correctamente
+              </p>
+              <p class="text-sm text-gray-600">
+                Gracias por ayudarnos a mantener las instalaciones en óptimas condiciones.
+              </p>
+            </div>
+          </div>
+
+          <hr class="my-4 border-gray-200" />
+
+          <!-- Datos del reporte -->
+          <h2 class="mb-4 text-base font-semibold text-gray-900">
+            Datos del reporte
+          </h2>
+
+          <dl class="divide-y divide-gray-200 text-sm">
+            <div class="flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:justify-between">
+              <dt class="font-medium text-gray-600">Folio del reporte</dt>
+              <dd class="font-semibold text-primary text-base">
+                FS-20240812-9875
+              </dd>
+            </div>
+
+            <div class="flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:justify-between">
+              <dt class="font-medium text-gray-600">Estado inicial</dt>
+              <dd class="font-semibold text-gray-900">Pendiente</dd>
+            </div>
+
+            <div class="flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:justify-between">
+              <dt class="font-medium text-gray-600">Tipo de problema</dt>
+              <dd class="text-gray-900">Fuga de agua</dd>
+            </div>
+
+            <div class="flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:justify-between">
+              <dt class="font-medium text-gray-600">Edificio</dt>
+              <dd class="text-gray-900">Edificio A-12</dd>
+            </div>
+
+            <div class="flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:justify-between">
+              <dt class="font-medium text-gray-600">Piso</dt>
+              <dd class="text-gray-900">Planta Baja</dd>
+            </div>
+
+            <div class="flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:justify-between">
+              <dt class="font-medium text-gray-600">Número de sanitario</dt>
+              <dd class="text-gray-900">3</dd>
+            </div>
+
+            <div class="flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:justify-between">
+              <dt class="font-medium text-gray-600">Fecha y hora</dt>
+              <dd class="text-gray-900">12/08/2024 14:35</dd>
+            </div>
+          </dl>
+        </section>
+
+        <!-- Aviso de guardar folio -->
+        <section class="w-full rounded-lg bg-blue-50 px-4 py-3 text-sm text-blue-900 flex gap-3 items-start">
+          <span class="material-symbols-outlined text-blue-700">
+            info
+          </span>
+          <p>
+            <span class="font-semibold">Guarda tu folio.</span>
+            Lo necesitarás para consultar el estado de tu reporte.
+          </p>
+        </section>
+
+        <!-- Botones -->
+        <div class="w-full max-w-3xl space-y-3">
+          <a
+            href="consultar.html"
+            class="flex items-center justify-center rounded-lg bg-primary px-4 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary/90 transition-colors"
+          >
+            Consultar estado del reporte
+          </a>
+
+          <a
+            href="index.html"
+            class="flex items-center justify-center rounded-lg border border-primary px-4 py-3 text-base font-semibold text-primary bg-white hover:bg-primary/5 transition-colors"
+          >
+            Volver al inicio
+          </a>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
