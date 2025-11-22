@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Consultar Reporte</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#312e81", // indigo-900
+              "background-light": "#f8fafc", // slate-50
+              "background-dark": "#0f172a", // slate-900
+            },
+            fontFamily: {
+              display: ["Inter", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.75rem", // lg
+            },
+          },
+        },
+      };
+    </script>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200 antialiased">
+<div class="container mx-auto px-4 py-6">
+<header class="flex justify-between items-center mb-16">
+<a class="flex items-center gap-3 text-lg font-bold text-slate-900 dark:text-white" href="#">
+<span class="material-icons" style="font-size: 28px;">support_agent</span>
+<span>Fes Acatlán</span>
+</a>
+<nav class="hidden md:flex items-center gap-8 text-slate-600 dark:text-slate-300 font-medium">
+<a class="hover:text-primary dark:hover:text-white transition-colors" href="#">Inicio</a>
+<a class="hover:text-primary dark:hover:text-white transition-colors" href="#">Nuevo Reporte</a>
+<a class="font-semibold text-primary dark:text-white border-b-2 border-primary" href="#">Consultar Reporte</a>
+</nav>
+<div>
+<a class="bg-primary text-white font-semibold px-6 py-2.5 rounded-lg hover:opacity-90 transition-opacity" href="#">Iniciar Sesion</a>
+</div>
+</header>
+<main class="max-w-4xl mx-auto">
+<section class="text-center mb-12">
+<h1 class="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">Consultar reporte</h1>
+<p class="text-slate-600 dark:text-slate-400">Ingresa el código de tu reporte para ver su estado actual.</p>
+</section>
+<section class="max-w-xl mx-auto mb-16">
+<form class="space-y-4">
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1" for="report-code">Código de reporte / Folio</label>
+<div class="flex flex-col sm:flex-row gap-4">
+<input class="flex-grow w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-primary focus:border-primary placeholder-slate-400 dark:placeholder-slate-500" id="report-code" placeholder="Ingresa tu código" type="text"/>
+<button class="bg-primary text-white font-semibold px-8 py-3 rounded-lg hover:opacity-90 transition-opacity whitespace-nowrap" type="submit">Buscar</button>
+</div>
+</div>
+</form>
+</section>
+<section class="space-y-6">
+<div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-6 sm:p-8">
+<div class="flex flex-col sm:flex-row justify-between sm:items-start gap-4 mb-6">
+<h2 class="text-xl font-bold text-slate-900 dark:text-white">Reporte #UNV83726</h2>
+<div class="bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300 text-sm font-medium px-4 py-1.5 rounded-full flex items-center gap-2 self-start">
+<span class="w-2 h-2 bg-yellow-400 rounded-full"></span>
+                            En progreso
+                        </div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-sm">
+<div>
+<p class="font-semibold text-slate-900 dark:text-white mb-1">Fecha de reporte:</p>
+<p class="text-slate-600 dark:text-slate-400">2024-10-26</p>
+</div>
+<div>
+<p class="font-semibold text-slate-900 dark:text-white mb-1">Tipo de problema:</p>
+<p class="text-slate-600 dark:text-slate-400">Fuga de agua</p>
+</div>
+<div>
+<p class="font-semibold text-slate-900 dark:text-white mb-1">Ubicación:</p>
+<p class="text-slate-600 dark:text-slate-400">Biblioteca Central, Baño Hombres Piso 2</p>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-6 sm:p-8">
+<div class="flex flex-col sm:flex-row justify-between sm:items-start gap-4 mb-6">
+<h2 class="text-xl font-bold text-slate-900 dark:text-white">Reporte #UNV81452</h2>
+<div class="bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300 text-sm font-medium px-4 py-1.5 rounded-full flex items-center gap-2 self-start">
+<span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                            Completado
+                        </div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-sm">
+<div>
+<p class="font-semibold text-slate-900 dark:text-white mb-1">Fecha de reporte:</p>
+<p class="text-slate-600 dark:text-slate-400">2024-10-22</p>
+</div>
+<div>
+<p class="font-semibold text-slate-900 dark:text-white mb-1">Tipo de problema:</p>
+<p class="text-slate-600 dark:text-slate-400">Inodoro tapado</p>
+</div>
+<div>
+<p class="font-semibold text-slate-900 dark:text-white mb-1">Ubicación:</p>
+<p class="text-slate-600 dark:text-slate-400">Edificio de Ciencias, Baño Mujeres Planta Baja</p>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-6 sm:p-8">
+<div class="flex flex-col sm:flex-row justify-between sm:items-start gap-4 mb-6">
+<h2 class="text-xl font-bold text-slate-900 dark:text-white">Reporte #UNV90123</h2>
+<div class="bg-slate-100 dark:bg-slate-700/60 text-slate-700 dark:text-slate-300 text-sm font-medium px-4 py-1.5 rounded-full flex items-center gap-2 self-start">
+<span class="w-2 h-2 bg-slate-400 dark:bg-slate-500 rounded-full"></span>
+                            Pendiente
+                        </div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-sm">
+<div>
+<p class="font-semibold text-slate-900 dark:text-white mb-1">Fecha de reporte:</p>
+<p class="text-slate-600 dark:text-slate-400">2024-10-28</p>
+</div>
+<div>
+<p class="font-semibold text-slate-900 dark:text-white mb-1">Tipo de problema:</p>
+<p class="text-slate-600 dark:text-slate-400">Falta de papel</p>
+</div>
+<div>
+<p class="font-semibold text-slate-900 dark:text-white mb-1">Ubicación:</p>
+<p class="text-slate-600 dark:text-slate-400">Gimnasio Universitario, Vestidores Hombres</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+</body></html>

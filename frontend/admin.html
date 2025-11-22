@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Panel de Administración - FES Acatlán</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-blue': '#002B5C',
+                        'light-gray': '#f8f9fa',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+<body class="font-sans bg-light-gray text-slate-800 antialiased">
+<div class="min-h-screen flex flex-col">
+<header class="bg-white shadow-sm fixed top-0 w-full z-10">
+<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between items-center h-16">
+<div class="flex items-center">
+<span class="font-bold text-xl text-brand-blue">Fes Acatlán</span>
+</div>
+<nav class="hidden md:flex items-center space-x-8">
+<a class="text-gray-700 hover:text-brand-blue font-medium border-b-2 border-brand-blue pb-1" href="#">Inicio</a>
+<a class="text-gray-500 hover:text-brand-blue font-medium" href="#">Reportes</a>
+<a class="text-gray-500 hover:text-brand-blue font-medium" href="#">Estadísticas</a>
+</nav>
+<div>
+<a class="text-gray-500 hover:text-brand-blue font-medium text-sm flex items-center gap-2" href="#">
+<span class="material-icons text-base">logout</span>
+                        Cerrar sesión
+                    </a>
+</div>
+</div>
+</div>
+</header>
+<main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow pt-24">
+<div class="text-center mb-8">
+<h1 class="text-3xl font-bold text-brand-blue mb-2">Panel de administración</h1>
+<p class="text-gray-500">Gestiona los reportes de sanitarios de la FES Acatlán</p>
+</div>
+<div class="bg-white rounded-lg shadow-sm p-4 mb-8">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+<div>
+<label class="block text-sm font-medium text-gray-700" for="search-folio">Buscar por folio</label>
+<input class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" id="search-folio" placeholder="#FES12345" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700" for="status-filter">Estado</label>
+<select class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" id="status-filter">
+<option>Todos</option>
+<option>Pendiente</option>
+<option>En proceso</option>
+<option>Resuelto</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700" for="building-filter">Edificio</label>
+<select class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" id="building-filter">
+<option>Todos</option>
+<option>A-1</option>
+<option>A-2</option>
+<option>A-3</option>
+<option>Biblioteca</option>
+</select>
+</div>
+<button class="text-sm text-gray-500 hover:text-brand-blue text-right lg:text-left">Limpiar filtros</button>
+</div>
+</div>
+<div class="space-y-4">
+<div class="bg-white rounded-lg shadow-sm overflow-hidden">
+<div class="p-4 border-b border-gray-200">
+<div class="flex justify-between items-center">
+<h3 class="font-bold text-gray-800">Reporte #FES12345</h3>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                Pendiente
+                            </span>
+</div>
+</div>
+<div class="p-4 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+<div>
+<p class="font-medium text-gray-500">Fecha de reporte</p>
+<p class="text-gray-800">28/05/2024</p>
+</div>
+<div>
+<p class="font-medium text-gray-500">Hora de reporte</p>
+<p class="text-gray-800">10:30 AM</p>
+</div>
+<div>
+<p class="font-medium text-gray-500">Tipo de problema</p>
+<p class="text-gray-800">Fuga de agua</p>
+</div>
+<div>
+<p class="font-medium text-gray-500">Ubicación</p>
+<p class="text-gray-800">Edificio A-1, Piso 2, Baño Mujeres</p>
+</div>
+</div>
+<div class="px-4 py-3 bg-gray-50 flex justify-between items-center">
+<button class="text-sm font-medium text-brand-blue hover:underline">Ver detalles</button>
+<div class="flex items-center space-x-2">
+<button class="text-xs px-2 py-1 rounded bg-gray-200 text-gray-700 hover:bg-gray-300">Pendiente</button>
+<button class="text-xs px-2 py-1 rounded bg-yellow-200 text-yellow-800 hover:bg-yellow-300">En proceso</button>
+<button class="text-xs px-2 py-1 rounded bg-green-200 text-green-800 hover:bg-green-300">Resuelto</button>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-sm overflow-hidden">
+<div class="p-4 border-b border-gray-200">
+<div class="flex justify-between items-center">
+<h3 class="font-bold text-gray-800">Reporte #FES12346</h3>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                En proceso
+                            </span>
+</div>
+</div>
+<div class="p-4 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+<div>
+<p class="font-medium text-gray-500">Fecha de reporte</p>
+<p class="text-gray-800">27/05/2024</p>
+</div>
+<div>
+<p class="font-medium text-gray-500">Hora de reporte</p>
+<p class="text-gray-800">02:15 PM</p>
+</div>
+<div>
+<p class="font-medium text-gray-500">Tipo de problema</p>
+<p class="text-gray-800">Inodoro tapado</p>
+</div>
+<div>
+<p class="font-medium text-gray-500">Ubicación</p>
+<p class="text-gray-800">Biblioteca, Planta Baja, Baño Hombres</p>
+</div>
+</div>
+<div class="px-4 py-3 bg-gray-50 flex justify-between items-center">
+<button class="text-sm font-medium text-brand-blue hover:underline">Ver detalles</button>
+<div class="flex items-center space-x-2">
+<button class="text-xs px-2 py-1 rounded bg-gray-200 text-gray-700 hover:bg-gray-300">Pendiente</button>
+<button class="text-xs px-2 py-1 rounded bg-yellow-200 text-yellow-800 hover:bg-yellow-300">En proceso</button>
+<button class="text-xs px-2 py-1 rounded bg-green-200 text-green-800 hover:bg-green-300">Resuelto</button>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-sm overflow-hidden">
+<div class="p-4 border-b border-gray-200">
+<div class="flex justify-between items-center">
+<h3 class="font-bold text-gray-800">Reporte #FES12347</h3>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                Resuelto
+                            </span>
+</div>
+</div>
+<div class="p-4 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+<div>
+<p class="font-medium text-gray-500">Fecha de reporte</p>
+<p class="text-gray-800">26/05/2024</p>
+</div>
+<div>
+<p class="font-medium text-gray-500">Hora de reporte</p>
+<p class="text-gray-800">09:00 AM</p>
+</div>
+<div>
+<p class="font-medium text-gray-500">Tipo de problema</p>
+<p class="text-gray-800">Falta de jabón</p>
+</div>
+<div>
+<p class="font-medium text-gray-500">Ubicación</p>
+<p class="text-gray-800">Edificio A-3, Piso 1, Baño Mujeres</p>
+</div>
+</div>
+<div class="px-4 py-3 bg-gray-50 flex justify-between items-center">
+<button class="text-sm font-medium text-brand-blue hover:underline">Ver detalles</button>
+<div class="flex items-center space-x-2">
+<button class="text-xs px-2 py-1 rounded bg-gray-200 text-gray-700 hover:bg-gray-300">Pendiente</button>
+<button class="text-xs px-2 py-1 rounded bg-yellow-200 text-yellow-800 hover:bg-yellow-300">En proceso</button>
+<button class="text-xs px-2 py-1 rounded bg-green-200 text-green-800 hover:bg-green-300">Resuelto</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>
