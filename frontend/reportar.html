@@ -56,36 +56,51 @@
   <div class="relative flex min-h-screen w-full flex-col">
 
     <!-- HEADER NUEVO -->
-    <header class="bg-primary text-white shadow-md">
-      <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
-        <!-- Izquierda: nombre FES -->
-        <div class="text-sm font-semibold sm:text-base">
-          FES Acatlán
-        </div>
+<!-- HEADER -->
+<header class="bg-primary text-white shadow-md">
+  <div
+    class="max-w-6xl mx-auto px-4 sm:px-6 py-3
+           flex flex-col sm:flex-row items-center sm:items-center
+           gap-3 sm:gap-0 min-h-[90px]"
+  >
+    <!-- Logo -->
+    <div class="w-full sm:w-auto flex justify-center sm:justify-start">
+      <img
+        src="images/logo.png"
+        alt="Logo FES Acatlán"
+        class="h-10 sm:h-14 w-auto"
+      />
+    </div>
 
-        <!-- Centro: menú -->
-        <nav class="flex gap-6 text-sm sm:text-base">
-          <a
-            href="index.html"
-            class="pb-1 border-b-2 border-transparent hover:border-white transition-colors"
-          >
-            Inicio
-          </a>
-          <a
-            href="reportar.html"
-            class="pb-1 border-b-2 border-white font-semibold"
-          >
-            Nuevo Reporte
-          </a>
-          <a
-            href="consultar.html"
-            class="pb-1 border-b-2 border-transparent hover:border-white transition-colors"
-          >
-            Consultar Reporte
-          </a>
-        </nav>
-      </div>
-    </header>
+    <!-- Menú -->
+    <nav
+      class="w-full sm:flex-1 flex justify-center
+             gap-3 sm:gap-6 text-xs sm:text-sm md:text-base
+             flex-wrap"
+    >
+      <a
+        href="index.html"
+        class="pb-1 border-b-2 border-transparent hover:border-white transition-colors"
+      >
+        Inicio
+      </a>
+      <a
+        href="reportar.html"
+        class="pb-1 border-b-2 border-white font-semibold"
+      >
+        Nuevo reporte
+      </a>
+      <a
+        href="consultar.html"
+        class="pb-1 border-b-2 border-transparent hover:border-white transition-colors"
+      >
+        Consultar reporte
+      </a>
+    </nav>
+  </div>
+</header>
+
+
     <!-- FIN HEADER -->
 
     <!-- CONTENIDO PRINCIPAL -->
