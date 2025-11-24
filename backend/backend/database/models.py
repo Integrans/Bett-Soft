@@ -42,7 +42,7 @@ class EstadoReporteEnum(enum.Enum):
 
 
 # ---------------------------------------------------------
-# TABLA: BANOS
+# BANOS
 # ---------------------------------------------------------
 
 class Bano(Base):
@@ -59,7 +59,7 @@ class Bano(Base):
 
 
 # ---------------------------------------------------------
-# TABLA: CATEGORIAS INCIDENTE
+# CATEGORIAS INCIDENTE
 # ---------------------------------------------------------
 
 class Categoria(Base):
@@ -74,7 +74,7 @@ class Categoria(Base):
 
 
 # ---------------------------------------------------------
-# TABLA: ESTADOS REPORTE
+# ESTADOS REPORTE
 # ---------------------------------------------------------
 
 class EstadoReporte(Base):
@@ -87,7 +87,7 @@ class EstadoReporte(Base):
 
 
 # ---------------------------------------------------------
-# TABLA: ADMINS
+# AAAAAAAAAAAAAAAADMINS
 # ---------------------------------------------------------
 
 class Admin(Base):
@@ -100,7 +100,7 @@ class Admin(Base):
 
 
 # ---------------------------------------------------------
-# TABLA: REPORTES
+# REPORTEEEEEEEEEEEES
 # ---------------------------------------------------------
 
 class Reporte(Base):

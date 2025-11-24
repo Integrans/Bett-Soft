@@ -21,7 +21,7 @@ def get_db():
 
 
 # ----------------------------
-# Registro / Login (ya existentes)
+# Registro / Login
 # ----------------------------
 @router.post("/registro", response_model=AdminResponse)
 def registrar_admin(data: AdminCreate, db: Session = Depends(get_db)):
@@ -95,7 +95,6 @@ def listar_reportes(
     total = query.count()
     rows = query.order_by(Reporte.fecha_creacion.desc()).offset(offset).limit(limit).all()
 
-    # Convertir a lista de dicts (evita serialización de enums compleja)
     results = []
     for r in rows:
         results.append({
@@ -163,12 +162,10 @@ def actualizar_estado_reporte(id_reporte: int, body: EstadoUpdate, db: Session =
     anterior = reporte.id_estado
     nuevo = body.id_estado
 
-    # update
     reporte.id_estado = nuevo
     db.add(reporte)
     db.commit()
 
-    # insertar en historial_reportes (usando SQL text para no depender de un modelo)
     sql = text(
         "INSERT INTO historial_reportes (id_reporte, id_admin, campo_modificado, valor_anterior, valor_nuevo, fecha_cambio) "
         "VALUES (:id_reporte, :id_admin, :campo, :val_ant, :val_new, :fecha)"
