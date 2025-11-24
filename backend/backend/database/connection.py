@@ -14,6 +14,12 @@ DB_NAME = os.getenv("DB_NAME")
 DATABASE_URL = (
     f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 )
+SQLALCHEMY_DATABASE_URL = os.getenv(
+    "DATABASE_URL", 
+    "mysql+pymysql://root:@localhost:3306/bett_soft_db" # Tu config local original
+)
+
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
 # Crear el engine
 engine = create_engine(
