@@ -1,295 +1,427 @@
 <!DOCTYPE html>
 <html class="light" lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BettSoft - Reporte de Sanitarios</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BettSoft – Reporte de Sanitarios</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap"
-    rel="stylesheet"
-  />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-    rel="stylesheet"
-  />
-
+  <!-- Tailwind CDN + forms -->
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 
-  <style>
-    .material-symbols-outlined {
-      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-    }
-  </style>
-
-  <script id="tailwind-config">
+  <!-- Configuración Tailwind (misma línea visual que el resto del sitio) -->
+  <script>
     tailwind.config = {
       darkMode: "class",
       theme: {
         extend: {
           colors: {
-            "primary": "#003366",
-            "accent": "#D4AF37",
-            "background-light": "#F0F2F5",
-            "background-dark": "#111621",
-            "surface": "#FFFFFF",
-            "text-main": "#212529",
-          },
-          fontFamily: {
-            "display": ["Public Sans", "sans-serif"]
+            primary: "#001F5B",       // azul FES
+            accent: "#C8A064",        // dorado
+            background: {
+              light: "#F4F6FB",
+              dark: "#0B1727"
+            },
+            text: {
+              main: "#111827"
+            }
           },
           borderRadius: {
-            "DEFAULT": "0.5rem",
-            "lg": "1rem",
-            "xl": "1.5rem",
-            "full": "9999px"
-          },
-        },
-      },
-    }
+            card: "1.5rem"
+          }
+        }
+      }
+    };
   </script>
+
+  <!-- Fuente similar a la que ya usas -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    body {
+      font-family: "Public Sans", system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+    }
+  </style>
 </head>
 
-<body class="font-display bg-background-light dark:bg-background-dark text-text-main">
-  <div class="relative flex min-h-screen w-full flex-col">
+<body class="font-display bg-background-light text-slate-800 antialiased">
+  <div class="min-h-screen flex flex-col">
 
-    <!-- HEADER NUEVO -->
-<!-- HEADER -->
-<header class="bg-primary text-white shadow-md">
-  <!-- Barra superior -->
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-
-    <!-- Logo -->
-    <a href="index.html" class="flex items-center">
-      <img
-        src="images/logo.png"
-        alt="Logo FES Acatlán"
-        class="h-10 sm:h-14 w-auto"
-      />
-    </a>
-
-    <!-- Menú de escritorio -->
-    <nav class="hidden sm:flex gap-8 text-sm md:text-base">
-      <a href="index.html"
-         class="pb-1 border-b-2 border-transparent hover:border-white transition">
-        Inicio
-      </a>
-      <a href="reportar.html"
-         class="pb-1 border-b-2 border-white font-semibold">
-        Nuevo Incidente
-      </a>
-      <a href="consultar.html"
-         class="pb-1 border-b-2 border-transparent hover:border-white transition">
-        Consultar Incidente
-      </a>
-    </nav>
-
-    <!-- Botón Iniciar sesión (solo escritorio) -->
-    <a
-      href="login.html"
-      class="hidden sm:inline-flex items-center gap-2 text-white text-sm font-medium
-             hover:shadow-md hover:bg-white/10 px-3 py-2 rounded-md transition"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-           viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round"
-              d="M15 3h4a2 2 0 012 2v4m0 6v4a2 2 0 01-2 2h-4m-6 0H5a2 2 0 01-2-2v-4m0-6V5a2 2 0 012-2h4" />
-      </svg>
-      Iniciar sesión
-    </a>
-
-    <!-- Botón hamburguesa (solo móvil) -->
-    <button
-      type="button"
-      class="inline-flex items-center justify-center sm:hidden p-2 rounded-md hover:bg-white/10 transition"
-      onclick="toggleMobileMenu()"
-      aria-label="Abrir menú"
-    >
-      <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
-           viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round"
-              d="M4 6h16M4 12h16M4 18h16" />
-      </svg>
-    </button>
-  </div>
-
-  <!-- Menú móvil desplegable -->
-  <div id="mobile-menu"
-       class="sm:hidden hidden border-t border-white/20 bg-primary/95">
-    <nav class="flex flex-col px-4 py-3 gap-3 text-sm">
-      <a href="index.html"
-         class="py-1 border-b border-white/10">
-        Inicio
-      </a>
-      <a href="reportar.html"
-         class="py-1 border-b border-white/10 font-semibold">
-        Nuevo Incidente
-      </a>
-      <a href="consultar.html"
-         class="py-1 border-b border-white/10">
-        Consultar Incidente
-      </a>
-      <a href="login.html"
-         class="pt-2 flex items-center gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round"
-                d="M15 3h4a2 2 0 012 2v4m0 6v4a2 2 0 01-2 2h-4m-6 0H5a2 2 0 01-2-2v-4m0-6V5a2 2 0 012-2h4" />
-        </svg>
-        Iniciar sesión
-      </a>
-    </nav>
-  </div>
-</header>
-
-
-
-    <!-- FIN HEADER -->
-
-    <!-- CONTENIDO PRINCIPAL -->
-    <main class="flex flex-1 justify-center px-4 py-6 sm:px-6 lg:px-8">
-      <div class="w-full max-w-2xl">
-        <div class="mb-6 text-center">
-          <h1 class="text-3xl font-bold text-primary">
-            Reporte de incidencia
-          </h1>
+    <!-- HEADER: franja azul, logo izquierda, menú centro -->
+    <header class="bg-primary text-white shadow-md">
+      <div
+        class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4"
+      >
+        <!-- Logo -->
+        <div class="flex items-center gap-3">
+          <img
+            src="images/logo.png"
+            alt="Logo FES Acatlán"
+            class="h-10 sm:h-14 w-auto"
+          />
         </div>
 
-        <form id="reporte-form" class="flex flex-col gap-6">
-  <div class="flex flex-col gap-5 rounded-xl bg-surface p-6 shadow-sm dark:bg-background-dark">
-    <div class="flex flex-col gap-1">
-      <p class="text-[#111318] dark:text-gray-200 text-2xl font-bold leading-tight tracking-[-0.033em]">
-        Detalles del Incidente
-      </p>
-      <p class="text-[#636f88] dark:text-gray-400 text-base font-normal leading-normal">
-        Utilice este formulario para reportar cualquier problema en los sanitarios.
-      </p>
-    </div>
+        <!-- Menú desktop -->
+        <nav class="hidden md:flex items-center gap-6 text-sm">
+          <a
+            href="index.html"
+            class="pb-1 border-b-2 border-transparent hover:border-white transition-colors"
+          >
+            Inicio
+          </a>
+          <a
+            href="reportar.html"
+            class="pb-1 border-b-2 border-white font-semibold"
+          >
+            Nuevo incidente
+          </a>
+          <a
+            href="consultar.html"
+            class="pb-1 border-b-2 border-transparent hover:border-white transition-colors"
+          >
+            Consultar incidente
+          </a>
+        </nav>
 
-    <!-- Tipo de problema -->
-    <label class="flex flex-col w-full">
-      <p class="text-[#111318] dark:text-gray-200 text-base font-medium leading-normal pb-2">
-        Tipo de problema
-      </p>
-      <select
-        class="form-select h-14 w-full appearance-none resize-none overflow-hidden rounded-lg border border-gray-300 bg-white bg-no-repeat bg-[right_1rem_center] p-3.5 pr-10 text-base font-normal leading-normal text-[#111318] placeholder:text-[#636f88] focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:placeholder-gray-400"
-        style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC9uCetYVE3n7qU7GWaMUB1-ACA72cBw-IhRG9ciR4c516JIZ_A3VLwSrDzqbKW1GTm_1c5rZRwZgCv72yFy8gVFN7L_KqhAZIqglQgWuENWVFuMwa561dFihDbVAXISzx-3khP0y7Qtj0hKg9j68jQ0OEN32HnLmeIuHALntb20TC0Afmnw-qGlQkffHI4mFH36DH8j7VvSbKN4WqYc07irYIwbo1OGUcbLCWjTQmwPUqfMwYAecvcNX8Mtm3WIO8bZvFnBAw5eiE');"
-        name="tipo_problema"
-        id="tipo_problema"
-      >
-        <option selected>Seleccione el tipo de problema</option>
-        <option value="falta-agua">Falta de agua</option>
-        <option value="fuga">Fuga de agua</option>
-        <option value="suciedad">Suciedad excesiva</option>
-        <option value="equipo-dano">Equipo dañado (inodoro, lavabo, etc.)</option>
-        <option value="falta-insumos">Falta de insumos (papel, jabón)</option>
-        <option value="otro">Otro</option>
-      </select>
-    </label>
+        <!-- Botón iniciar sesión (desktop) -->
+        <div class="hidden md:block">
+          <a
+            href="login.html"
+            class="px-4 py-2 bg-white/95 text-primary rounded-full text-sm font-medium shadow-sm hover:bg-white hover:shadow-md transition"
+          >
+            Iniciar sesión
+          </a>
+        </div>
 
-    <!-- Edificio y baño -->
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
-      <!-- Edificio -->
-      <label class="flex flex-col w-full">
-        <p class="text-[#111318] dark:text-gray-200 text-base font-medium leading-normal pb-2">
-          Edificio
-        </p>
-        <select
-          class="form-select h-14 w-full appearance-none resize-none overflow-hidden rounded-lg border border-gray-300 bg-white bg-no-repeat bg-[right_1rem_center] p-3.5 pr-10 text-base font-normal leading-normal text-[#111318] placeholder:text-[#636f88] focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:placeholder-gray-400"
-          style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC9uCetYVE3n7qU7GWaMUB1-ACA72cBw-IhRG9ciR4c516JIZ_A3VLwSrDzqbKW1GTm_1c5rZRwZgCv72yFy8gVFN7L_KqhAZIqglQgWuENWVFuMwa561dFihDbVAXISzx-3khP0y7Qtj0hKg9j68jQ0OEN32HnLmeIuHALntb20TC0Afmnw-qGlQkffHI4mFH36DH8j7VvSbKN4WqYc07irYIwbo1OGUcbLCWjTQmwPUqfMwYAecvcNX8Mtm3WIO8bZvFnBAw5eiE');"
-          name="edificio"
-          id="edificio"
+        <!-- Botón menú móvil -->
+        <button
+          id="btn-menu"
+          class="md:hidden inline-flex items-center justify-center p-2 rounded-md border border-white/40"
+          aria-label="Abrir menú"
         >
-          <option selected>Seleccione el edificio</option>
-          <option value="a1">Edificio A1</option>
-          <option value="a2">Edificio A2</option>
-          <option value="a3">Edificio A3</option>
-        </select>
-      </label>
+          <span class="sr-only">Abrir menú</span>
+          <svg
+            id="icon-open"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg
+            id="icon-close"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 hidden"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
 
-      <!-- Baño (antes Piso) -->
-      <label class="flex flex-col w-full">
-        <p class="text-[#111318] dark:text-gray-200 text-base font-medium leading-normal pb-2">
-          Baño
-        </p>
-        <select
-          class="form-select h-14 w-full appearance-none resize-none overflow-hidden rounded-lg border border-gray-300 bg-white bg-no-repeat bg-[right_1rem_center] p-3.5 pr-10 text-base font-normal leading-normal text-[#111318] placeholder:text-[#636f88] focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:placeholder-gray-400"
-          style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC9uCetYVE3n7qU7GWaMUB1-ACA72cBw-IhRG9ciR4c516JIZ_A3VLwSrDzqbKW1GTm_1c5rZRwZgCv72yFy8gVFN7L_KqhAZIqglQgWuENWVFuMwa561dFihDbVAXISzx-3khP0y7Qtj0hKg9j68jQ0OEN32HnLmeIuHALntb20TC0Afmnw-qGlQkffHI4mFH36DH8j7VvSbKN4WqYc07irYIwbo1OGUcbLCWjTQmwPUqfMwYAecvcNX8Mtm3WIO8bZvFnBAw5eiE');"
-          name="bano"
-          id="bano"
+      <!-- Menú móvil -->
+      <div id="menu-mobile" class="md:hidden hidden border-t border-white/20">
+        <div class="max-w-6xl mx-auto px-4 py-3 space-y-2 text-sm">
+          <a href="index.html" class="block py-1">Inicio</a>
+          <a href="reportar.html" class="block py-1 font-semibold">
+            Nuevo incidente
+          </a>
+          <a href="consultar.html" class="block py-1">Consultar incidente</a>
+          <a
+            href="login.html"
+            class="inline-flex mt-2 px-4 py-2 rounded-full bg-white/95 text-primary font-medium"
+          >
+            Iniciar sesión
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="flex-1">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        <h1
+          class="text-2xl sm:text-3xl font-bold text-center text-primary mb-8"
         >
-          <option selected>Seleccione baño</option>
-          <option value="hombre">Hombre</option>
-          <option value="mujer">Mujer</option>
-          <option value="mixto">Mixto</option>
-        </select>
-      </label>
-    </div>
+          Reporte de incidencia
+        </h1>
 
-    <!-- Sección (antes Número de sanitario) -->
-    <label class="flex flex-col w-full">
-      <p class="text-[#111318] dark:text-gray-200 text-base font-medium leading-normal pb-2">
-        Sección
-      </p>
-      <select
-        class="form-select h-14 w-full appearance-none resize-none overflow-hidden rounded-lg border border-gray-300 bg-white bg-no-repeat bg-[right_1rem_center] p-3.5 pr-10 text-base font-normal leading-normal text-[#111318] placeholder:text-[#636f88] focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:placeholder-gray-400"
-        style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC9uCetYVE3n7qU7GWaMUB1-ACA72cBw-IhRG9ciR4c516JIZ_A3VLwSrDzqbKW1GTm_1c5rZRwZgCv72yFy8gVFN7L_KqhAZIqglQgWuENWVFuMwa561dFihDbVAXISzx-3khP0y7Qtj0hKg9j68jQ0OEN32HnLmeIuHALntb20TC0Afmnw-qGlQkffHI4mFH36DH8j7VvSbKN4WqYc07irYIwbo1OGUcbLCWjTQmwPUqfMwYAecvcNX8Mtm3WIO8bZvFnBAw5eiE');"
-        name="seccion"
-        id="seccion"
-      >
-        <option selected>Seleccione sección</option>
-        <option value="frontal">Frontal</option>
-        <option value="trasero">Trasero</option>
-      </select>
-    </label>
+        <!-- Tarjeta del formulario -->
+        <section
+          class="bg-white rounded-card shadow-md sm:shadow-lg px-6 sm:px-10 py-6 sm:py-8"
+        >
+          <header class="mb-6">
+            <h2 class="text-lg sm:text-xl font-semibold text-slate-900">
+              Detalles del Incidente
+            </h2>
+            <p class="mt-1 text-sm text-slate-500">
+              Utilice este formulario para reportar cualquier problema en los
+              sanitarios.
+            </p>
+          </header>
 
+          <!-- FORMULARIO -->
+          <form id="reporte-form" class="space-y-6">
+            <!-- Número de cuenta -->
+            <div class="space-y-1">
+              <label
+                for="numero_cuenta"
+                class="block text-sm font-medium text-slate-700"
+              >
+                Número de cuenta
+                <span class="text-xs text-slate-400">
+                  (obligatorio si no es anónimo)
+                </span>
+              </label>
+              <input
+                id="numero_cuenta"
+                type="text"
+                inputmode="numeric"
+                autocomplete="off"
+                class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-primary focus:ring-primary text-sm"
+                placeholder="Ej. 123456789"
+              />
+              <p class="text-xs text-slate-400">
+                Si marcas el reporte como anónimo, este campo se ignorará.
+              </p>
+            </div>
 
+            <!-- Tipo de problema -->
+            <div class="space-y-1">
+              <label
+                for="tipo_problema"
+                class="block text-sm font-medium text-slate-700"
+              >
+                Tipo de problema
+              </label>
+              <select
+                id="tipo_problema"
+                class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-primary focus:ring-primary text-sm"
+              >
+                <option value="">Seleccione el tipo de problema</option>
+                <!-- Los valores numéricos deben corresponder con tu tabla categorias_incidente -->
+                <option value="1">Fuga de agua</option>
+                <option value="2">Falta de papel</option>
+                <option value="3">Sanitario sucio</option>
+                <option value="4">Sanitario dañado</option>
+              </select>
+            </div>
 
-    <!-- Comentarios ELIMINADO en este sprint -->
+            <!-- Edificio / Baño (sexo) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="space-y-1">
+                <label
+                  for="edificio"
+                  class="block text-sm font-medium text-slate-700"
+                >
+                  Edificio
+                </label>
+                <select
+                  id="edificio"
+                  class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-primary focus:ring-primary text-sm"
+                >
+                  <option value="">Seleccione el edificio</option>
+                  <option value="Edificio A1">Edificio A1</option>
+                  <option value="Edificio A2">Edificio A2</option>
+                  <option value="Edificio B">Edificio B</option>
+                  <option value="Biblioteca">Biblioteca</option>
+                </select>
+              </div>
 
-    <!-- Anónimo -->
-    <div class="relative flex items-start">
-      <div class="flex h-6 items-center">
-        <input
-          id="anonymous"
-          name="anonymous"
-          type="checkbox"
-          class="form-checkbox h-5 w-5 rounded border-gray-300 text-primary focus:ring-accent dark:border-gray-600 dark:bg-gray-700"
-          aria-describedby="anonymous-description"
-        />
-      </div>
-      <div class="ml-3 text-sm leading-6">
-        <label for="anonymous" class="font-medium text-text-main dark:text-gray-300">
-          Enviar Incidente anónimo
-        </label>
-      </div>
-    </div>
-  </div>
+              <div class="space-y-1">
+                <label
+                  for="sexo"
+                  class="block text-sm font-medium text-slate-700"
+                >
+                  Baño
+                </label>
+                <select
+                  id="sexo"
+                  class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-primary focus:ring-primary text-sm"
+                >
+                  <option value="">Seleccione baño</option>
+                  <option value="hombre">Hombres</option>
+                  <option value="mujer">Mujeres</option>
+                </select>
+              </div>
+            </div>
 
-  <!-- Botón enviar -->
-  <button
-    type="submit"
-    class="flex h-14 w-full items-center justify-center rounded-lg bg-primary px-6 py-2.5 text-lg font-bold text-white shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-  >
-    Enviar Incidente
-  </button>
-</form>
+            <!-- Sección / Taza u orinal -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="space-y-1">
+                <label
+                  for="seccion"
+                  class="block text-sm font-medium text-slate-700"
+                >
+                  Pasillo
+                </label>
+                <input
+                  id="seccion"
+                  type="text"
+                  class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-primary focus:ring-primary text-sm"
+                  placeholder="Ej. Frontal, al fondo, junto a la ventana…"
+                />
+              </div>
+
+              <div class="space-y-1">
+                <label
+                  for="taza_o_orinal"
+                  class="block text-sm font-medium text-slate-700"
+                >
+                  Taza u orinal
+                </label>
+                <select
+                  id="taza_o_orinal"
+                  class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-primary focus:ring-primary text-sm"
+                >
+                  <option value="">Seleccione una opción</option>
+                  <option value="taza">Taza</option>
+                  <option value="orinal">Orinal</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Tipo de reporte -->
+            <div class="space-y-1">
+              <label
+                for="tipo_reporte"
+                class="block text-sm font-medium text-slate-700"
+              >
+              
+
+            <!-- Checkbox anónimo -->
+            <div class="flex items-center gap-2">
+              <input
+                id="anonimo"
+                type="checkbox"
+                class="rounded border-slate-300 text-primary focus:ring-primary"
+              />
+              <label for="anonimo" class="text-sm text-slate-700">
+                Enviar incidente anónimo
+              </label>
+            </div>
+
+            <!-- Botón enviar -->
+            <div class="pt-2">
+              <button
+                type="submit"
+                class="w-full inline-flex justify-center items-center rounded-full bg-primary text-white font-semibold py-3 text-sm sm:text-base shadow-md hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+              >
+                Enviar Incidente
+              </button>
+            </div>
+          </form>
+        </section>
       </div>
     </main>
+
+    <!-- FOOTER -->
+    <footer class="py-4 text-center text-xs text-slate-500">
+      Hecho en México · Sistema oficial FES Acatlán
+    </footer>
   </div>
+
+  <!-- JS: menú hamburguesa + envío al backend -->
   <script>
-  function toggleMobileMenu() {
-    const menu = document.getElementById('mobile-menu');
-    menu.classList.toggle('hidden');
-  }
-</script>
-<script src="js/app.js"></script>
+    // ---------------- Menú móvil ----------------
+    const btnMenu = document.getElementById("btn-menu");
+    const menuMobile = document.getElementById("menu-mobile");
+    const iconOpen = document.getElementById("icon-open");
+    const iconClose = document.getElementById("icon-close");
 
-</body>
-</html>
+    if (btnMenu && menuMobile) {
+      btnMenu.addEventListener("click", () => {
+        const isOpen = !menuMobile.classList.contains("hidden");
+        menuMobile.classList.toggle("hidden", isOpen);
+        iconOpen.classList.toggle("hidden", !isOpen);
+        iconClose.classList.toggle("hidden", isOpen);
+      });
+    }
 
+    // ---------------- Lógica del formulario ----------------
+    const API_BASE = "http://127.0.0.1:8000";
 
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("reporte-form");
+      if (!form) return;
+
+      console.log("Frontend cargado correctamente");
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const anonimo = document.getElementById("anonimo").checked;
+        const numeroCuentaInput = document.getElementById("numero_cuenta");
+
+        const data = {
+          numero_cuenta: anonimo
+            ? "ANONIMO"
+            : (numeroCuentaInput.value || "").trim(),
+          id_categoria: parseInt(
+            document.getElementById("tipo_problema").value,
+            10
+          ) || null,
+          taza_o_orinal: document.getElementById("taza_o_orinal").value || null,
+          pasillo: (document.getElementById("seccion").value || "").trim() || "NA",
+          tipo_reporte: document.getElementById("tipo_reporte").value || null,
+          edificio: document.getElementById("edificio").value || null,
+          sexo: document.getElementById("sexo").value || null,
+          imagen_url: null
+        };
+
+        // Validación mínima en frontend
+        if (!data.id_categoria || !data.tipo_reporte || !data.edificio || !data.sexo) {
+          alert("Por favor llena todos los campos obligatorios.");
+          return;
+        }
+        if (!anonimo && !data.numero_cuenta) {
+          alert("Ingresa tu número de cuenta o marca el reporte como anónimo.");
+          return;
+        }
+
+        console.log("Datos enviados:", data);
+
+        try {
+          const resp = await fetch(`${API_BASE}/reportes/`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+          });
+
+          let json = null;
+          try {
+            json = await resp.json();
+          } catch (_) {}
+
+          console.log("Respuesta backend:", json);
+
+          if (!resp.ok) {
+            alert("Error al enviar el reporte. Revisa la consola.");
+            return;
+          }
+
+          // Aquí puedes redirigir a confirmar.html si quieres mostrar folio, etc.
+          // window.location.href = "confirmar.html";
+          alert("Reporte enviado correctamente.");
+        } catch (err) {
+          console.error("Error de conexión:", err);
+          alert("No se pudo conectar con el servidor. Verifica que el backend esté encendido.");
+        }
+      });
+    });
+  </script>
 </body>
 </html>
