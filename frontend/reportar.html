@@ -1,0 +1,119 @@
+<form id="form-reporte" class="flex flex-col gap-6">
+  <div class="flex flex-col gap-5 rounded-xl bg-surface p-6 shadow-sm dark:bg-background-dark">
+    
+    <div class="flex flex-col gap-1">
+      <p class="text-[#111318] dark:text-gray-200 text-2xl font-bold">Detalles del Reporte</p>
+    </div>
+
+    <label class="flex flex-col w-full">
+      <p class="text-base font-medium pb-2">Tipo de problema</p>
+      <select id="tipo_problema" class="form-select h-14 w-full rounded-lg border border-gray-300 p-3.5">
+        <option value="fuga">Fuga de agua</option>
+        <option value="taza_tapada">Taza tapada</option>
+        <option value="orinal_tapado">Orinal tapado</option>
+        <option value="no_papel">Falta de papel</option>
+        <option value="no_jabon">Falta de jabón</option>
+        <option value="suciedad">Suciedad</option>
+        <option value="mal_olor">Mal olor</option>
+      </select>
+    </label>
+
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <label class="flex flex-col w-full">
+        <p class="text-base font-medium pb-2">Edificio</p>
+        <select id="edificio" class="form-select h-14 w-full rounded-lg border border-gray-300 p-3.5">
+          <option value="A1">Edificio A1</option>
+          <option value="A2">Edificio A2</option>
+        </select>
+      </label>
+      <label class="flex flex-col w-full">
+        <p class="text-base font-medium pb-2">Nivel / Piso</p>
+        <select id="nivel" class="form-select h-14 w-full rounded-lg border border-gray-300 p-3.5">
+          <option value="1">Piso 1</option>
+          <option value="2">Piso 2</option>
+          <option value="3">Piso 3</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <label class="flex flex-col w-full">
+        <p class="text-base font-medium pb-2">¿Taza u Orinal?</p>
+        <select id="taza_or_orinal" class="form-select h-14 w-full rounded-lg border border-gray-300 p-3.5">
+          <option value="taza">Taza</option>
+          <option value="orinal">Orinal</option>
+        </select>
+      </label>
+      <label class="flex flex-col w-full">
+        <p class="text-base font-medium pb-2">Ubicación (Pasillo)</p>
+        <select id="pasillo" class="form-select h-14 w-full rounded-lg border border-gray-300 p-3.5">
+          <option value="frente">Frente</option>
+          <option value="atras">Atrás</option>
+        </select>
+      </label>
+    </div>
+
+    <label class="flex flex-col w-full">
+      <p class="text-base font-medium pb-2">Baño de:</p>
+      <select id="sexo" class="form-select h-14 w-full rounded-lg border border-gray-300 p-3.5">
+        <option value="M">Mujeres</option>
+        <option value="H">Hombres</option>
+        <option value="Mixto">Mixto</option>
+      </select>
+    </label>
+
+    <label class="flex flex-col w-full">
+        <p class="text-base font-medium pb-2">Número de Cuenta (Opcional)</p>
+        <input type="text" id="numero_cuenta" class="form-input h-14 w-full rounded-lg border border-gray-300 p-3.5" placeholder="123456789" />
+    </label>
+
+    <div class="flex items-center gap-2">
+        <input id="es_anonimo" type="checkbox" class="h-5 w-5 text-primary rounded" />
+        <label for="es_anonimo">Enviar como anónimo</label>
+    </div>
+
+    <button type="submit" class="flex h-14 w-full items-center justify-center rounded-lg bg-primary px-6 py-2.5 text-lg font-bold text-white shadow-sm hover:bg-primary/90">
+      Enviar Reporte
+    </button>
+  </div>
+</form>
+
+<script>
+    const API_URL = "http://127.0.0.1:8000"; 
+
+    document.getElementById('form-reporte').addEventListener('submit', async (e) => {
+      e.preventDefault(); 
+
+      // Recolectar datos
+      const payload = {
+        tipo_problema: document.getElementById('tipo_problema').value,
+        edificio: document.getElementById('edificio').value,
+        nivel: parseInt(document.getElementById('nivel').value),
+        sexo: document.getElementById('sexo').value,
+        taza_or_orinal: document.getElementById('taza_or_orinal').value,
+        pasillo: document.getElementById('pasillo').value,
+        numero_cuenta: document.getElementById('numero_cuenta').value,
+        es_anonimo: document.getElementById('es_anonimo').checked
+      };
+
+      try {
+        const res = await fetch(`${API_URL}/reportes/`, { // Nota la barra al final /
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          alert("¡Éxito! Folio: " + data.folio);
+          window.location.href = 'confirmar.html';
+        } else {
+          const errorText = await res.text();
+          alert("Error del servidor: " + errorText);
+        }
+      } catch (err) {
+        console.error(err);
+        alert('No se pudo conectar con el servidor.');
+      }
+    });
+</script>
