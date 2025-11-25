@@ -7,13 +7,8 @@ from database.connection import SessionLocal
 from sqlalchemy.exc import IntegrityError
 from database.models import (Bano, Reporte, SexoEnum, TipoReporteEnum, PrioridadEnum, EstadoReporteEnum, Categoria, EstadoReporte, HistorialReporte, Admin, EstadoReporte, PasilloEnum)
 
-# Crear tablas si no existen
 Base.metadata.create_all(bind=engine)
 
-# ----------------------------
-# main.py
-
-# ... tus imports ...
 from database.models import (
     Categoria, 
     EstadoReporte, 
@@ -34,9 +29,6 @@ def poblar_datos_iniciales():
     try:
         print("🌱 Iniciando carga de datos...")
 
-        # ---------------------------------------------------------
-        # 1. ESTADOS (Lista de datos)
-        # ---------------------------------------------------------
         estados_data = [
             (1, EstadoReporteEnum.en_proceso),
             (2, EstadoReporteEnum.resuelto),
@@ -47,11 +39,7 @@ def poblar_datos_iniciales():
             exists = db.query(EstadoReporte).filter_by(id_estado=id_est).first()
             if not exists:
                 db.add(EstadoReporte(id_estado=id_est, nombre=enum_val))
-        
-        # ---------------------------------------------------------
-        # 2. CATEGORÍAS (Lista de datos)
-        # ---------------------------------------------------------
-        # Estructura: (id, nombre_clave, descripcion_visual, prioridad)
+
         categorias_data = [
             (1, 'fuga', 'Fuga de agua o tuberías', PrioridadEnum.alta),
             (2, 'taza_tapada', 'Taza de baño tapada', PrioridadEnum.alta),
@@ -72,10 +60,6 @@ def poblar_datos_iniciales():
                     prioridad_default=prio
                 ))
 
-        # ---------------------------------------------------------
-        # 3. BAÑOS (Lista gigante)
-        # ---------------------------------------------------------
-        # Estructura: (id, edificio, nivel, sexo_enum, tiene_orinal, tiene_taza)
         banos_data = [
             (1,'A-1',1, SexoEnum.M, 0,1), (2,'A-1',2, SexoEnum.H, 1,1),
             (3,'A-2',1, SexoEnum.M, 0,1), (4,'A-2',2, SexoEnum.H, 1,1),
@@ -115,36 +99,28 @@ def poblar_datos_iniciales():
         db.rollback()
     finally:
         db.close()
-# Poblar datos iniciales al iniciar la aplicación
+
 poblar_datos_iniciales()
-# ----------------------------
-# CREAR LA APP DE FASTAPI
+
 app = FastAPI(
     title="BettSoft API",
     description="API para reportes de baños en la FES Acatlán",
     version="1.0.0"
 )
 
-# ----------------------------
-# CONFIGURAR CORS
-# ----------------------------
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # ⚠ En producción se usa dominio del frontend
+    allow_origins=["*"],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# ----------------------------
-# INCLUIR ROUTERS
-# ----------------------------
+
 app.include_router(reportes.router)
 app.include_router(admin.router)
 
-# ----------------------------
-# RUTA DE PRUEBA
-# ----------------------------
+
 @app.get("/")
 def root():
     return {"mensaje": "API BettSoft funcionando correctamente"}

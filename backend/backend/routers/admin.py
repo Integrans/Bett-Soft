@@ -19,10 +19,6 @@ def get_db():
     finally:
         db.close()
 
-
-# ----------------------------
-# Registro / Login
-# ----------------------------
 @router.post("/registro", response_model=AdminResponse)
 def registrar_admin(data: AdminCreate, db: Session = Depends(get_db)):
     existe = db.query(Admin).filter(Admin.email == data.email).first()
@@ -54,9 +50,6 @@ def login_admin(data: AdminLogin, db: Session = Depends(get_db)):
     return {"mensaje": "Login exitoso"}
 
 
-# ----------------------------
-# Esquemas internos para endpoints admin
-# ----------------------------
 class EstadoUpdate(BaseModel):
     id_admin: int
     id_estado: int
@@ -64,12 +57,7 @@ class EstadoUpdate(BaseModel):
 
 class PrioridadUpdate(BaseModel):
     id_admin: int
-    prioridad_asignada: str  # "alta"|"media"|"baja"
-
-
-# ----------------------------
-# Endpoints del panel administrativo
-# ----------------------------
+    prioridad_asignada: str
 
 @router.get("/reportes", response_model=List[dict])
 def listar_reportes(
