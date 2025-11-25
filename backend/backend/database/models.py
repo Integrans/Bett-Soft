@@ -125,3 +125,17 @@ class Reporte(Base):
     bano = relationship("Bano", back_populates="reportes")
     categoria = relationship("Categoria", back_populates="reportes")
     estado = relationship("EstadoReporte", back_populates="reportes")
+
+# ---------------------------------------------------------
+# HISTORIAL DE REPORTES
+
+class HistorialReporte(Base):
+    __tablename__ = "historial_reporte"
+
+    id_historial = Column(Integer, primary_key=True, autoincrement=True)
+    id_reporte = Column(Integer, ForeignKey("reportes.id_reporte"), nullable=False)
+    id_estado_anterior = Column(Integer, ForeignKey("estados_reporte.id_estado"), nullable=False)
+    id_estado_nuevo = Column(Integer, ForeignKey("estados_reporte.id_estado"), nullable=False)
+    fecha_cambio = Column(DateTime)
+
+    reporte = relationship("Reporte")
