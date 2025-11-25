@@ -17,7 +17,7 @@ services:
   # SERVICIO 2: Tu Backend (FastAPI)
   backend:
     build: ./backend/backend
-
+    restart: on-failure
     ports:
       - "8000:8000"
     depends_on:

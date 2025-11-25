@@ -1,40 +1,27 @@
-import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
-from dotenv import load_dotenv
+import os
 
-load_dotenv()
+# --- LÓGICA DE CONEXIÓN INTELIGENTE ---
 
-DB_USER = os.getenv("DB_USER")
-DB_PASSWORD = os.getenv("DB_PASSWORD")
-DB_HOST = os.getenv("DB_HOST")
-DB_PORT = os.getenv("DB_PORT")
-DB_NAME = os.getenv("DB_NAME")
+# 1. Primero preguntamos: "¿Docker me dio una dirección completa?"
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-DATABASE_URL = (
-    f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-)
-SQLALCHEMY_DATABASE_URL = os.getenv(
-    "DATABASE_URL", 
-    "mysql+pymysql://root:@localhost:3306/bett_soft_db" # Tu config local original
-)
+# 2. Si Docker no dijo nada (es None), asumimos que estamos en tu PC Local
+if not DATABASE_URL:
+    # Esta es tu conexión local de siempre (XAMPP/Workbench)
+    DATABASE_URL = "mysql+pymysql://root:@localhost:3306/bett_soft_db"
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
+# --------------------------------------
 
-# Crear el engine
-engine = create_engine(
-    DATABASE_URL,
-    echo=False,       
-    pool_pre_ping=True
-)
+# Creamos el motor con la URL que haya ganado (Docker o Local)
+engine = create_engine(DATABASE_URL)
 
-# Sesiones de DB
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# Base para los modelos
 Base = declarative_base()
 
-# Dependencia para obtener la sesión de DB
+# La función para que las rutas usen la base de datos
 def get_db():
     db = SessionLocal()
     try:
