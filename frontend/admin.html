@@ -45,86 +45,85 @@
 
     <!-- HEADER azul con menú -->
     <header class="bg-primary text-white shadow-md">
-  <!-- Barra superior -->
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+      <!-- Barra superior -->
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
 
-    <!-- Logo -->
-    <a href="index.html" class="flex items-center">
-      <img
-        src="images/logo.png"
-        alt="Logo FES Acatlán"
-        class="h-10 sm:h-14 w-auto"
-      />
-    </a>
+        <!-- Logo -->
+        <a href="index.html" class="flex items-center">
+          <img
+            src="images/logo.png"
+            alt="Logo FES Acatlán"
+            class="h-10 sm:h-14 w-auto"
+          />
+        </a>
 
-    <!-- Menú de escritorio -->
-    <nav class="hidden sm:flex gap-8 text-sm md:text-base">
-      <a href="index.html"
-         class="pb-1 border-b-2 border-transparent hover:border-white transition">
-        Inicio
-      </a>
-      <a href="reportar.html"
-         class="pb-1 border-b-2 border-transparent hover:border-white transition">
-        Nuevo reporte
-      </a>
-      <a href="consultar.html"
-         class="pb-1 border-b-2 border-transparent hover:border-white transition">
-        Consultar reporte
-      </a>
-    </nav>
+        <!-- Menú de escritorio -->
+        <nav class="hidden sm:flex gap-8 text-sm md:text-base">
+          <a href="index.html"
+             class="pb-1 border-b-2 border-transparent hover:border-white transition">
+            Inicio
+          </a>
+          <a href="reportar.html"
+             class="pb-1 border-b-2 border-transparent hover:border-white transition">
+            Nuevo reporte
+          </a>
+          <a href="consultar.html"
+             class="pb-1 border-b-2 border-transparent hover:border-white transition">
+            Consultar reporte
+          </a>
+        </nav>
 
-    <!-- Botón Cerrar sesión (solo escritorio) -->
-    <button
-      type="button"
-      class="hidden sm:inline-flex items-center gap-2 text-white text-sm font-medium
-             hover:shadow-md hover:bg-white/10 px-3 py-2 rounded-md transition"
-    >
-      <span class="material-icons text-base">logout</span>
-      <span>Cerrar sesión</span>
-    </button>
+        <!-- Botón Cerrar sesión (solo escritorio) -->
+        <button
+          type="button"
+          class="hidden sm:inline-flex items-center gap-2 text-white text-sm font-medium
+                 hover:shadow-md hover:bg-white/10 px-3 py-2 rounded-md transition"
+        >
+          <span class="material-icons text-base">logout</span>
+          <span>Cerrar sesión</span>
+        </button>
 
-    <!-- Botón hamburguesa (solo móvil) -->
-    <button
-      type="button"
-      class="inline-flex items-center justify-center sm:hidden p-2 rounded-md hover:bg-white/10 transition"
-      onclick="toggleMobileMenu()"
-      aria-label="Abrir menú"
-    >
-      <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
-           viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round"
-              d="M4 6h16M4 12h16M4 18h16" />
-      </svg>
-    </button>
-  </div>
+        <!-- Botón hamburguesa (solo móvil) -->
+        <button
+          type="button"
+          class="inline-flex items-center justify-center sm:hidden p-2 rounded-md hover:bg.white/10 transition"
+          onclick="toggleMobileMenu()"
+          aria-label="Abrir menú"
+        >
+          <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+               viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
 
-  <!-- Menú móvil desplegable -->
-  <div id="mobile-menu"
-       class="sm:hidden hidden border-t border-white/20 bg-primary/95">
-    <nav class="flex flex-col px-4 py-3 gap-3 text-sm">
-      <a href="index.html"
-         class="py-1 border-b border-white/10">
-        Inicio
-      </a>
-      <a href="reportar.html"
-         class="py-1 border-b border-white/10">
-        Nuevo reporte
-      </a>
-      <a href="consultar.html"
-         class="py-1 border-b border-white/10">
-        Consultar reporte
-      </a>
-      <button
-        type="button"
-        class="pt-2 flex items-center gap-2 text-left"
-      >
-        <span class="material-icons text-base">logout</span>
-        <span>Cerrar sesión</span>
-      </button>
-    </nav>
-  </div>
-</header>
-
+      <!-- Menú móvil desplegable -->
+      <div id="mobile-menu"
+           class="sm:hidden hidden border-t border-white/20 bg-primary/95">
+        <nav class="flex flex-col px-4 py-3 gap-3 text-sm">
+          <a href="index.html"
+             class="py-1 border-b border-white/10">
+            Inicio
+          </a>
+          <a href="reportar.html"
+             class="py-1 border-b border-white/10">
+            Nuevo reporte
+          </a>
+          <a href="consultar.html"
+             class="py-1 border-b border-white/10">
+            Consultar reporte
+          </a>
+          <button
+            type="button"
+            class="pt-2 flex items-center gap-2 text-left"
+          >
+            <span class="material-icons text-base">logout</span>
+            <span>Cerrar sesión</span>
+          </button>
+        </nav>
+      </div>
+    </header>
 
     <!-- CONTENIDO -->
     <main class="flex-1 px-4 py-8 sm:px-6 lg:px-8">
@@ -165,10 +164,10 @@
                 class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 text-sm
                        focus:border-primary focus:ring-primary"
               >
-                <option>Todos</option>
-                <option>Pendiente</option>
-                <option>En proceso</option>
-                <option>Resuelto</option>
+                <option value="Todos">Todos</option>
+                <option value="Pendiente">Pendiente</option>
+                <option value="En proceso">En proceso</option>
+                <option value="Resuelto">Resuelto</option>
               </select>
             </div>
 
@@ -181,15 +180,16 @@
                 class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 text-sm
                        focus:border-primary focus:ring-primary"
               >
-                <option>Todos</option>
-                <option>A-1</option>
-                <option>A-2</option>
-                <option>A-3</option>
-                <option>Biblioteca</option>
+                <option value="Todos">Todos</option>
+                <!-- por ahora solo mostramos el id_bano, luego pueden mapear a edificios reales -->
+                <option value="1">Baño 1</option>
+                <option value="2">Baño 2</option>
+                <option value="3">Baño 3</option>
               </select>
             </div>
 
             <button
+              id="clear-filters"
               type="button"
               class="text-sm text-slate-500 hover:text-primary mt-6 text-left lg:text-right"
             >
@@ -198,187 +198,185 @@
           </div>
         </section>
 
-        <!-- LISTA DE REPORTES -->
-        <section class="space-y-4">
-
-          <!-- Reporte 1 -->
-          <article class="bg-white rounded-lg shadow-sm overflow-hidden">
-            <header class="p-4 border-b border-slate-200 flex justify-between items-center">
-              <h2 class="font-semibold text-slate-900">
-                Reporte #FES12345
-              </h2>
-              <span
-                class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-800"
-              >
-                Pendiente
-              </span>
-            </header>
-
-            <div class="p-4 grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
-              <div>
-                <p class="font-medium text-slate-500">Fecha de reporte</p>
-                <p class="text-slate-900">28/05/2024</p>
-              </div>
-              <div>
-                <p class="font-medium text-slate-500">Hora de reporte</p>
-                <p class="text-slate-900">10:30 AM</p>
-              </div>
-              <div>
-                <p class="font-medium text-slate-500">Tipo de problema</p>
-                <p class="text-slate-900">Fuga de agua</p>
-              </div>
-              <div>
-                <p class="font-medium text-slate-500">Ubicación</p>
-                <p class="text-slate-900">Edificio A-1, Piso 2, Baño Mujeres</p>
-              </div>
-            </div>
-
-            <footer class="px-4 py-3 bg-slate-50 flex justify-between items-center text-sm">
-              <button class="font-medium text-primary hover:underline">
-                Ver detalles
-              </button>
-              <div class="flex items-center gap-2">
-                <button
-                  class="px-2 py-1 rounded bg-slate-200 text-slate-700 hover:bg-slate-300 text-xs"
-                >
-                  Pendiente
-                </button>
-                <button
-                  class="px-2 py-1 rounded bg-yellow-200 text-yellow-800 hover:bg-yellow-300 text-xs"
-                >
-                  En proceso
-                </button>
-                <button
-                  class="px-2 py-1 rounded bg-green-200 text-green-800 hover:bg-green-300 text-xs"
-                >
-                  Resuelto
-                </button>
-              </div>
-            </footer>
-          </article>
-
-          <!-- Reporte 2 -->
-          <article class="bg-white rounded-lg shadow-sm overflow-hidden">
-            <header class="p-4 border-b border-slate-200 flex justify-between items-center">
-              <h2 class="font-semibold text-slate-900">
-                Reporte #FES12346
-              </h2>
-              <span
-                class="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800"
-              >
-                En proceso
-              </span>
-            </header>
-
-            <div class="p-4 grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
-              <div>
-                <p class="font-medium text-slate-500">Fecha de reporte</p>
-                <p class="text-slate-900">27/05/2024</p>
-              </div>
-              <div>
-                <p class="font-medium text-slate-500">Hora de reporte</p>
-                <p class="text-slate-900">02:15 PM</p>
-              </div>
-              <div>
-                <p class="font-medium text-slate-500">Tipo de problema</p>
-                <p class="text-slate-900">Inodoro tapado</p>
-              </div>
-              <div>
-                <p class="font-medium text-slate-500">Ubicación</p>
-                <p class="text-slate-900">Biblioteca, Planta Baja, Baño Hombres</p>
-              </div>
-            </div>
-
-            <footer class="px-4 py-3 bg-slate-50 flex justify-between items-center text-sm">
-              <button class="font-medium text-primary hover:underline">
-                Ver detalles
-              </button>
-              <div class="flex items-center gap-2">
-                <button
-                  class="px-2 py-1 rounded bg-slate-200 text-slate-700 hover:bg-slate-300 text-xs"
-                >
-                  Pendiente
-                </button>
-                <button
-                  class="px-2 py-1 rounded bg-yellow-200 text-yellow-800 hover:bg-yellow-300 text-xs"
-                >
-                  En proceso
-                </button>
-                <button
-                  class="px-2 py-1 rounded bg-green-200 text-green-800 hover:bg-green-300 text-xs"
-                >
-                  Resuelto
-                </button>
-              </div>
-            </footer>
-          </article>
-
-          <!-- Reporte 3 -->
-          <article class="bg-white rounded-lg shadow-sm overflow-hidden">
-            <header class="p-4 border-b border-slate-200 flex justify-between items-center">
-              <h2 class="font-semibold text-slate-900">
-                Reporte #FES12347
-              </h2>
-              <span
-                class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800"
-              >
-                Resuelto
-              </span>
-            </header>
-
-            <div class="p-4 grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
-              <div>
-                <p class="font-medium text-slate-500">Fecha de reporte</p>
-                <p class="text-slate-900">26/05/2024</p>
-              </div>
-              <div>
-                <p class="font-medium text-slate-500">Hora de reporte</p>
-                <p class="text-slate-900">09:00 AM</p>
-              </div>
-              <div>
-                <p class="font-medium text-slate-500">Tipo de problema</p>
-                <p class="text-slate-900">Falta de jabón</p>
-              </div>
-              <div>
-                <p class="font-medium text-slate-500">Ubicación</p>
-                <p class="text-slate-900">Edificio A-3, Piso 1, Baño Mujeres</p>
-              </div>
-            </div>
-
-            <footer class="px-4 py-3 bg-slate-50 flex justify-between items-center text-sm">
-              <button class="font-medium text-primary hover:underline">
-                Ver detalles
-              </button>
-              <div class="flex items-center gap-2">
-                <button
-                  class="px-2 py-1 rounded bg-slate-200 text-slate-700 hover:bg-slate-300 text-xs"
-                >
-                  Pendiente
-                </button>
-                <button
-                  class="px-2 py-1 rounded bg-yellow-200 text-yellow-800 hover:bg-yellow-300 text-xs"
-                >
-                  En proceso
-                </button>
-                <button
-                  class="px-2 py-1 rounded bg-green-200 text-green-800 hover:bg-green-300 text-xs"
-                >
-                  Resuelto
-                </button>
-              </div>
-            </footer>
-          </article>
-
+        <!-- LISTA DE REPORTES (dinámica) -->
+        <section id="reports-container" class="space-y-4">
+          <!-- Aquí se insertan las tarjetas desde JavaScript -->
         </section>
+
       </div>
     </main>
   </div>
-  <script>
-  function toggleMobileMenu() {
-    const menu = document.getElementById('mobile-menu');
-    menu.classList.toggle('hidden');
-  }
-</script>
 
+  <!-- JS embebido -->
+  <script>
+    function toggleMobileMenu() {
+      const menu = document.getElementById("mobile-menu");
+      if (menu) menu.classList.toggle("hidden");
+    }
+
+    const API_BASE = "http://127.0.0.1:8000";
+    let allReportes = [];
+
+    function mapEstado(id) {
+      // Ajusta estos valores si en tu BD son distintos
+      if (id === 1) return "Pendiente";
+      if (id === 2) return "En proceso";
+      if (id === 3) return "Resuelto";
+      return "Desconocido";
+    }
+
+    function estadoBadgeClasses(id) {
+      if (id === 1) {
+        return "inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-800";
+      }
+      if (id === 2) {
+        return "inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800";
+      }
+      if (id === 3) {
+        return "inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800";
+      }
+      return "inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-800";
+    }
+
+    function formatFecha(isoString) {
+      if (!isoString) return "-";
+      const d = new Date(isoString);
+      if (Number.isNaN(d.getTime())) return isoString;
+      const dia = String(d.getDate()).padStart(2, "0");
+      const mes = String(d.getMonth() + 1).padStart(2, "0");
+      const ano = d.getFullYear();
+      const hora = String(d.getHours()).padStart(2, "0");
+      const min = String(d.getMinutes()).padStart(2, "0");
+      return `${dia}/${mes}/${ano} ${hora}:${min}`;
+    }
+
+    function renderReportes(reportes) {
+      const container = document.getElementById("reports-container");
+      container.innerHTML = "";
+
+      if (!reportes || reportes.length === 0) {
+        container.innerHTML = `
+          <p class="text-center text-slate-500 text-sm">
+            No hay reportes para mostrar. Ajusta los filtros o intenta de nuevo.
+          </p>`;
+        return;
+      }
+
+      reportes.forEach((r) => {
+        const estadoTexto = mapEstado(r.id_estado);
+        const estadoClasses = estadoBadgeClasses(r.id_estado);
+        const fecha = formatFecha(r.fecha_creacion);
+
+        // Por ahora usamos id_bano directamente; después se puede traer el nombre del edificio
+        const ubicacion = `Baño #${r.id_bano}`;
+
+        const card = document.createElement("article");
+        card.className = "bg-white rounded-lg shadow-sm overflow-hidden";
+
+        card.innerHTML = `
+          <header class="p-4 border-b border-slate-200 flex justify-between items-center">
+            <h2 class="font-semibold text-slate-900">
+              Reporte #${r.folio}
+            </h2>
+            <span class="${estadoClasses}">
+              ${estadoTexto}
+            </span>
+          </header>
+
+          <div class="p-4 grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+            <div>
+              <p class="font-medium text-slate-500">Fecha de reporte</p>
+              <p class="text-slate-900">${fecha}</p>
+            </div>
+            <div>
+              <p class="font-medium text-slate-500">Número de cuenta</p>
+              <p class="text-slate-900">${r.numero_cuenta || "-"}</p>
+            </div>
+            <div>
+              <p class="font-medium text-slate-500">Prioridad</p>
+              <p class="text-slate-900 capitalize">${r.prioridad_asignada || "-"}</p>
+            </div>
+            <div>
+              <p class="font-medium text-slate-500">Ubicación</p>
+              <p class="text-slate-900">${ubicacion}</p>
+            </div>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    function aplicarFiltros() {
+      const folioInput = document.getElementById("search-folio");
+      const estadoSelect = document.getElementById("status-filter");
+      const buildingSelect = document.getElementById("building-filter");
+
+      const folioTexto = (folioInput.value || "").trim();
+      const estadoTexto = estadoSelect.value || "Todos";
+      const edificioVal = buildingSelect.value || "Todos";
+
+      let filtrados = [...allReportes];
+
+      if (folioTexto !== "") {
+        filtrados = filtrados.filter((r) =>
+          String(r.folio).includes(folioTexto)
+        );
+      }
+
+      if (estadoTexto !== "Todos") {
+        filtrados = filtrados.filter(
+          (r) => mapEstado(r.id_estado) === estadoTexto
+        );
+      }
+
+      if (edificioVal !== "Todos") {
+        filtrados = filtrados.filter(
+          (r) => String(r.id_bano) === String(edificioVal)
+        );
+      }
+
+      renderReportes(filtrados);
+    }
+
+    function limpiarFiltros() {
+      document.getElementById("search-folio").value = "";
+      document.getElementById("status-filter").value = "Todos";
+      document.getElementById("building-filter").value = "Todos";
+      aplicarFiltros();
+    }
+
+    async function cargarReportes() {
+      try {
+        const resp = await fetch(`${API_BASE}/admin/reportes`);
+        if (!resp.ok) {
+          console.error("Error HTTP al cargar reportes:", resp.status);
+          renderReportes([]);
+          return;
+        }
+        const data = await resp.json();
+        allReportes = Array.isArray(data) ? data : [];
+        aplicarFiltros();
+      } catch (err) {
+        console.error("Error al cargar reportes:", err);
+        renderReportes([]);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // Cargar datos
+      cargarReportes();
+
+      // Listeners de filtros
+      document.getElementById("search-folio")
+        .addEventListener("input", aplicarFiltros);
+      document.getElementById("status-filter")
+        .addEventListener("change", aplicarFiltros);
+      document.getElementById("building-filter")
+        .addEventListener("change", aplicarFiltros);
+      document.getElementById("clear-filters")
+        .addEventListener("click", limpiarFiltros);
+    });
+  </script>
 </body>
 </html>
