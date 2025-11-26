@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es" class="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel de Administración - BettSoft</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+
+  <!-- Fuentes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    rel="stylesheet"
+  />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "#003366",
+            "background-light": "#F0F2F5",
+          },
+          fontFamily: {
+            display: ["Public Sans", "sans-serif"],
+          },
+          borderRadius: {
+            lg: "1rem",
+          },
+        },
+      },
+    };
+  </script>
+</head>
+
+<body class="font-display bg-background-light text-slate-800 antialiased">
+  <div class="min-h-screen flex flex-col">
+
+    <!-- HEADER azul con menú -->
+    <header class="bg-primary text-white shadow-md">
+  <!-- Barra superior -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+
+    <!-- Logo -->
+    <a href="index.html" class="flex items-center">
+      <img
+        src="images/logo.png"
+        alt="Logo FES Acatlán"
+        class="h-10 sm:h-14 w-auto"
+      />
+    </a>
+
+    <!-- Menú de escritorio -->
+    <nav class="hidden sm:flex gap-8 text-sm md:text-base">
+      <a href="index.html"
+         class="pb-1 border-b-2 border-transparent hover:border-white transition">
+        Inicio
+      </a>
+      <a href="reportar.html"
+         class="pb-1 border-b-2 border-transparent hover:border-white transition">
+        Nuevo reporte
+      </a>
+      <a href="consultar.html"
+         class="pb-1 border-b-2 border-transparent hover:border-white transition">
+        Consultar reporte
+      </a>
+    </nav>
+
+    <!-- Botón Cerrar sesión (solo escritorio) -->
+    <button
+      type="button"
+      class="hidden sm:inline-flex items-center gap-2 text-white text-sm font-medium
+             hover:shadow-md hover:bg-white/10 px-3 py-2 rounded-md transition"
+    >
+      <span class="material-icons text-base">logout</span>
+      <span>Cerrar sesión</span>
+    </button>
+
+    <!-- Botón hamburguesa (solo móvil) -->
+    <button
+      type="button"
+      class="inline-flex items-center justify-center sm:hidden p-2 rounded-md hover:bg-white/10 transition"
+      onclick="toggleMobileMenu()"
+      aria-label="Abrir menú"
+    >
+      <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+           viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Menú móvil desplegable -->
+  <div id="mobile-menu"
+       class="sm:hidden hidden border-t border-white/20 bg-primary/95">
+    <nav class="flex flex-col px-4 py-3 gap-3 text-sm">
+      <a href="index.html"
+         class="py-1 border-b border-white/10">
+        Inicio
+      </a>
+      <a href="reportar.html"
+         class="py-1 border-b border-white/10">
+        Nuevo reporte
+      </a>
+      <a href="consultar.html"
+         class="py-1 border-b border-white/10">
+        Consultar reporte
+      </a>
+      <button
+        type="button"
+        class="pt-2 flex items-center gap-2 text-left"
+      >
+        <span class="material-icons text-base">logout</span>
+        <span>Cerrar sesión</span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+
+    <!-- CONTENIDO -->
+    <main class="flex-1 px-4 py-8 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-6xl space-y-8">
+
+        <!-- Título -->
+        <section class="text-center">
+          <h1 class="text-3xl font-bold text-primary mb-2">
+            Panel de administración
+          </h1>
+          <p class="text-slate-600">
+            Gestiona los reportes de sanitarios de la FES Acatlán
+          </p>
+        </section>
+
+        <!-- Filtros -->
+        <section class="bg-white rounded-lg shadow-sm p-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+            <div>
+              <label for="search-folio" class="block text-sm font-medium text-slate-700">
+                Buscar por folio
+              </label>
+              <input
+                id="search-folio"
+                type="text"
+                placeholder="#FES12345"
+                class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 text-sm
+                       focus:border-primary focus:ring-primary"
+              />
+            </div>
+
+            <div>
+              <label for="status-filter" class="block text-sm font-medium text-slate-700">
+                Estado
+              </label>
+              <select
+                id="status-filter"
+                class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 text-sm
+                       focus:border-primary focus:ring-primary"
+              >
+                <option>Todos</option>
+                <option>Pendiente</option>
+                <option>En proceso</option>
+                <option>Resuelto</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="building-filter" class="block text-sm font-medium text-slate-700">
+                Edificio
+              </label>
+              <select
+                id="building-filter"
+                class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 text-sm
+                       focus:border-primary focus:ring-primary"
+              >
+                <option>Todos</option>
+                <option>A-1</option>
+                <option>A-2</option>
+                <option>A-3</option>
+                <option>Biblioteca</option>
+              </select>
+            </div>
+
+            <button
+              type="button"
+              class="text-sm text-slate-500 hover:text-primary mt-6 text-left lg:text-right"
+            >
+              Limpiar filtros
+            </button>
+          </div>
+        </section>
+
+        <!-- LISTA DE REPORTES -->
+        <section class="space-y-4">
+
+          <!-- Reporte 1 -->
+          <article class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <header class="p-4 border-b border-slate-200 flex justify-between items-center">
+              <h2 class="font-semibold text-slate-900">
+                Reporte #FES12345
+              </h2>
+              <span
+                class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-800"
+              >
+                Pendiente
+              </span>
+            </header>
+
+            <div class="p-4 grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+              <div>
+                <p class="font-medium text-slate-500">Fecha de reporte</p>
+                <p class="text-slate-900">28/05/2024</p>
+              </div>
+              <div>
+                <p class="font-medium text-slate-500">Hora de reporte</p>
+                <p class="text-slate-900">10:30 AM</p>
+              </div>
+              <div>
+                <p class="font-medium text-slate-500">Tipo de problema</p>
+                <p class="text-slate-900">Fuga de agua</p>
+              </div>
+              <div>
+                <p class="font-medium text-slate-500">Ubicación</p>
+                <p class="text-slate-900">Edificio A-1, Piso 2, Baño Mujeres</p>
+              </div>
+            </div>
+
+            <footer class="px-4 py-3 bg-slate-50 flex justify-between items-center text-sm">
+              <button class="font-medium text-primary hover:underline">
+                Ver detalles
+              </button>
+              <div class="flex items-center gap-2">
+                <button
+                  class="px-2 py-1 rounded bg-slate-200 text-slate-700 hover:bg-slate-300 text-xs"
+                >
+                  Pendiente
+                </button>
+                <button
+                  class="px-2 py-1 rounded bg-yellow-200 text-yellow-800 hover:bg-yellow-300 text-xs"
+                >
+                  En proceso
+                </button>
+                <button
+                  class="px-2 py-1 rounded bg-green-200 text-green-800 hover:bg-green-300 text-xs"
+                >
+                  Resuelto
+                </button>
+              </div>
+            </footer>
+          </article>
+
+          <!-- Reporte 2 -->
+          <article class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <header class="p-4 border-b border-slate-200 flex justify-between items-center">
+              <h2 class="font-semibold text-slate-900">
+                Reporte #FES12346
+              </h2>
+              <span
+                class="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800"
+              >
+                En proceso
+              </span>
+            </header>
+
+            <div class="p-4 grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+              <div>
+                <p class="font-medium text-slate-500">Fecha de reporte</p>
+                <p class="text-slate-900">27/05/2024</p>
+              </div>
+              <div>
+                <p class="font-medium text-slate-500">Hora de reporte</p>
+                <p class="text-slate-900">02:15 PM</p>
+              </div>
+              <div>
+                <p class="font-medium text-slate-500">Tipo de problema</p>
+                <p class="text-slate-900">Inodoro tapado</p>
+              </div>
+              <div>
+                <p class="font-medium text-slate-500">Ubicación</p>
+                <p class="text-slate-900">Biblioteca, Planta Baja, Baño Hombres</p>
+              </div>
+            </div>
+
+            <footer class="px-4 py-3 bg-slate-50 flex justify-between items-center text-sm">
+              <button class="font-medium text-primary hover:underline">
+                Ver detalles
+              </button>
+              <div class="flex items-center gap-2">
+                <button
+                  class="px-2 py-1 rounded bg-slate-200 text-slate-700 hover:bg-slate-300 text-xs"
+                >
+                  Pendiente
+                </button>
+                <button
+                  class="px-2 py-1 rounded bg-yellow-200 text-yellow-800 hover:bg-yellow-300 text-xs"
+                >
+                  En proceso
+                </button>
+                <button
+                  class="px-2 py-1 rounded bg-green-200 text-green-800 hover:bg-green-300 text-xs"
+                >
+                  Resuelto
+                </button>
+              </div>
+            </footer>
+          </article>
+
+          <!-- Reporte 3 -->
+          <article class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <header class="p-4 border-b border-slate-200 flex justify-between items-center">
+              <h2 class="font-semibold text-slate-900">
+                Reporte #FES12347
+              </h2>
+              <span
+                class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800"
+              >
+                Resuelto
+              </span>
+            </header>
+
+            <div class="p-4 grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+              <div>
+                <p class="font-medium text-slate-500">Fecha de reporte</p>
+                <p class="text-slate-900">26/05/2024</p>
+              </div>
+              <div>
+                <p class="font-medium text-slate-500">Hora de reporte</p>
+                <p class="text-slate-900">09:00 AM</p>
+              </div>
+              <div>
+                <p class="font-medium text-slate-500">Tipo de problema</p>
+                <p class="text-slate-900">Falta de jabón</p>
+              </div>
+              <div>
+                <p class="font-medium text-slate-500">Ubicación</p>
+                <p class="text-slate-900">Edificio A-3, Piso 1, Baño Mujeres</p>
+              </div>
+            </div>
+
+            <footer class="px-4 py-3 bg-slate-50 flex justify-between items-center text-sm">
+              <button class="font-medium text-primary hover:underline">
+                Ver detalles
+              </button>
+              <div class="flex items-center gap-2">
+                <button
+                  class="px-2 py-1 rounded bg-slate-200 text-slate-700 hover:bg-slate-300 text-xs"
+                >
+                  Pendiente
+                </button>
+                <button
+                  class="px-2 py-1 rounded bg-yellow-200 text-yellow-800 hover:bg-yellow-300 text-xs"
+                >
+                  En proceso
+                </button>
+                <button
+                  class="px-2 py-1 rounded bg-green-200 text-green-800 hover:bg-green-300 text-xs"
+                >
+                  Resuelto
+                </button>
+              </div>
+            </footer>
+          </article>
+
+        </section>
+      </div>
+    </main>
+  </div>
+  <script>
+  function toggleMobileMenu() {
+    const menu = document.getElementById('mobile-menu');
+    menu.classList.toggle('hidden');
+  }
+</script>
+
+</body>
+</html>
