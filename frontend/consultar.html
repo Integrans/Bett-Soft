@@ -180,20 +180,101 @@
         <!-- Resultados de ejemplo -->
         <section class="space-y-6">
 
-          <!-- Resultados de la búsqueda -->
-<section class="mt-8">
-  <h2 class="text-lg font-semibold text-slate-900 mb-3">Resultado</h2>
+          <!-- Tarjeta 1 -->
+          <article class="bg-white rounded-2xl shadow-sm p-6 sm:p-8">
+            <div class="flex flex-col sm:flex-row justify-between gap-4 mb-6">
+              <h2 class="text-lg font-bold text-slate-900">
+                Reporte #UNV83726
+              </h2>
+              <div
+                class="flex items-center gap-2 self-start rounded-full bg-yellow-100 text-yellow-800 text-xs font-medium px-4 py-1.5"
+              >
+                <span class="w-2 h-2 rounded-full bg-yellow-400"></span>
+                En progreso
+              </div>
+            </div>
 
-  <!-- Mensaje de estado (errores / info) -->
-  <p id="mensaje-estado" class="text-sm text-slate-500 mb-4">
-    Ingresa un folio para consultar el estado de tu reporte.
-  </p>
+            <dl class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-sm">
+              <div>
+                <dt class="font-semibold text-slate-900 mb-1">Fecha de reporte:</dt>
+                <dd class="text-slate-600">2024-10-26</dd>
+              </div>
+              <div>
+                <dt class="font-semibold text-slate-900 mb-1">Tipo de problema:</dt>
+                <dd class="text-slate-600">Fuga de agua</dd>
+              </div>
+              <div>
+                <dt class="font-semibold text-slate-900 mb-1">Ubicación:</dt>
+                <dd class="text-slate-600">
+                  Biblioteca Central, Baño Hombres Piso 2
+                </dd>
+              </div>
+            </dl>
+          </article>
 
-  <!-- Aquí se va a insertar la tarjeta del reporte -->
-  <div id="resultado-reporte" class="space-y-4"></div>
-</section>
+          <!-- Tarjeta 2 -->
+          <article class="bg-white rounded-2xl shadow-sm p-6 sm:p-8">
+            <div class="flex flex-col sm:flex-row justify-between gap-4 mb-6">
+              <h2 class="text-lg font-bold text-slate-900">
+                Reporte #UNV81452
+              </h2>
+              <div
+                class="flex items-center gap-2 self-start rounded-full bg-green-100 text-green-800 text-xs font-medium px-4 py-1.5"
+              >
+                <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                Completado
+              </div>
+            </div>
 
+            <dl class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-sm">
+              <div>
+                <dt class="font-semibold text-slate-900 mb-1">Fecha de reporte:</dt>
+                <dd class="text-slate-600">2024-10-22</dd>
+              </div>
+              <div>
+                <dt class="font-semibold text-slate-900 mb-1">Tipo de problema:</dt>
+                <dd class="text-slate-600">Inodoro tapado</dd>
+              </div>
+              <div>
+                <dt class="font-semibold text-slate-900 mb-1">Ubicación:</dt>
+                <dd class="text-slate-600">
+                  Edificio de Ciencias, Baño Mujeres Planta Baja
+                </dd>
+              </div>
+            </dl>
+          </article>
 
+          <!-- Tarjeta 3 -->
+          <article class="bg-white rounded-2xl shadow-sm p-6 sm:p-8">
+            <div class="flex flex-col sm:flex-row justify-between gap-4 mb-6">
+              <h2 class="text-lg font-bold text-slate-900">
+                Reporte #UNV90123
+              </h2>
+              <div
+                class="flex items-center gap-2 self-start rounded-full bg-slate-100 text-slate-700 text-xs font-medium px-4 py-1.5"
+              >
+                <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                Pendiente
+              </div>
+            </div>
+
+            <dl class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-sm">
+              <div>
+                <dt class="font-semibold text-slate-900 mb-1">Fecha de reporte:</dt>
+                <dd class="text-slate-600">2024-10-28</dd>
+              </div>
+              <div>
+                <dt class="font-semibold text-slate-900 mb-1">Tipo de problema:</dt>
+                <dd class="text-slate-600">Falta de papel</dd>
+              </div>
+              <div>
+                <dt class="font-semibold text-slate-900 mb-1">Ubicación:</dt>
+                <dd class="text-slate-600">
+                  Gimnasio Universitario, Vestidores Hombres
+                </dd>
+              </div>
+            </dl>
+          </article>
 
         </section>
       </div>
@@ -205,8 +286,6 @@
     menu.classList.toggle('hidden');
   }
 </script>
-<script src="consultar.js"></script>
-
 
 </body>
 </html>
