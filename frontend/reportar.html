@@ -1,427 +1,243 @@
 <!DOCTYPE html>
 <html class="light" lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BettSoft – Reporte de Sanitarios</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BettSoft - Nuevo Reporte</title>
 
-  <!-- Tailwind CDN + forms -->
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 
-  <!-- Configuración Tailwind (misma línea visual que el resto del sitio) -->
-  <script>
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            primary: "#001F5B",       // azul FES
-            accent: "#C8A064",        // dorado
-            background: {
-              light: "#F4F6FB",
-              dark: "#0B1727"
-            },
-            text: {
-              main: "#111827"
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#003366",  // Azul institucional
+                        accent: "#D4AF37",   // Dorado
+                        bg_light: "#F0F2F5", // Fondo gris suave
+                        surface: "#FFFFFF",  // Blanco puro
+                    }
+                }
             }
-          },
-          borderRadius: {
-            card: "1.5rem"
-          }
         }
-      }
-    };
-  </script>
-
-  <!-- Fuente similar a la que ya usas -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap"
-    rel="stylesheet"
-  />
-
-  <style>
-    body {
-      font-family: "Public Sans", system-ui, -apple-system, BlinkMacSystemFont,
-        "Segoe UI", sans-serif;
-    }
-  </style>
+    </script>
 </head>
 
-<body class="font-display bg-background-light text-slate-800 antialiased">
-  <div class="min-h-screen flex flex-col">
+<body class="bg-bg_light text-gray-800 font-sans min-h-screen flex flex-col">
 
-    <!-- HEADER: franja azul, logo izquierda, menú centro -->
-    <header class="bg-primary text-white shadow-md">
-      <div
-        class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4"
+<!-- HEADER -->
+<header class="bg-primary text-white shadow-md sticky top-0 z-50">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+
+    <!-- LOGO IZQUIERDA -->
+    <a href="index.html" class="flex items-center">
+      <img src="Images/logo.png" alt="BettSoft" class="h-10 object-contain">
+    </a>
+
+    <!-- MENÚ CENTRO (DESKTOP) -->
+    <nav class="hidden md:flex gap-8 text-sm font-medium items-center">
+      <a href="index.html" class="hover:text-white/80 transition">Inicio</a>
+      <a href="reportar.html" class="border-b-2 border-white pb-1">Nuevo reporte</a>
+      <a href="consultar.html" class="hover:text-white/80 transition">Consultar reporte</a>
+    </nav>
+
+    <!-- BOTÓN LOGIN DERECHA -->
+    <div class="hidden md:block">
+      <a
+        href="login.html"
+        class="border border-white text-white font-semibold px-4 py-2 rounded-md hover:bg-white hover:text-primary transition"
       >
-        <!-- Logo -->
-        <div class="flex items-center gap-3">
-          <img
-            src="images/logo.png"
-            alt="Logo FES Acatlán"
-            class="h-10 sm:h-14 w-auto"
-          />
-        </div>
+        Iniciar sesión
+      </a>
+    </div>
 
-        <!-- Menú desktop -->
-        <nav class="hidden md:flex items-center gap-6 text-sm">
-          <a
-            href="index.html"
-            class="pb-1 border-b-2 border-transparent hover:border-white transition-colors"
-          >
-            Inicio
-          </a>
-          <a
-            href="reportar.html"
-            class="pb-1 border-b-2 border-white font-semibold"
-          >
-            Nuevo incidente
-          </a>
-          <a
-            href="consultar.html"
-            class="pb-1 border-b-2 border-transparent hover:border-white transition-colors"
-          >
-            Consultar incidente
-          </a>
-        </nav>
+    <!-- BOTÓN HAMBURGUESA (MÓVIL) -->
+    <button id="btn-menu" class="md:hidden">
+      <span id="icon-open" class="material-symbols-outlined text-white text-3xl">
+        menu
+      </span>
+      <span id="icon-close" class="material-symbols-outlined text-white text-3xl hidden">
+        close
+      </span>
+    </button>
 
-        <!-- Botón iniciar sesión (desktop) -->
-        <div class="hidden md:block">
-          <a
-            href="login.html"
-            class="px-4 py-2 bg-white/95 text-primary rounded-full text-sm font-medium shadow-sm hover:bg-white hover:shadow-md transition"
-          >
-            Iniciar sesión
-          </a>
-        </div>
-
-        <!-- Botón menú móvil -->
-        <button
-          id="btn-menu"
-          class="md:hidden inline-flex items-center justify-center p-2 rounded-md border border-white/40"
-          aria-label="Abrir menú"
-        >
-          <span class="sr-only">Abrir menú</span>
-          <svg
-            id="icon-open"
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-          <svg
-            id="icon-close"
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 hidden"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-
-      <!-- Menú móvil -->
-      <div id="menu-mobile" class="md:hidden hidden border-t border-white/20">
-        <div class="max-w-6xl mx-auto px-4 py-3 space-y-2 text-sm">
-          <a href="index.html" class="block py-1">Inicio</a>
-          <a href="reportar.html" class="block py-1 font-semibold">
-            Nuevo incidente
-          </a>
-          <a href="consultar.html" class="block py-1">Consultar incidente</a>
-          <a
-            href="login.html"
-            class="inline-flex mt-2 px-4 py-2 rounded-full bg-white/95 text-primary font-medium"
-          >
-            Iniciar sesión
-          </a>
-        </div>
-      </div>
-    </header>
-
-    <!-- CONTENIDO PRINCIPAL -->
-    <main class="flex-1">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-        <h1
-          class="text-2xl sm:text-3xl font-bold text-center text-primary mb-8"
-        >
-          Reporte de incidencia
-        </h1>
-
-        <!-- Tarjeta del formulario -->
-        <section
-          class="bg-white rounded-card shadow-md sm:shadow-lg px-6 sm:px-10 py-6 sm:py-8"
-        >
-          <header class="mb-6">
-            <h2 class="text-lg sm:text-xl font-semibold text-slate-900">
-              Detalles del Incidente
-            </h2>
-            <p class="mt-1 text-sm text-slate-500">
-              Utilice este formulario para reportar cualquier problema en los
-              sanitarios.
-            </p>
-          </header>
-
-          <!-- FORMULARIO -->
-          <form id="reporte-form" class="space-y-6">
-            <!-- Número de cuenta -->
-            <div class="space-y-1">
-              <label
-                for="numero_cuenta"
-                class="block text-sm font-medium text-slate-700"
-              >
-                Número de cuenta
-                <span class="text-xs text-slate-400">
-                  (obligatorio si no es anónimo)
-                </span>
-              </label>
-              <input
-                id="numero_cuenta"
-                type="text"
-                inputmode="numeric"
-                autocomplete="off"
-                class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-primary focus:ring-primary text-sm"
-                placeholder="Ej. 123456789"
-              />
-              <p class="text-xs text-slate-400">
-                Si marcas el reporte como anónimo, este campo se ignorará.
-              </p>
-            </div>
-
-            <!-- Tipo de problema -->
-            <div class="space-y-1">
-              <label
-                for="tipo_problema"
-                class="block text-sm font-medium text-slate-700"
-              >
-                Tipo de problema
-              </label>
-              <select
-                id="tipo_problema"
-                class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-primary focus:ring-primary text-sm"
-              >
-                <option value="">Seleccione el tipo de problema</option>
-                <!-- Los valores numéricos deben corresponder con tu tabla categorias_incidente -->
-                <option value="1">Fuga de agua</option>
-                <option value="2">Falta de papel</option>
-                <option value="3">Sanitario sucio</option>
-                <option value="4">Sanitario dañado</option>
-              </select>
-            </div>
-
-            <!-- Edificio / Baño (sexo) -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div class="space-y-1">
-                <label
-                  for="edificio"
-                  class="block text-sm font-medium text-slate-700"
-                >
-                  Edificio
-                </label>
-                <select
-                  id="edificio"
-                  class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-primary focus:ring-primary text-sm"
-                >
-                  <option value="">Seleccione el edificio</option>
-                  <option value="Edificio A1">Edificio A1</option>
-                  <option value="Edificio A2">Edificio A2</option>
-                  <option value="Edificio B">Edificio B</option>
-                  <option value="Biblioteca">Biblioteca</option>
-                </select>
-              </div>
-
-              <div class="space-y-1">
-                <label
-                  for="sexo"
-                  class="block text-sm font-medium text-slate-700"
-                >
-                  Baño
-                </label>
-                <select
-                  id="sexo"
-                  class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-primary focus:ring-primary text-sm"
-                >
-                  <option value="">Seleccione baño</option>
-                  <option value="hombre">Hombres</option>
-                  <option value="mujer">Mujeres</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- Sección / Taza u orinal -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div class="space-y-1">
-                <label
-                  for="seccion"
-                  class="block text-sm font-medium text-slate-700"
-                >
-                  Pasillo
-                </label>
-                <input
-                  id="seccion"
-                  type="text"
-                  class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-primary focus:ring-primary text-sm"
-                  placeholder="Ej. Frontal, al fondo, junto a la ventana…"
-                />
-              </div>
-
-              <div class="space-y-1">
-                <label
-                  for="taza_o_orinal"
-                  class="block text-sm font-medium text-slate-700"
-                >
-                  Taza u orinal
-                </label>
-                <select
-                  id="taza_o_orinal"
-                  class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-primary focus:ring-primary text-sm"
-                >
-                  <option value="">Seleccione una opción</option>
-                  <option value="taza">Taza</option>
-                  <option value="orinal">Orinal</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- Tipo de reporte -->
-            <div class="space-y-1">
-              <label
-                for="tipo_reporte"
-                class="block text-sm font-medium text-slate-700"
-              >
-              
-
-            <!-- Checkbox anónimo -->
-            <div class="flex items-center gap-2">
-              <input
-                id="anonimo"
-                type="checkbox"
-                class="rounded border-slate-300 text-primary focus:ring-primary"
-              />
-              <label for="anonimo" class="text-sm text-slate-700">
-                Enviar incidente anónimo
-              </label>
-            </div>
-
-            <!-- Botón enviar -->
-            <div class="pt-2">
-              <button
-                type="submit"
-                class="w-full inline-flex justify-center items-center rounded-full bg-primary text-white font-semibold py-3 text-sm sm:text-base shadow-md hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-              >
-                Enviar Incidente
-              </button>
-            </div>
-          </form>
-        </section>
-      </div>
-    </main>
-
-    <!-- FOOTER -->
-    <footer class="py-4 text-center text-xs text-slate-500">
-      Hecho en México · Sistema oficial FES Acatlán
-    </footer>
   </div>
 
-  <!-- JS: menú hamburguesa + envío al backend -->
-  <script>
-    // ---------------- Menú móvil ----------------
-    const btnMenu = document.getElementById("btn-menu");
-    const menuMobile = document.getElementById("menu-mobile");
-    const iconOpen = document.getElementById("icon-open");
-    const iconClose = document.getElementById("icon-close");
+  <!-- MENÚ MÓVIL -->
+  <div id="menu-mobile" class="hidden md:hidden bg-primary border-t border-blue-900">
+    <nav class="flex flex-col p-4 gap-3 text-sm">
+      <a href="index.html" class="hover:text-white/80">Inicio</a>
+      <a href="reportar.html" class="hover:text-white/80">Nuevo reporte</a>
+      <a href="consultar.html" class="hover:text-white/80">Consultar reporte</a>
+      <a href="login.html" class="mt-2 border border-white text-center py-2 rounded-md font-semibold hover:bg-white hover:text-primary transition">
+        Iniciar sesión
+      </a>
+    </nav>
+  </div>
+</header>
 
-    if (btnMenu && menuMobile) {
-      btnMenu.addEventListener("click", () => {
-        const isOpen = !menuMobile.classList.contains("hidden");
-        menuMobile.classList.toggle("hidden", isOpen);
-        iconOpen.classList.toggle("hidden", !isOpen);
-        iconClose.classList.toggle("hidden", isOpen);
-      });
-    }
 
-    // ---------------- Lógica del formulario ----------------
-    const API_BASE = "http://127.0.0.1:8000";
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const form = document.getElementById("reporte-form");
-      if (!form) return;
+    <!-- MAIN -->
+    <main class="flex-1 w-full max-w-3xl mx-auto px-4 py-8">
 
-      console.log("Frontend cargado correctamente");
+        <div class="mb-6 text-center">
+            <h1 class="text-3xl font-bold text-primary">Levantar incidente</h1>
+            <p class="text-gray-500 mt-2">Ayúdanos a mantener las instalaciones en buen estado.</p>
+        </div>
 
-      form.addEventListener("submit", async (event) => {
-        event.preventDefault();
+        <div class="bg-surface rounded-xl shadow-lg border border-gray-100 overflow-hidden">
 
-        const anonimo = document.getElementById("anonimo").checked;
-        const numeroCuentaInput = document.getElementById("numero_cuenta");
+            <div class="h-2 bg-gradient-to-r from-primary to-blue-400"></div>
 
-        const data = {
-          numero_cuenta: anonimo
-            ? "ANONIMO"
-            : (numeroCuentaInput.value || "").trim(),
-          id_categoria: parseInt(
-            document.getElementById("tipo_problema").value,
-            10
-          ) || null,
-          taza_o_orinal: document.getElementById("taza_o_orinal").value || null,
-          pasillo: (document.getElementById("seccion").value || "").trim() || "NA",
-          tipo_reporte: document.getElementById("tipo_reporte").value || null,
-          edificio: document.getElementById("edificio").value || null,
-          sexo: document.getElementById("sexo").value || null,
-          imagen_url: null
-        };
+            <form id="form-reporte" class="p-6 sm:p-8 flex flex-col gap-6">
 
-        // Validación mínima en frontend
-        if (!data.id_categoria || !data.tipo_reporte || !data.edificio || !data.sexo) {
-          alert("Por favor llena todos los campos obligatorios.");
-          return;
-        }
-        if (!anonimo && !data.numero_cuenta) {
-          alert("Ingresa tu número de cuenta o marca el reporte como anónimo.");
-          return;
-        }
+                <!-- DETALLES DEL PROBLEMA -->
+                <div>
+                    <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 mb-4">
+                        <span class="material-symbols-outlined text-primary">error</span>
+                        Detalles del problema
+                    </h3>
 
-        console.log("Datos enviados:", data);
+                    <label class="block">
+                        <span class="text-gray-700 font-medium">Tipo de incidente</span>
+                        <select id="tipo_problema" required
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary/20 bg-gray-50 h-12">
+                            <option value="" disabled selected>Selecciona una opción...</option>
+                            <option value="fuga">💦 Fuga de agua</option>
+                            <option value="taza_tapada">🚽 Taza tapada</option>
+                            <option value="orinal_tapado">🛑 Orinal tapado</option>
+                            <option value="no_papel">🧻 Falta de papel</option>
+                            <option value="no_jabon">🧼 Falta de jabón</option>
+                            <option value="suciedad">🧹 Suciedad excesiva</option>
+                            <option value="mal_olor">🤢 Mal olor</option>
+                        </select>
+                    </label>
+                </div>
 
-        try {
-          const resp = await fetch(`${API_BASE}/reportes/`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-          });
+                <hr class="border-gray-100">
 
-          let json = null;
-          try {
-            json = await resp.json();
-          } catch (_) {}
+                <!-- UBICACIÓN -->
+                <div>
+                    <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 mb-4">
+                        <span class="material-symbols-outlined text-primary">location_on</span>
+                        Ubicación
+                    </h3>
 
-          console.log("Respuesta backend:", json);
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Edificio -->
+                        <label class="block">
+                            <span class="text-gray-700 font-medium">Edificio</span>
+                            <select id="edificio" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary/20 bg-gray-50 h-11">
+                                <option value="A-1">Edificio A1</option>
+                                <option value="A-2">Edificio A2</option>
+                                <option value="A-3">Edificio A3</option>
+                                <option value="A-4">Edificio A4</option>
+                                <option value="A-5">Edificio A5</option>
+                                <option value="A-6">Edificio A6</option>
+                                <option value="A-7">Edificio A7</option>
+                                <option value="A-8">Edificio A8</option>
+                                <option value="A-9">Edificio A9</option>
+                                <option value="A-10">Edificio A10</option>
+                                <option value="A-11">Edificio A11</option>
+                                <option value="A-12">Edificio A12</option>
+                                <option value="A-13">Edificio A13</option>
+                                <option value="A-14">Edificio A14</option>
+                                <option value="A-15">Edificio A15</option>
+                            </select>
+                        </label>
 
-          if (!resp.ok) {
-            alert("Error al enviar el reporte. Revisa la consola.");
-            return;
-          }
+                        <!-- Nivel (solo 1 y 2 porque así está en la tabla banos) -->
+                        <label class="block">
+                            <span class="text-gray-700 font-medium">Nivel / Piso</span>
+                            <select id="nivel" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary/20 bg-gray-50 h-11">
+                                <option value="1">Piso 1</option>
+                                <option value="2">Piso 2</option>
+                            </select>
+                        </label>
 
-          // Aquí puedes redirigir a confirmar.html si quieres mostrar folio, etc.
-          // window.location.href = "confirmar.html";
-          alert("Reporte enviado correctamente.");
-        } catch (err) {
-          console.error("Error de conexión:", err);
-          alert("No se pudo conectar con el servidor. Verifica que el backend esté encendido.");
-        }
-      });
-    });
-  </script>
+                        <!-- Sexo -->
+                        <label class="block">
+                            <span class="text-gray-700 font-medium">Baño de:</span>
+                            <select id="sexo" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary/20 bg-gray-50 h-11">
+                                <option value="M">Mujeres</option>
+                                <option value="H">Hombres</option>
+                                <option value="Mixto">Mixto</option>
+                            </select>
+                        </label>
+
+                        <!-- Pasillo -->
+                        <label class="block">
+                            <span class="text-gray-700 font-medium">Ubicación (Pasillo)</span>
+                            <select id="pasillo" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary/20 bg-gray-50 h-11">
+                                <option value="frente">Frente</option>
+                                <option value="atras">Atrás</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <!-- Taza u orinal -->
+                    <div class="mt-4">
+                        <label class="block">
+                            <span class="text-gray-700 font-medium">Elemento afectado</span>
+                            <div class="mt-2 flex gap-4">
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="taza_or_orinal" value="taza" class="form-radio text-primary"
+                                        checked>
+                                    <span class="ml-2">Taza (inodoro)</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="taza_or_orinal" value="orinal" class="form-radio text-primary">
+                                    <span class="ml-2">Orinal (mingitorio)</span>
+                                </label>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <hr class="border-gray-100">
+
+                <!-- DATOS DEL USUARIO -->
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                    <label class="block mb-3">
+                        <span class="text-gray-700 font-medium text-sm">Número de cuenta (opcional)</span>
+                        <input
+                            type="text"
+                            id="numero_cuenta"
+                            placeholder="Ej. 315123456"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary/20 h-10 text-sm">
+                    </label>
+
+                    <label class="inline-flex items-center cursor-pointer">
+                        <input id="es_anonimo" type="checkbox"
+                            class="form-checkbox rounded text-primary focus:ring-primary/50 h-5 w-5 transition duration-150 ease-in-out">
+                        <span class="ml-2 text-gray-700 font-medium">Prefiero enviar reporte anónimo</span>
+                    </label>
+
+                    <p class="text-xs text-gray-500 mt-2">
+                        Si marca el reporte como anónimo, el número de cuenta se ignorará aunque lo haya escrito.
+                    </p>
+                </div>
+
+                <!-- BOTÓN ENVIAR -->
+                <button
+                    type="submit"
+                    class="w-full bg-primary hover:bg-blue-900 text-white font-bold py-4 rounded-lg shadow-md hover:shadow-lg transform active:scale-[0.98] transition-all duration-200 flex justify-center items-center gap-2 mt-2">
+                    <span class="material-symbols-outlined">send</span>
+                    Enviar incidente
+                </button>
+            </form>
+        </div>
+
+    </main>
+    
+    <script src="reportar.js"></script>
 </body>
 </html>
