@@ -1,155 +1,300 @@
-// URL base del backend
+// ======================
+// CONFIG
+// ======================
 const API_BASE = "http://127.0.0.1:8000";
 
-// Referencias a los elementos del DOM
-const inputFolio = document.getElementById("filtro-folio");
-const selectEstado = document.getElementById("filtro-estado");
-const selectEdificio = document.getElementById("filtro-edificio");
-const contenedorReportes = document.getElementById("contenedor-reportes");
+// Lista de estados (debe coincidir con tu BD)
+const ESTADOS = [
+  { id: 1, label: "Pendiente",  badgeClasses: "bg-amber-100 text-amber-800" },
+  { id: 2, label: "En proceso", badgeClasses: "bg-blue-100 text-blue-800" },
+  { id: 3, label: "Resuelto",  badgeClasses: "bg-emerald-100 text-emerald-800" },
+];
 
-// Aquí guardamos todos los reportes que vengan del backend
-let TODOS_LOS_REPORTES = [];
+// ======================
+// VARIABLES GLOBALES
+// ======================
+let allReportes = [];
 
-// Mapeos simples para mostrar texto bonito
-const ESTADOS_MAP = {
-  1: "Pendiente",
-  2: "En proceso",
-  3: "Resuelto",
-};
+// ======================
+// UTILIDADES
+// ======================
+function getEstadoDef(idEstado) {
+  return ESTADOS.find((e) => e.id === idEstado) || ESTADOS[0];
+}
 
-const PRIORIDAD_MAP = {
-  alta: "Alta",
-  media: "Media",
-  baja: "Baja",
-};
+function formatearFecha(isoString) {
+  if (!isoString) return "Sin fecha";
+  const d = new Date(isoString);
+  if (Number.isNaN(d.getTime())) return isoString;
+  return d.toLocaleString("es-MX", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
 
-// 🟦 1. Cargar reportes al inicio
-document.addEventListener("DOMContentLoaded", async () => {
-  try {
-    console.log("Cargando reportes desde el backend...");
+// Mapeo simple de tipo de problema (ajusta a tus valores reales)
+function mapTipoReporte(tipo) {
+  if (!tipo) return "Sin especificar";
 
-    const resp = await fetch(`${API_BASE}/admin/reportes`);
-    if (!resp.ok) {
-      console.error("Error al obtener reportes:", resp.status);
-      contenedorReportes.innerHTML =
-        "<p class='text-center text-gray-500'>Error al cargar reportes.</p>";
-      return;
-    }
-
-    const data = await resp.json();
-    console.log("Reportes recibidos:", data);
-
-    TODOS_LOS_REPORTES = data || [];
-    renderizarReportes(TODOS_LOS_REPORTES);
-  } catch (err) {
-    console.error("Error de red al cargar reportes:", err);
-    contenedorReportes.innerHTML =
-      "<p class='text-center text-gray-500'>No se pudo conectar con el servidor.</p>";
+  switch (tipo) {
+    case "fuga":
+      return "Fuga de agua";
+    case "taza_tapada":
+      return "Taza tapada";
+    case "orinal_tapado":
+      return "Orinal tapado";
+    case "falta_papel":
+      return "Falta de papel";
+    case "falta_jabon":
+      return "Falta de jabón";
+    case "otro":
+      return "Otro";
+    default:
+      return tipo;
   }
-});
+}
 
-// 🟦 2. Listeners de filtros
-[inputFolio, selectEstado, selectEdificio].forEach((el) => {
-  if (!el) return;
-  el.addEventListener("input", aplicarFiltros);
-  el.addEventListener("change", aplicarFiltros);
-});
+// ======================
+// ACTUALIZAR ESTADO EN BACKEND
+// ======================
+async function actualizarEstado(folio, nuevoEstado) {
+  try {
+    const resp = await fetch(
+      `${API_BASE}/admin/reportes/${encodeURIComponent(folio)}/estado`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id_estado: nuevoEstado }),
+      }
+    );
 
-// 🟦 3. Aplica filtros sobre TODOS_LOS_REPORTES
-function aplicarFiltros() {
-  let folio = (inputFolio?.value || "").trim();
-  let estadoFiltro = selectEstado?.value || "";
-  let edificioFiltro = selectEdificio?.value || "";
-
-  let filtrados = TODOS_LOS_REPORTES.filter((rep) => {
-    // Filtro por folio (coincidencia parcial)
-    if (folio && !String(rep.folio).includes(folio)) {
-      return false;
-    }
-
-    // Filtro por estado (id_estado numérico)
-    if (estadoFiltro && String(rep.id_estado) !== estadoFiltro) {
-      return false;
-    }
-
-    // Filtro por edificio
-    // Si en la respuesta del backend viene `edificio`, lo usamos.
-    // Si no viene, este filtro simplemente no excluye nada.
-    if (edificioFiltro && rep.edificio && rep.edificio !== edificioFiltro) {
+    if (!resp.ok) {
+      console.error(
+        "Error al actualizar estado:",
+        resp.status,
+        await resp.text()
+      );
+      alert("No se pudo actualizar el estado del reporte. Intenta nuevamente.");
       return false;
     }
 
     return true;
-  });
-
-  renderizarReportes(filtrados);
+  } catch (err) {
+    console.error("Error de conexión al actualizar estado:", err);
+    alert(
+      "Error de conexión con el servidor al actualizar estado. Verifica el backend."
+    );
+    return false;
+  }
 }
 
-// 🟦 4. Dibuja las tarjetas en el DOM
-function renderizarReportes(lista) {
-  if (!contenedorReportes) {
-    console.error("No se encontró el contenedor de reportes en el HTML");
+// ======================
+// RENDER DE TARJETAS
+// ======================
+function renderReportes(lista) {
+  const container = document.getElementById("reports-container");
+  if (!container) {
+    console.error(
+      "No se encontró el contenedor #reports-container en admin.html"
+    );
     return;
   }
 
-  contenedorReportes.innerHTML = "";
+  container.innerHTML = "";
 
   if (!lista || lista.length === 0) {
-    contenedorReportes.innerHTML =
-      "<p class='text-center text-gray-500'>No hay reportes para mostrar. Ajusta los filtros o intenta de nuevo.</p>";
+    container.innerHTML = `
+      <p class="text-center text-slate-500 text-sm py-8">
+        No hay reportes para mostrar. Ajusta los filtros o intenta de nuevo.
+      </p>`;
     return;
   }
 
-  lista.forEach((rep) => {
-    const tarjeta = document.createElement("article");
-    tarjeta.className =
-      "bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex flex-col gap-3";
+  lista.forEach((reporte) => {
+    const estadoDef = getEstadoDef(reporte.id_estado);
 
-    const estadoTexto = ESTADOS_MAP[rep.id_estado] || "Desconocido";
-    const prioridadTexto = PRIORIDAD_MAP[rep.prioridad_asignada] || rep.prioridad_asignada || "—";
+    const card = document.createElement("article");
+    card.className =
+      "bg-white rounded-xl shadow-sm border border-slate-200 mb-4 overflow-hidden";
 
-    tarjeta.innerHTML = `
-      <header class="flex items-center justify-between gap-4">
+    const fecha = formatearFecha(reporte.fecha_creacion);
+    const numeroCuenta = reporte.numero_cuenta || "Anónimo";
+    const tipoNombre = mapTipoReporte(reporte.tipo_reporte);
+    const edificio = reporte.edificio || "—";
+    const ubicacionTexto = `Baño #${reporte.id_bano || "—"} • Edificio ${edificio}`;
+
+    card.innerHTML = `
+      <div class="px-6 py-4 flex items-center justify-between border-b border-slate-100">
         <div>
-          <p class="text-xs uppercase tracking-wide text-gray-400">Folio</p>
-          <p class="font-semibold text-gray-900">#${rep.folio}</p>
+          <p class="text-xs text-slate-500">Reporte</p>
+          <p class="font-semibold text-slate-900">#${reporte.folio}</p>
         </div>
-        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
-          ${rep.id_estado === 1 ? "bg-yellow-50 text-yellow-700" : ""}
-          ${rep.id_estado === 2 ? "bg-blue-50 text-blue-700" : ""}
-          ${rep.id_estado === 3 ? "bg-emerald-50 text-emerald-700" : ""}">
-          ${estadoTexto}
-        </span>
-      </header>
-
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600">
-        <div>
-          <p class="text-xs text-gray-400">Número de cuenta</p>
-          <p class="font-medium">${rep.numero_cuenta || "Anónimo"}</p>
-        </div>
-
-        <div>
-          <p class="text-xs text-gray-400">Baño</p>
-          <p class="font-medium">ID baño: ${rep.id_bano}</p>
-        </div>
-
-        <div>
-          <p class="text-xs text-gray-400">Categoría</p>
-          <p class="font-medium">ID categoría: ${rep.id_categoria}</p>
-        </div>
-
-        <div>
-          <p class="text-xs text-gray-400">Prioridad</p>
-          <p class="font-medium capitalize">${prioridadTexto}</p>
+        <div class="flex items-center gap-3" data-estado-wrapper>
+          <span
+            class="text-xs font-semibold px-3 py-1 rounded-full ${estadoDef.badgeClasses}"
+            data-estado-label
+          >
+            ${estadoDef.label}
+          </span>
         </div>
       </div>
 
-      <footer class="flex items-center justify-between text-xs text-gray-400 mt-2">
-        <span>Creado: ${rep.fecha_creacion || "—"}</span>
-        <span>ID reporte: ${rep.id_reporte}</span>
-      </footer>
+      <div class="px-6 py-4 grid grid-cols-1 md:grid-cols-4 gap-4 text-sm text-slate-700">
+        <div>
+          <p class="text-xs font-medium text-slate-500">Fecha de reporte</p>
+          <p class="mt-1">${fecha}</p>
+        </div>
+        <div>
+          <p class="text-xs font-medium text-slate-500">Número de cuenta</p>
+          <p class="mt-1">${numeroCuenta}</p>
+        </div>
+        <div>
+          <p class="text-xs font-medium text-slate-500">Tipo de problema</p>
+          <p class="mt-1">${tipoNombre}</p>
+        </div>
+        <div>
+          <p class="text-xs font-medium text-slate-500">Ubicación</p>
+          <p class="mt-1">${ubicacionTexto}</p>
+        </div>
+      </div>
     `;
 
-    contenedorReportes.appendChild(tarjeta);
+    // Crear el <select> de estado dentro del wrapper
+    const estadoWrapper = card.querySelector("[data-estado-wrapper]");
+    const estadoLabel = card.querySelector("[data-estado-label]");
+
+    const select = document.createElement("select");
+    select.className =
+      "text-xs border border-slate-300 rounded-md px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500";
+    select.setAttribute("aria-label", "Cambiar estado del reporte");
+
+    ESTADOS.forEach((est) => {
+      const opt = document.createElement("option");
+      opt.value = String(est.id);
+      opt.textContent = est.label;
+      if (est.id === reporte.id_estado) opt.selected = true;
+      select.appendChild(opt);
+    });
+
+    estadoWrapper.appendChild(select);
+
+    // Evento de cambio de estado
+    select.addEventListener("change", async (e) => {
+      const nuevoIdEstado = Number(e.target.value);
+      const prevIdEstado = reporte.id_estado;
+      const prevDef = getEstadoDef(prevIdEstado);
+      const nuevoDef = getEstadoDef(nuevoIdEstado);
+
+      const ok = await actualizarEstado(reporte.folio, nuevoIdEstado);
+      if (!ok) {
+        // revertir visualmente
+        e.target.value = String(prevIdEstado);
+        return;
+      }
+
+      // actualizar en memoria
+      reporte.id_estado = nuevoIdEstado;
+
+      // actualizar badge visualmente
+      estadoLabel.textContent = nuevoDef.label;
+      estadoLabel.className =
+        "text-xs font-semibold px-3 py-1 rounded-full " +
+        nuevoDef.badgeClasses;
+    });
+
+    container.appendChild(card);
   });
 }
+
+// ======================
+// FILTROS
+// ======================
+function aplicarFiltros() {
+  const inputFolio = document.getElementById("buscar-folio");
+  const selectEstado = document.getElementById("filtro-estado");
+  const selectEdificio = document.getElementById("filtro-edificio");
+
+  const folioTerm = (inputFolio?.value || "").trim().toLowerCase();
+  const estadoTerm = selectEstado?.value || "todos";
+  const edificioTerm = (selectEdificio?.value || "todos").toLowerCase();
+
+  let lista = [...allReportes];
+
+  if (folioTerm !== "") {
+    lista = lista.filter((r) =>
+      (r.folio || "").toLowerCase().includes(folioTerm)
+    );
+  }
+
+  if (estadoTerm !== "todos") {
+    const idEstado = Number(estadoTerm);
+    lista = lista.filter((r) => r.id_estado === idEstado);
+  }
+
+  if (edificioTerm !== "todos") {
+    lista = lista.filter(
+      (r) => (r.edificio || "").toLowerCase() === edificioTerm
+    );
+  }
+
+  renderReportes(lista);
+}
+
+// ======================
+// CARGA INICIAL
+// ======================
+async function cargarReportes() {
+  try {
+    const resp = await fetch(`${API_BASE}/admin/reportes`);
+    if (!resp.ok) {
+      console.error("Error al cargar reportes:", resp.status, await resp.text());
+      alert("Ocurrió un error al cargar los reportes.");
+      return;
+    }
+
+    const data = await resp.json();
+    allReportes = Array.isArray(data) ? data : [];
+
+    aplicarFiltros();
+  } catch (err) {
+    console.error("Error de conexión al cargar reportes:", err);
+    alert(
+      "No se pudo conectar con el servidor al cargar reportes. Verifica que el backend esté encendido."
+    );
+  }
+}
+
+// ======================
+// INIT
+// ======================
+document.addEventListener("DOMContentLoaded", () => {
+  // Filtros
+  const inputFolio = document.getElementById("buscar-folio");
+  const selectEstado = document.getElementById("filtro-estado");
+  const selectEdificio = document.getElementById("filtro-edificio");
+  const btnLimpiar = document.getElementById("btn-limpiar");
+
+  if (inputFolio) {
+    inputFolio.addEventListener("input", aplicarFiltros);
+  }
+  if (selectEstado) {
+    selectEstado.addEventListener("change", aplicarFiltros);
+  }
+  if (selectEdificio) {
+    selectEdificio.addEventListener("change", aplicarFiltros);
+  }
+  if (btnLimpiar) {
+    btnLimpiar.addEventListener("click", () => {
+      if (inputFolio) inputFolio.value = "";
+      if (selectEstado) selectEstado.value = "todos";
+      if (selectEdificio) selectEdificio.value = "todos";
+      aplicarFiltros();
+    });
+  }
+
+  // Cargar reportes del backend
+  cargarReportes();
+});

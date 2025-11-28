@@ -6,7 +6,7 @@ class ReporteCreate(BaseModel):
     edificio: str          
     nivel: int             
     sexo: str               
-    taza_or_orinal: str     
+    taza_o_orinal: str     
     pasillo: str            
     numero_cuenta: Optional[str] = None
     es_anonimo: bool = False

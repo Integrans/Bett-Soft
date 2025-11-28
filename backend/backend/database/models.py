@@ -122,6 +122,9 @@ class Reporte(Base):
     pasillo = Column(Enum(PasilloEnum), nullable=False)
     tipo_reporte = Column(Enum(TipoReporteEnum), nullable=False)
 
+    edificio = Column(String(50), nullable=False)
+    sexo = Column(Enum(SexoEnum), nullable=False)
+
     bano = relationship("Bano", back_populates="reportes")
     categoria = relationship("Categoria", back_populates="reportes")
     estado = relationship("EstadoReporte", back_populates="reportes")
