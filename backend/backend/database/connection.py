@@ -1,8 +1,8 @@
-import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
-from dotenv import load_dotenv
+import os
 
+<<<<<<< HEAD
 load_dotenv()
 
 DB_USER = os.getenv("DB_USER", "root")
@@ -23,12 +23,23 @@ engine = create_engine(
 )
 
 # Sesiones de DB
+=======
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if not DATABASE_URL:
+    DATABASE_URL = "mysql+pymysql://root:@localhost:3306/bett_soft_db"
+
+engine = create_engine(DATABASE_URL)
+
+>>>>>>> origin/dev
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# Base para los modelos
 Base = declarative_base()
 
+<<<<<<< HEAD
 # Dependencia para obtener la sesión de DB
+=======
+>>>>>>> origin/dev
 def get_db():
     db = SessionLocal()
     try:
