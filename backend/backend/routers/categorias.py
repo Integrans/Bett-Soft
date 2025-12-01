@@ -1,14 +1,15 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from database.connection import SessionLocal
-from database.models import Categoria  # <-- usar la clase correcta
+from database.models import CategoriaIncidente
 from schemas.categorias_schema import CategoriaResponse
 
+# YA NO LLEVA prefix AQUÍ
 router = APIRouter(prefix="/categorias", tags=["Categorías"])
 
-# ------------------------------------------------------------
-# Función para obtener DB
-# ------------------------------------------------------------
+# --------------------------------------------
+# Obtener instancia de BD
+# --------------------------------------------
 def get_db():
     db = SessionLocal()
     try:
@@ -16,16 +17,9 @@ def get_db():
     finally:
         db.close()
 
-# ------------------------------------------------------------
-# Endpoint: obtener todas las categorías
-# ------------------------------------------------------------
+# --------------------------------------------
+# GET: /categorias
+# --------------------------------------------
 @router.get("/", response_model=list[CategoriaResponse])
 def obtener_categorias(db: Session = Depends(get_db)):
-    return db.query(Categoria).all()  # <-- Cambiado
-
-# ------------------------------------------------------------
-# Endpoint alternativo: listar categorías (sin response_model)
-# ------------------------------------------------------------
-@router.get("/categorias")
-def listar_categorias(db: Session = Depends(get_db)):
-    return db.query(Categoria).all()  # <-- Cambiado
+    return db.query(CategoriaIncidente).all()

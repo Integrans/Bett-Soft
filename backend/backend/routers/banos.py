@@ -4,8 +4,8 @@ from database.connection import SessionLocal
 from database.models import Bano
 from schemas.banos_schema import BanoResponse
 
+# YA NO LLEVA prefix AQUÍ
 router = APIRouter(prefix="/banos", tags=["Baños"])
-
 
 def get_db():
     db = SessionLocal()
@@ -14,7 +14,9 @@ def get_db():
     finally:
         db.close()
 
-
+# --------------------------------------------
+# GET: /banos
+# --------------------------------------------
 @router.get("/", response_model=list[BanoResponse])
 def obtener_banos(db: Session = Depends(get_db)):
     return db.query(Bano).all()

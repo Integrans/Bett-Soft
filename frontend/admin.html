@@ -163,12 +163,24 @@
               <select
                 id="status-filter"
                 class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 text-sm
-                       focus:border-primary focus:ring-primary"
+                      focus:border-primary focus:ring-primary"
               >
-                <option>Todos</option>
-                <option>Pendiente</option>
-                <option>En proceso</option>
-                <option>Resuelto</option>
+                <option value="">Todos</option>
+                  <button onclick="cambiarEstado(${rep.id_reporte}, 'en_proceso')"
+                      class="px-2 py-1 rounded bg-yellow-200 text-yellow-800 hover:bg-yellow-300 text-xs">
+                      En proceso
+                  </button>
+
+                  <button onclick="cambiarEstado(${rep.id_reporte}, 'resuelto')"
+                      class="px-2 py-1 rounded bg-green-200 text-green-800 hover:bg-green-300 text-xs">
+                      Resuelto
+                  </button>
+
+                  <button onclick="cambiarEstado(${rep.id_reporte}, 'descartado')"
+                      class="px-2 py-1 rounded bg-slate-200 text-slate-800 hover:bg-slate-300 text-xs">
+                      Descartado
+                  </button>
+
               </select>
             </div>
 
@@ -179,7 +191,7 @@
               <select
                 id="building-filter"
                 class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 text-sm
-                       focus:border-primary focus:ring-primary"
+                      focus:border-primary focus:ring-primary"
               >
                 <option>Todos</option>
                 <option>A-1</option>
@@ -198,180 +210,11 @@
           </div>
         </section>
 
-        <!-- LISTA DE REPORTES -->
-        <section class="space-y-4">
+            <!-- LISTA DE REPORTES -->
+            <section id="lista-reportes" class="space-y-4"></section>
 
-          <!-- Reporte 1 -->
-          <article class="bg-white rounded-lg shadow-sm overflow-hidden">
-            <header class="p-4 border-b border-slate-200 flex justify-between items-center">
-              <h2 class="font-semibold text-slate-900">
-                Reporte #FES12345
-              </h2>
-              <span
-                class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-800"
-              >
-                Pendiente
-              </span>
-            </header>
-
-            <div class="p-4 grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
-              <div>
-                <p class="font-medium text-slate-500">Fecha de reporte</p>
-                <p class="text-slate-900">28/05/2024</p>
-              </div>
-              <div>
-                <p class="font-medium text-slate-500">Hora de reporte</p>
-                <p class="text-slate-900">10:30 AM</p>
-              </div>
-              <div>
-                <p class="font-medium text-slate-500">Tipo de problema</p>
-                <p class="text-slate-900">Fuga de agua</p>
-              </div>
-              <div>
-                <p class="font-medium text-slate-500">Ubicación</p>
-                <p class="text-slate-900">Edificio A-1, Piso 2, Baño Mujeres</p>
-              </div>
-            </div>
-
-            <footer class="px-4 py-3 bg-slate-50 flex justify-between items-center text-sm">
-              <button class="font-medium text-primary hover:underline">
-                Ver detalles
-              </button>
-              <div class="flex items-center gap-2">
-                <button
-                  class="px-2 py-1 rounded bg-slate-200 text-slate-700 hover:bg-slate-300 text-xs"
-                >
-                  Pendiente
-                </button>
-                <button
-                  class="px-2 py-1 rounded bg-yellow-200 text-yellow-800 hover:bg-yellow-300 text-xs"
-                >
-                  En proceso
-                </button>
-                <button
-                  class="px-2 py-1 rounded bg-green-200 text-green-800 hover:bg-green-300 text-xs"
-                >
-                  Resuelto
-                </button>
-              </div>
-            </footer>
-          </article>
-
-          <!-- Reporte 2 -->
-          <article class="bg-white rounded-lg shadow-sm overflow-hidden">
-            <header class="p-4 border-b border-slate-200 flex justify-between items-center">
-              <h2 class="font-semibold text-slate-900">
-                Reporte #FES12346
-              </h2>
-              <span
-                class="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800"
-              >
-                En proceso
-              </span>
-            </header>
-
-            <div class="p-4 grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
-              <div>
-                <p class="font-medium text-slate-500">Fecha de reporte</p>
-                <p class="text-slate-900">27/05/2024</p>
-              </div>
-              <div>
-                <p class="font-medium text-slate-500">Hora de reporte</p>
-                <p class="text-slate-900">02:15 PM</p>
-              </div>
-              <div>
-                <p class="font-medium text-slate-500">Tipo de problema</p>
-                <p class="text-slate-900">Inodoro tapado</p>
-              </div>
-              <div>
-                <p class="font-medium text-slate-500">Ubicación</p>
-                <p class="text-slate-900">Biblioteca, Planta Baja, Baño Hombres</p>
-              </div>
-            </div>
-
-            <footer class="px-4 py-3 bg-slate-50 flex justify-between items-center text-sm">
-              <button class="font-medium text-primary hover:underline">
-                Ver detalles
-              </button>
-              <div class="flex items-center gap-2">
-                <button
-                  class="px-2 py-1 rounded bg-slate-200 text-slate-700 hover:bg-slate-300 text-xs"
-                >
-                  Pendiente
-                </button>
-                <button
-                  class="px-2 py-1 rounded bg-yellow-200 text-yellow-800 hover:bg-yellow-300 text-xs"
-                >
-                  En proceso
-                </button>
-                <button
-                  class="px-2 py-1 rounded bg-green-200 text-green-800 hover:bg-green-300 text-xs"
-                >
-                  Resuelto
-                </button>
-              </div>
-            </footer>
-          </article>
-
-          <!-- Reporte 3 -->
-          <article class="bg-white rounded-lg shadow-sm overflow-hidden">
-            <header class="p-4 border-b border-slate-200 flex justify-between items-center">
-              <h2 class="font-semibold text-slate-900">
-                Reporte #FES12347
-              </h2>
-              <span
-                class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800"
-              >
-                Resuelto
-              </span>
-            </header>
-
-            <div class="p-4 grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
-              <div>
-                <p class="font-medium text-slate-500">Fecha de reporte</p>
-                <p class="text-slate-900">26/05/2024</p>
-              </div>
-              <div>
-                <p class="font-medium text-slate-500">Hora de reporte</p>
-                <p class="text-slate-900">09:00 AM</p>
-              </div>
-              <div>
-                <p class="font-medium text-slate-500">Tipo de problema</p>
-                <p class="text-slate-900">Falta de jabón</p>
-              </div>
-              <div>
-                <p class="font-medium text-slate-500">Ubicación</p>
-                <p class="text-slate-900">Edificio A-3, Piso 1, Baño Mujeres</p>
-              </div>
-            </div>
-
-            <footer class="px-4 py-3 bg-slate-50 flex justify-between items-center text-sm">
-              <button class="font-medium text-primary hover:underline">
-                Ver detalles
-              </button>
-              <div class="flex items-center gap-2">
-                <button
-                  class="px-2 py-1 rounded bg-slate-200 text-slate-700 hover:bg-slate-300 text-xs"
-                >
-                  Pendiente
-                </button>
-                <button
-                  class="px-2 py-1 rounded bg-yellow-200 text-yellow-800 hover:bg-yellow-300 text-xs"
-                >
-                  En proceso
-                </button>
-                <button
-                  class="px-2 py-1 rounded bg-green-200 text-green-800 hover:bg-green-300 text-xs"
-                >
-                  Resuelto
-                </button>
-              </div>
-            </footer>
-          </article>
-
-        </section>
-      </div>
-    </main>
+          </div>
+        </main>
   </div>
   <script>
   function toggleMobileMenu() {
@@ -379,6 +222,7 @@
     menu.classList.toggle('hidden');
   }
 </script>
+<script src="./javascript/admin.js"></script>
 
 </body>
 </html>
