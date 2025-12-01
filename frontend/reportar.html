@@ -180,6 +180,7 @@
         id="tipo_problema"
       >
         <option selected>Seleccione el tipo de problema</option>
+
         <option value="fuga">Fuga</option>
         <option value="taza_tapada">Taza tapada</option>
         <option value="orinal_tapado">Orinal tapado</option>
@@ -187,6 +188,8 @@
         <option value="no_jabon">No hay jabon</option>
         <option value="suciedad">Suciedad</option>
         <option value="mal_olor">Mal olor</option>
+
+
       </select>
     </label>
 
@@ -204,6 +207,7 @@
           id="edificio"
         >
           <option selected>Seleccione el edificio</option>
+
           <option value="A-1">Edificio A-1</option>
           <option value="A-2">Edificio A-2</option>
           <option value="A-3">Edificio A-3</option>
@@ -296,6 +300,87 @@
     </div>
   </div>
 
+=======
+          <option value="a1">Edificio A1</option>
+          <option value="a2">Edificio A2</option>
+          <option value="a3">Edificio A3</option>
+        </select>
+      </label>
+
+      <!-- Baño (antes Piso) -->
+      <label class="flex flex-col w-full">
+        <p class="text-[#111318] dark:text-gray-200 text-base font-medium leading-normal pb-2">
+          Baño
+        </p>
+        <select
+          class="form-select h-14 w-full appearance-none resize-none overflow-hidden rounded-lg border border-gray-300 bg-white bg-no-repeat bg-[right_1rem_center] p-3.5 pr-10 text-base font-normal leading-normal text-[#111318] placeholder:text-[#636f88] focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:placeholder-gray-400"
+          style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC9uCetYVE3n7qU7GWaMUB1-ACA72cBw-IhRG9ciR4c516JIZ_A3VLwSrDzqbKW1GTm_1c5rZRwZgCv72yFy8gVFN7L_KqhAZIqglQgWuENWVFuMwa561dFihDbVAXISzx-3khP0y7Qtj0hKg9j68jQ0OEN32HnLmeIuHALntb20TC0Afmnw-qGlQkffHI4mFH36DH8j7VvSbKN4WqYc07irYIwbo1OGUcbLCWjTQmwPUqfMwYAecvcNX8Mtm3WIO8bZvFnBAw5eiE');"
+          name="bano"
+          id="bano"
+        >
+          <option selected>Seleccione baño</option>
+          <option value="hombre">Hombre</option>
+          <option value="mujer">Mujer</option>
+          <option value="mixto">Mixto</option>
+        </select>
+      </label>
+    </div>
+
+    <!-- Sección (antes Número de sanitario) -->
+    <label class="flex flex-col w-full">
+      <p class="text-[#111318] dark:text-gray-200 text-base font-medium leading-normal pb-2">
+        Sección
+      </p>
+      <select
+        class="form-select h-14 w-full appearance-none resize-none overflow-hidden rounded-lg border border-gray-300 bg-white bg-no-repeat bg-[right_1rem_center] p-3.5 pr-10 text-base font-normal leading-normal text-[#111318] placeholder:text-[#636f88] focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:placeholder-gray-400"
+        style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC9uCetYVE3n7qU7GWaMUB1-ACA72cBw-IhRG9ciR4c516JIZ_A3VLwSrDzqbKW1GTm_1c5rZRwZgCv72yFy8gVFN7L_KqhAZIqglQgWuENWVFuMwa561dFihDbVAXISzx-3khP0y7Qtj0hKg9j68jQ0OEN32HnLmeIuHALntb20TC0Afmnw-qGlQkffHI4mFH36DH8j7VvSbKN4WqYc07irYIwbo1OGUcbLCWjTQmwPUqfMwYAecvcNX8Mtm3WIO8bZvFnBAw5eiE');"
+        name="seccion"
+        id="seccion"
+      >
+        <option selected>Seleccione sección</option>
+        <option value="frontal">Frontal</option>
+        <option value="trasero">Trasero</option>
+      </select>
+    </label>
+
+    <!-- Adjuntar imagen -->
+    <div class="w-full">
+      <label
+        for="file-upload"
+        class="flex h-14 w-full cursor-pointer items-center justify-center gap-2 rounded-lg border-2 border-dashed border-gray-300 bg-white transition-colors hover:border-accent hover:bg-accent/10 dark:border-gray-600 dark:bg-gray-800 dark:hover:border-accent dark:hover:bg-accent/20"
+      >
+        <span class="material-symbols-outlined text-accent" data-icon="upload_file">
+          upload_file
+        </span>
+        <span class="text-base font-medium text-primary dark:text-gray-300">
+          Adjuntar imagen
+        </span>
+      </label>
+      <input id="file-upload" name="file-upload" type="file" class="sr-only" />
+    </div>
+
+    <!-- Comentarios ELIMINADO en este sprint -->
+
+    <!-- Anónimo -->
+    <div class="relative flex items-start">
+      <div class="flex h-6 items-center">
+        <input
+          id="anonymous"
+          name="anonymous"
+          type="checkbox"
+          class="form-checkbox h-5 w-5 rounded border-gray-300 text-primary focus:ring-accent dark:border-gray-600 dark:bg-gray-700"
+          aria-describedby="anonymous-description"
+        />
+      </div>
+      <div class="ml-3 text-sm leading-6">
+        <label for="anonymous" class="font-medium text-text-main dark:text-gray-300">
+          Enviar reporte anónimo
+        </label>
+      </div>
+    </div>
+  </div>
+
+>>>>>>> 557b956843e59c206d69258811e0a352bca0d53c
   <!-- Botón enviar -->
   <button
     type="submit"
@@ -307,6 +392,12 @@
       </div>
     </main>
   </div>
+
+
+</body>
+</html>
+
+
 
 </body>
 </html>
