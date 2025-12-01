@@ -1,12 +1,13 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Form, UploadFile, File, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database.connection import SessionLocal
-from database.models import Reporte
-from schemas.reportes_schema import ReporteCreate, ReporteResponse
-from utils.folio_generator import generar_folio
+from database import models
+from datetime import datetime
+import shutil, os
 
-router = APIRouter(prefix="/reportes", tags=["Reportes"])
+router = APIRouter()
 
+os.makedirs("uploads", exist_ok=True)
 
 def get_db():
     db = SessionLocal()
@@ -15,32 +16,73 @@ def get_db():
     finally:
         db.close()
 
+categoria_map = {
+    "fuga": 1,
+    "taza_tapada": 2,
+    "orinal_tapado": 3,
+    "no_papel": 4,
+    "no_jabon": 5,
+    "suciedad": 6,
+    "mal_olor": 7
+}
 
-@router.post("/", response_model=ReporteResponse)
-def crear_reporte(data: ReporteCreate, db: Session = Depends(get_db)):
+def generar_folio(db: Session):
+    fecha = datetime.now().strftime("%Y%m%d")
+    count = db.query(models.Reporte).filter(models.Reporte.folio.like(f"INC-{fecha}-%")).count()
+    consecutivo = str(count + 1).zfill(4)
+    return f"INC-{fecha}-{consecutivo}"
 
-    # Generar folio
+@router.post("/reportes")
+def crear_reporte(
+    tipo_problema: str = Form(...),
+    edificio: str = Form(...),
+    nivel: int = Form(...),
+    sexo: str = Form(...),
+    taza_or_orinal: str = Form(...),
+    pasillo: str = Form(...),
+    numero_cuenta: str = Form(None),
+    es_anonimo: bool = Form(False),
+    file_upload: UploadFile = File(None),
+    db: Session = Depends(get_db)
+):
     folio = generar_folio(db)
+    cuenta = numero_cuenta if not es_anonimo and numero_cuenta else "ANONIMO"
+    edificio_normalizado = edificio.replace("A", "A-", 1) if edificio.startswith("A") else edificio
 
-    nuevo = Reporte(
+    bano = db.query(models.Bano).filter(
+        models.Bano.edificio == edificio_normalizado,
+        models.Bano.nivel == nivel,
+        models.Bano.sexo == sexo
+    ).first()
+    id_bano_final = bano.id_bano if bano else 1
+    id_categoria_final = categoria_map.get(tipo_problema, 1)
+
+    imagen_url = None
+    if file_upload:
+        ruta = f"uploads/{folio}_{file_upload.filename}"
+        with open(ruta, "wb") as buffer:
+            shutil.copyfileobj(file_upload.file, buffer)
+        imagen_url = ruta
+
+    nuevo_reporte = models.Reporte(
         folio=folio,
-        numero_cuenta=data.numero_cuenta,
-        id_categoria=data.id_categoria,
-        prioridad_asignada="media",   # DEFAULT temporal hasta definir lógica
-        imagen_url=data.imagen_url,
-        taza_o_orinal=data.taza_o_orinal,
-        pasillo=data.pasillo,
-        tipo_reporte=data.tipo_reporte,
-        edificio=data.edificio,
-        sexo=data.sexo
+        numero_cuenta=cuenta,
+        id_bano=id_bano_final,
+        id_categoria=id_categoria_final,
+        id_estado=1,
+        prioridad_asignada=models.PrioridadEnum.media,
+        fecha_creacion=datetime.now(),
+        taza_or_orinal=taza_or_orinal,
+        pasillo=pasillo,
+        tipo_reporte=tipo_problema,
+        imagen_url=imagen_url
     )
 
-    db.add(nuevo)
-    db.commit()
-    db.refresh(nuevo)
-
-    return {
-        "mensaje": "Reporte creado",
-        "folio": nuevo.folio,
-        "prioridad_asignada": nuevo.prioridad_asignada
-    }
+    try:
+        db.add(nuevo_reporte)
+        db.commit()
+        db.refresh(nuevo_reporte)
+        return {"mensaje": "Reporte creado exitosamente", "folio": folio}
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))

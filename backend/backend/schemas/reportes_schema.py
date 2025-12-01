@@ -1,23 +1,38 @@
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
+from enums import SexoEnum, PasilloEnum, TazaOrinalEnum, TipoReporteEnum, PrioridadEnum, EstadoReporteEnum
 
-
+# ---------------------------------------------------------
+# Schema para crear un reporte
+# ---------------------------------------------------------
 class ReporteCreate(BaseModel):
-    numero_cuenta: str
-    id_categoria: int
-    taza_o_orinal: str  # "taza" | "orinal"
-    pasillo: str        # "frente" | "atras"
-    tipo_reporte: str   # "fuga" | "taza_tapada" | "orinal_tapado" | "no_papel" | "no_jabon" | "suciedad" | "mal_olor"
+    tipo_problema: str
     edificio: str
-    sexo: str           # "H" | "M" | "Mixto"
-    imagen_url: Optional[str] = None
+    nivel: int
+    sexo: str
+    taza_or_orinal: str
+    pasillo: str
+    numero_cuenta: Optional[str] = None
+    es_anonimo: bool = False
+    # file_upload se maneja directamente en FastAPI, no aquí
 
-
-class ReporteResponse(BaseModel):
-    mensaje: str
+# ---------------------------------------------------------
+# Schema de salida (respuesta)
+# ---------------------------------------------------------
+class ReporteOut(BaseModel):
+    id_reporte: int
     folio: str
-    prioridad_asignada: str
+    numero_cuenta: str
+    id_bano: int
+    id_categoria: int
+    id_estado: int
+    fecha_creacion: datetime
+    prioridad_asignada: PrioridadEnum
+    tipo_reporte: TipoReporteEnum
+    taza_or_orinal: TazaOrinalEnum
+    pasillo: PasilloEnum
+    imagen_url: Optional[str]
 
     class Config:
-        from_attributes = True
+        orm_mode = True

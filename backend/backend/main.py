@@ -1,7 +1,15 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Form, UploadFile, File, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from database.connection import Base, engine
-from routers import reportes, admin
+from sqlalchemy.orm import Session
+from database.connection import Base, engine, SessionLocal
+from database import models
+from routers import reportes, admin, banos, categorias
+from datetime import datetime
+import os
+import shutil
+
+# Crear carpetas necesarias
+os.makedirs("uploads", exist_ok=True)
 
 # Crear tablas si no existen
 Base.metadata.create_all(bind=engine)
@@ -12,26 +20,116 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# ----------------------------
-# CONFIGURAR CORS
-# ----------------------------
+# Configurar CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # ⚠ En producción se usa dominio del frontend
+    allow_origins=["*"],  # ⚠ En producción poner dominio frontend
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# ----------------------------
-# INCLUIR ROUTERS
-# ----------------------------
-app.include_router(reportes.router)
-app.include_router(admin.router)
+# ------------------------------------------------------------
+# Función para obtener DB
+# ------------------------------------------------------------
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
-# ----------------------------
-# RUTA DE PRUEBA
-# ----------------------------
+# ------------------------------------------------------------
+# Mapeo tipo de problema → categoría
+# ------------------------------------------------------------
+categoria_map = {
+    "fuga": 1,
+    "taza_tapada": 2,
+    "orinal_tapado": 3,
+    "no_papel": 4,
+    "no_jabon": 5,
+    "suciedad": 6,
+    "mal_olor": 7
+}
+
+# ------------------------------------------------------------
+# Función para generar folio tipo INC-YYYYMMDD-0001
+# ------------------------------------------------------------
+def generar_folio(db: Session):
+    fecha = datetime.now().strftime("%Y%m%d")
+    count = db.query(models.Reporte).filter(models.Reporte.folio.like(f"INC-{fecha}-%")).count()
+    consecutivo = str(count + 1).zfill(4)
+    return f"INC-{fecha}-{consecutivo}"
+
+# ------------------------------------------------------------
+# Endpoint para crear reporte (puedes dejarlo aquí o en router reportes)
+# ------------------------------------------------------------
+@app.post("/reportes")
+def crear_reporte(
+    tipo_problema: str = Form(...),
+    edificio: str = Form(...),
+    nivel: int = Form(...),
+    sexo: str = Form(...),
+    taza_or_orinal: str = Form(...),
+    pasillo: str = Form(...),
+    numero_cuenta: str = Form(None),
+    es_anonimo: bool = Form(False),
+    file_upload: UploadFile = File(None),
+    db: Session = Depends(get_db)
+):
+    folio = generar_folio(db)
+    cuenta = numero_cuenta if not es_anonimo and numero_cuenta else "ANONIMO"
+    edificio_normalizado = edificio.replace("A", "A-", 1) if edificio.startswith("A") else edificio
+
+    bano = db.query(models.Bano).filter(
+        models.Bano.edificio == edificio_normalizado,
+        models.Bano.nivel == nivel,
+        models.Bano.sexo == sexo
+    ).first()
+    id_bano_final = bano.id_bano if bano else 1
+    id_categoria_final = categoria_map.get(tipo_problema, 1)
+
+    imagen_url = None
+    if file_upload:
+        ruta = f"uploads/{folio}_{file_upload.filename}"
+        with open(ruta, "wb") as buffer:
+            shutil.copyfileobj(file_upload.file, buffer)
+        imagen_url = ruta
+
+    nuevo_reporte = models.Reporte(
+        folio=folio,
+        numero_cuenta=cuenta,
+        id_bano=id_bano_final,
+        id_categoria=id_categoria_final,
+        id_estado=1,
+        prioridad_asignada=models.PrioridadEnum.media,
+        fecha_creacion=datetime.now(),
+        taza_or_orinal=taza_or_orinal,
+        pasillo=pasillo,
+        tipo_reporte=tipo_problema,
+        imagen_url=imagen_url
+    )
+
+    try:
+        db.add(nuevo_reporte)
+        db.commit()
+        db.refresh(nuevo_reporte)
+        return {"mensaje": "Reporte creado exitosamente", "folio": folio}
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
+
+# ------------------------------------------------------------
+# Rutas principales
+# ------------------------------------------------------------
 @app.get("/")
 def root():
     return {"mensaje": "API BettSoft funcionando correctamente"}
+
+# ------------------------------------------------------------
+# Incluir routers
+# ------------------------------------------------------------
+app.include_router(reportes.router, prefix="/reportes", tags=["Reportes"])
+app.include_router(admin.router, prefix="/admin", tags=["Admin"])
+app.include_router(banos.router, prefix="/banos", tags=["Baños"])
+app.include_router(categorias.router, prefix="/categorias", tags=["Categorías"])

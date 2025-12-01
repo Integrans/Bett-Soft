@@ -157,145 +157,160 @@
           </h1>
         </div>
 
-        <form class="flex flex-col gap-6">
-          <div class="flex flex-col gap-5 rounded-xl bg-surface p-6 shadow-sm dark:bg-background-dark">
-            <div class="flex flex-col gap-1">
-              <p class="text-[#111318] dark:text-gray-200 text-2xl font-bold leading-tight tracking-[-0.033em]">
-                Detalles del Reporte
-              </p>
-              <p class="text-[#636f88] dark:text-gray-400 text-base font-normal leading-normal">
-                Utilice este formulario para reportar cualquier problema en los sanitarios.
-              </p>
-            </div>
+        <form id="reporte-form" class="flex flex-col gap-6">
+  <div class="flex flex-col gap-5 rounded-xl bg-surface p-6 shadow-sm dark:bg-background-dark">
+    <div class="flex flex-col gap-1">
+      <p class="text-[#111318] dark:text-gray-200 text-2xl font-bold leading-tight tracking-[-0.033em]">
+        Detalles del Reporte
+      </p>
+      <p class="text-[#636f88] dark:text-gray-400 text-base font-normal leading-normal">
+        Utilice este formulario para reportar cualquier problema en los sanitarios.
+      </p>
+    </div>
 
-            <!-- Tipo de problema -->
-            <label class="flex flex-col w-full">
-              <p class="text-[#111318] dark:text-gray-200 text-base font-medium leading-normal pb-2">
-                Tipo de problema
-              </p>
-              <select
-                class="form-select h-14 w-full appearance-none resize-none overflow-hidden rounded-lg border border-gray-300 bg-white bg-no-repeat bg-[right_1rem_center] p-3.5 pr-10 text-base font-normal leading-normal text-[#111318] placeholder:text-[#636f88] focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:placeholder-gray-400"
-                style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC9uCetYVE3n7qU7GWaMUB1-ACA72cBw-IhRG9ciR4c516JIZ_A3VLwSrDzqbKW1GTm_1c5rZRwZgCv72yFy8gVFN7L_KqhAZIqglQgWuENWVFuMwa561dFihDbVAXISzx-3khP0y7Qtj0hKg9j68jQ0OEN32HnLmeIuHALntb20TC0Afmnw-qGlQkffHI4mFH36DH8j7VvSbKN4WqYc07irYIwbo1OGUcbLCWjTQmwPUqfMwYAecvcNX8Mtm3WIO8bZvFnBAw5eiE');"
-              >
-                <option selected>Seleccione el tipo de problema</option>
-                <option value="falta-agua">Falta de agua</option>
-                <option value="fuga">Fuga de agua</option>
-                <option value="suciedad">Suciedad excesiva</option>
-                <option value="equipo-dano">Equipo dañado (inodoro, lavabo, etc.)</option>
-                <option value="falta-insumos">Falta de insumos (papel, jabón)</option>
-                <option value="otro">Otro</option>
-              </select>
-            </label>
+    <!-- Tipo de problema -->
+    <label class="flex flex-col w-full">
+      <p class="text-[#111318] dark:text-gray-200 text-base font-medium leading-normal pb-2">
+        Tipo de problema
+      </p>
+      <select
+        class="form-select h-14 w-full appearance-none resize-none overflow-hidden rounded-lg border border-gray-300 bg-white bg-no-repeat bg-[right_1rem_center] p-3.5 pr-10 text-base font-normal leading-normal text-[#111318] placeholder:text-[#636f88] focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:placeholder-gray-400"
+        style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC9uCetYVE3n7qU7GWaMUB1-ACA72cBw-IhRG9ciR4c516JIZ_A3VLwSrDzqbKW1GTm_1c5rZRwZgCv72yFy8gVFN7L_KqhAZIqglQgWuENWVFuMwa561dFihDbVAXISzx-3khP0y7Qtj0hKg9j68jQ0OEN32HnLmeIuHALntb20TC0Afmnw-qGlQkffHI4mFH36DH8j7VvSbKN4WqYc07irYIwbo1OGUcbLCWjTQmwPUqfMwYAecvcNX8Mtm3WIO8bZvFnBAw5eiE');"
+        name="tipo_problema"
+        id="tipo_problema"
+      >
+        <option selected>Seleccione el tipo de problema</option>
+        <option value="fuga">Fuga</option>
+        <option value="taza_tapada">Taza tapada</option>
+        <option value="orinal_tapado">Orinal tapado</option>
+        <option value="no_papel">No hay papel</option>
+        <option value="no_jabon">No hay jabon</option>
+        <option value="suciedad">Suciedad</option>
+        <option value="mal_olor">Mal olor</option>
+      </select>
+    </label>
 
-            <!-- Edificio y piso -->
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
-              <label class="flex flex-col w-full">
-                <p class="text-[#111318] dark:text-gray-200 text-base font-medium leading-normal pb-2">
-                  Edificio
-                </p>
-                <select
-                  class="form-select h-14 w-full appearance-none resize-none overflow-hidden rounded-lg border border-gray-300 bg-white bg-no-repeat bg-[right_1rem_center] p-3.5 pr-10 text-base font-normal leading-normal text-[#111318] placeholder:text-[#636f88] focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:placeholder-gray-400"
-                  style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC9uCetYVE3n7qU7GWaMUB1-ACA72cBw-IhRG9ciR4c516JIZ_A3VLwSrDzqbKW1GTm_1c5rZRwZgCv72yFy8gVFN7L_KqhAZIqglQgWuENWVFuMwa561dFihDbVAXISzx-3khP0y7Qtj0hKg9j68jQ0OEN32HnLmeIuHALntb20TC0Afmnw-qGlQkffHI4mFH36DH8j7VvSbKN4WqYc07irYIwbo1OGUcbLCWjTQmwPUqfMwYAecvcNX8Mtm3WIO8bZvFnBAw5eiE');"
-                >
-                  <option selected>Seleccione el edificio</option>
-                  <option value="a1">Edificio A1</option>
-                  <option value="a2">Edificio A2</option>
-                  <option value="a3">Edificio A3</option>
-                </select>
-              </label>
+    <!-- Edificio y baño -->
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
+      <!-- Edificio -->
+      <label class="flex flex-col w-full">
+        <p class="text-[#111318] dark:text-gray-200 text-base font-medium leading-normal pb-2">
+          Edificio
+        </p>
+        <select
+          class="form-select h-14 w-full appearance-none resize-none overflow-hidden rounded-lg border border-gray-300 bg-white bg-no-repeat bg-[right_1rem_center] p-3.5 pr-10 text-base font-normal leading-normal text-[#111318] placeholder:text-[#636f88] focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:placeholder-gray-400"
+          style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC9uCetYVE3n7qU7GWaMUB1-ACA72cBw-IhRG9ciR4c516JIZ_A3VLwSrDzqbKW1GTm_1c5rZRwZgCv72yFy8gVFN7L_KqhAZIqglQgWuENWVFuMwa561dFihDbVAXISzx-3khP0y7Qtj0hKg9j68jQ0OEN32HnLmeIuHALntb20TC0Afmnw-qGlQkffHI4mFH36DH8j7VvSbKN4WqYc07irYIwbo1OGUcbLCWjTQmwPUqfMwYAecvcNX8Mtm3WIO8bZvFnBAw5eiE');"
+          name="edificio"
+          id="edificio"
+        >
+          <option selected>Seleccione el edificio</option>
+          <option value="A-1">Edificio A-1</option>
+          <option value="A-2">Edificio A-2</option>
+          <option value="A-3">Edificio A-3</option>
+          <option value="A-4">Edificio A-4</option>
+          <option value="A-5">Edificio A-5</option>
+          <option value="A-6">Edificio A-6</option>
+          <option value="A-7">Edificio A-7</option>
+          <option value="A-8">Edificio A-8</option>
+          <option value="A-9">Edificio A-9</option>
+          <option value="A-10">Edificio A-10</option>
+          <option value="A-11">Edificio A-11</option>
+          <option value="A-12">Edificio A-12</option>
+          <option value="A-13">Edificio A-13</option>
+          <option value="A-14">Edificio A-14</option>
+          <option value="A-15">Edificio A-15</option>
 
-              <label class="flex flex-col w-full">
-                <p class="text-[#111318] dark:text-gray-200 text-base font-medium leading-normal pb-2">
-                  Piso
-                </p>
-                <select
-                  class="form-select h-14 w-full appearance-none resize-none overflow-hidden rounded-lg border border-gray-300 bg-white bg-no-repeat bg-[right_1rem_center] p-3.5 pr-10 text-base font-normal leading-normal text-[#111318] placeholder:text-[#636f88] focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:placeholder-gray-400"
-                  style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC9uCetYVE3n7qU7GWaMUB1-ACA72cBw-IhRG9ciR4c516JIZ_A3VLwSrDzqbKW1GTm_1c5rZRwZgCv72yFy8gVFN7L_KqhAZIqglQgWuENWVFuMwa561dFihDbVAXISzx-3khP0y7Qtj0hKg9j68jQ0OEN32HnLmeIuHALntb20TC0Afmnw-qGlQkffHI4mFH36DH8j7VvSbKN4WqYc07irYIwbo1OGUcbLCWjTQmwPUqfMwYAecvcNX8Mtm3WIO8bZvFnBAw5eiE');"
-                >
-                  <option selected>Seleccione piso</option>
-                  <option value="pb">Planta Baja</option>
-                  <option value="1">Piso 1</option>
-                  <option value="2">Piso 2</option>
-                </select>
-              </label>
-            </div>
+        </select>
+      </label>
 
-            <!-- Número de sanitario -->
-            <label class="flex flex-col w-full">
-              <p class="text-[#111318] dark:text-gray-200 text-base font-medium leading-normal pb-2">
-                Número de sanitario
-              </p>
-              <input
-                type="text"
-                class="form-input h-14 w-full resize-none overflow-hidden rounded-lg border border-gray-300 bg-white p-3.5 text-base font-normal leading-normal text-[#111318] placeholder:text-[#636f88] focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:placeholder-gray-400"
-                placeholder="Especifique número o ubicación (ej. 'Tercero a la izquierda')"
-              />
-            </label>
+      <!-- Baño (antes Piso) -->
+      <label class="flex flex-col w-full">
+        <p class="text-[#111318] dark:text-gray-200 text-base font-medium leading-normal pb-2">
+          Baño
+        </p>
+        <select
+          class="form-select h-14 w-full appearance-none resize-none overflow-hidden rounded-lg border border-gray-300 bg-white bg-no-repeat bg-[right_1rem_center] p-3.5 pr-10 text-base font-normal leading-normal text-[#111318] placeholder:text-[#636f88] focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:placeholder-gray-400"
+          style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC9uCetYVE3n7qU7GWaMUB1-ACA72cBw-IhRG9ciR4c516JIZ_A3VLwSrDzqbKW1GTm_1c5rZRwZgCv72yFy8gVFN7L_KqhAZIqglQgWuENWVFuMwa561dFihDbVAXISzx-3khP0y7Qtj0hKg9j68jQ0OEN32HnLmeIuHALntb20TC0Afmnw-qGlQkffHI4mFH36DH8j7VvSbKN4WqYc07irYIwbo1OGUcbLCWjTQmwPUqfMwYAecvcNX8Mtm3WIO8bZvFnBAw5eiE');"
+          name="bano"
+          id="bano"
+        >
+          <option selected>Seleccione baño</option>
+          <option value="hombre">Hombre</option>
+          <option value="mujer">Mujer</option>
+          <option value="mixto">Mixto</option>
+        </select>
+      </label>
+    </div>
 
-            <!-- Adjuntar imagen -->
-            <div class="w-full">
-              <label
-                for="file-upload"
-                class="flex h-14 w-full cursor-pointer items-center justify-center gap-2 rounded-lg border-2 border-dashed border-gray-300 bg-white transition-colors hover:border-accent hover:bg-accent/10 dark:border-gray-600 dark:bg-gray-800 dark:hover:border-accent dark:hover:bg-accent/20"
-              >
-                <span class="material-symbols-outlined text-accent" data-icon="upload_file">
-                  upload_file
-                </span>
-                <span class="text-base font-medium text-primary dark:text-gray-300">
-                  Adjuntar imagen
-                </span>
-              </label>
-              <input id="file-upload" name="file-upload" type="file" class="sr-only" />
-            </div>
+    <!-- Sección (antes Número de sanitario) -->
+    <label class="flex flex-col w-full">
+      <p class="text-[#111318] dark:text-gray-200 text-base font-medium leading-normal pb-2">
+        Sección
+      </p>
+      <select
+        class="form-select h-14 w-full appearance-none resize-none overflow-hidden rounded-lg border border-gray-300 bg-white bg-no-repeat bg-[right_1rem_center] p-3.5 pr-10 text-base font-normal leading-normal text-[#111318] placeholder:text-[#636f88] focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:placeholder-gray-400"
+        style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC9uCetYVE3n7qU7GWaMUB1-ACA72cBw-IhRG9ciR4c516JIZ_A3VLwSrDzqbKW1GTm_1c5rZRwZgCv72yFy8gVFN7L_KqhAZIqglQgWuENWVFuMwa561dFihDbVAXISzx-3khP0y7Qtj0hKg9j68jQ0OEN32HnLmeIuHALntb20TC0Afmnw-qGlQkffHI4mFH36DH8j7VvSbKN4WqYc07irYIwbo1OGUcbLCWjTQmwPUqfMwYAecvcNX8Mtm3WIO8bZvFnBAw5eiE');"
+        name="seccion"
+        id="seccion"
+      >
+        <option selected>Seleccione sección</option>
+        <option value="frontal">Frontal</option>
+        <option value="trasero">Trasero</option>
+      </select>
+    </label>
 
-            <!-- Comentarios -->
-            <label class="flex flex-col w-full">
-              <p class="text-[#111318] dark:text-gray-200 text-base font-medium leading-normal pb-2">
-                Campo de comentarios (opcional)
-              </p>
-              <textarea
-                rows="4"
-                class="form-textarea w-full resize-y rounded-lg border border-gray-300 bg-white p-3.5 text-base font-normal leading-normal text-[#111318] placeholder:text-[#636f88] focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:placeholder-gray-400"
-                placeholder="Proporcione detalles adicionales aquí..."
-              ></textarea>
-            </label>
+    <!-- Adjuntar imagen -->
+    <div class="w-full">
+      <label
+        for="file-upload"
+        class="flex h-14 w-full cursor-pointer items-center justify-center gap-2 rounded-lg border-2 border-dashed border-gray-300 bg-white transition-colors hover:border-accent hover:bg-accent/10 dark:border-gray-600 dark:bg-gray-800 dark:hover:border-accent dark:hover:bg-accent/20"
+      >
+        <span class="material-symbols-outlined text-accent" data-icon="upload_file">
+          upload_file
+        </span>
+        <span class="text-base font-medium text-primary dark:text-gray-300">
+          Adjuntar imagen
+        </span>
+      </label>
+      <input id="file-upload" name="file-upload" type="file" class="sr-only" />
+    </div>
 
-            <!-- Anónimo -->
-            <div class="relative flex items-start">
-              <div class="flex h-6 items-center">
-                <input
-                  id="anonymous"
-                  name="anonymous"
-                  type="checkbox"
-                  class="form-checkbox h-5 w-5 rounded border-gray-300 text-primary focus:ring-accent dark:border-gray-600 dark:bg-gray-700"
-                  aria-describedby="anonymous-description"
-                />
-              </div>
-              <div class="ml-3 text-sm leading-6">
-                <label for="anonymous" class="font-medium text-text-main dark:text-gray-300">
-                  Enviar reporte anónimo
-                </label>
-              </div>
-            </div>
-          </div>
+    <!-- Comentarios ELIMINADO en este sprint -->
 
-          <!-- Botón enviar -->
-          <button
-            type="submit"
-            class="flex h-14 w-full items-center justify-center rounded-lg bg-primary px-6 py-2.5 text-lg font-bold text-white shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-          >
-            Enviar Reporte
-          </button>
-        </form>
+    <!-- Anónimo -->
+    <div class="relative flex items-start">
+      <div class="flex h-6 items-center">
+        <input
+          id="anonymous"
+          name="anonymous"
+          type="checkbox"
+          class="form-checkbox h-5 w-5 rounded border-gray-300 text-primary focus:ring-accent dark:border-gray-600 dark:bg-gray-700"
+          aria-describedby="anonymous-description"
+        />
+      </div>
+      <div class="ml-3 text-sm leading-6">
+        <label for="anonymous" class="font-medium text-text-main dark:text-gray-300">
+          Enviar reporte anónimo
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón enviar -->
+  <button
+    type="submit"
+    class="flex h-14 w-full items-center justify-center rounded-lg bg-primary px-6 py-2.5 text-lg font-bold text-white shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+  >
+    Enviar Reporte
+  </button>
+</form>
       </div>
     </main>
   </div>
-  <script>
-  function toggleMobileMenu() {
-    const menu = document.getElementById('mobile-menu');
-    menu.classList.toggle('hidden');
-  }
-</script>
+
+</body>
+</html>
+
 
 </body>
 </html>

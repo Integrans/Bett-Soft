@@ -3,7 +3,6 @@ from sqlalchemy.orm import relationship
 from database.connection import Base
 import enum
 
-
 # ---------------------------------------------------------
 # ENUMS
 # ---------------------------------------------------------
@@ -40,7 +39,6 @@ class EstadoReporteEnum(enum.Enum):
     resuelto = "resuelto"
     descartado = "descartado"
 
-
 # ---------------------------------------------------------
 # TABLA: BANOS
 # ---------------------------------------------------------
@@ -57,7 +55,6 @@ class Bano(Base):
 
     reportes = relationship("Reporte", back_populates="bano")
 
-
 # ---------------------------------------------------------
 # TABLA: CATEGORIAS INCIDENTE
 # ---------------------------------------------------------
@@ -66,12 +63,11 @@ class Categoria(Base):
     __tablename__ = "categorias_incidente"
 
     id_categoria = Column(Integer, primary_key=True, autoincrement=True)
-    nombre = Column(String(100), nullable=False)
+    nombre = Column(String(100), nullable=False)  # ✅ longitud definida
     descripcion = Column(String(200))
     prioridad_default = Column(Enum(PrioridadEnum), nullable=False)
 
     reportes = relationship("Reporte", back_populates="categoria")
-
 
 # ---------------------------------------------------------
 # TABLA: ESTADOS REPORTE
@@ -85,7 +81,6 @@ class EstadoReporte(Base):
 
     reportes = relationship("Reporte", back_populates="estado")
 
-
 # ---------------------------------------------------------
 # TABLA: ADMINS
 # ---------------------------------------------------------
@@ -97,7 +92,6 @@ class Admin(Base):
     nombre = Column(String(100), nullable=False)
     email = Column(String(100), nullable=False, unique=True)
     password_hash = Column(String(255), nullable=False)
-
 
 # ---------------------------------------------------------
 # TABLA: REPORTES
