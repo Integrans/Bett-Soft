@@ -4,35 +4,21 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BettSoft - Nuevo Reporte</title>
-<<<<<<< HEAD
 
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 
-=======
-    
-    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-    
->>>>>>> origin/dev
     <script>
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
                     colors: {
-<<<<<<< HEAD
                         primary: "#003366",  // Azul institucional
                         accent: "#D4AF37",   // Dorado
                         bg_light: "#F0F2F5", // Fondo gris suave
                         surface: "#FFFFFF",  // Blanco puro
-=======
-                        primary: "#003366", // Azul institucional
-                        accent: "#D4AF37",  // Dorado
-                        bg_light: "#F0F2F5", // Fondo gris suave
-                        surface: "#FFFFFF", // Blanco puro
->>>>>>> origin/dev
                     }
                 }
             }
@@ -42,7 +28,6 @@
 
 <body class="bg-bg_light text-gray-800 font-sans min-h-screen flex flex-col">
 
-<<<<<<< HEAD
 <!-- HEADER -->
 <header class="bg-primary text-white shadow-md sticky top-0 z-50">
   <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -192,111 +177,18 @@
                             <span class="text-gray-700 font-medium">Ubicación (Pasillo)</span>
                             <select id="pasillo" required
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary/20 bg-gray-50 h-11">
-=======
-    <header class="bg-primary text-white shadow-md sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-2">
-                <span class="material-symbols-outlined text-accent">water_drop</span>
-                <span class="text-xl font-bold tracking-wide">BettSoft</span>
-            </a>
-            <nav class="hidden sm:flex gap-6 text-sm font-medium">
-                <a href="index.html" class="hover:text-accent transition">Inicio</a>
-                <a href="reportar.html" class="border-b-2 border-accent pb-1">Nuevo reporte</a>
-                <a href="consultar.html" class="hover:text-accent transition">Consultar reporte</a>
-            </nav>
-        </div>
-    </header>
-
-    <main class="flex-1 w-full max-w-3xl mx-auto px-4 py-8">
-        
-        <div class="mb-6 text-center">
-            <h1 class="text-3xl font-bold text-primary">Levantar Incidente</h1>
-            <p class="text-gray-500 mt-2">Ayúdanos a mantener las instalaciones en buen estado</p>
-        </div>
-
-        <div class="bg-surface rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-            
-            <div class="h-2 bg-gradient-to-r from-primary to-blue-400"></div>
-
-            <form id="form-reporte" class="p-6 sm:p-8 flex flex-col gap-6">
-                
-                <div>
-                    <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 mb-4">
-                        <span class="material-symbols-outlined text-primary">error</span>
-                        Detalles del Problema
-                    </h3>
-                    
-                    <label class="block">
-                        <span class="text-gray-700 font-medium">Tipo de indicente</span>
-                        <select id="tipo_problema" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary/20 bg-gray-50 h-12">
-                            <option value="" disabled selected>Selecciona una opción...</option>
-                            <option value="fuga">💦 Fuga de agua</option>
-                            <option value="taza_tapada">🚽 Taza tapada</option>
-                            <option value="orinal_tapado">🛑 Orinal tapado</option>
-                            <option value="no_papel">🧻 Falta de papel</option>
-                            <option value="no_jabon">🧼 Falta de jabón</option>
-                            <option value="suciedad">🧹 Suciedad excesiva</option>
-                            <option value="mal_olor">🤢 Mal olor</option>
-                        </select>
-                    </label>
-                </div>
-
-                <hr class="border-gray-100">
-
-                <div>
-                    <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 mb-4">
-                        <span class="material-symbols-outlined text-primary">location_on</span>
-                        Ubicación
-                    </h3>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <label class="block">
-                            <span class="text-gray-700 font-medium">Edificio</span>
-                            <select id="edificio" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary/20 bg-gray-50 h-11">
-                                <option value="A1">Edificio A1</option>
-                                <option value="A2">Edificio A2</option>
-                                <option value="A3">Edificio A3</option>
-                            </select>
-                        </label>
-
-                        <label class="block">
-                            <span class="text-gray-700 font-medium">Nivel / Piso</span>
-                            <select id="nivel" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary/20 bg-gray-50 h-11">
-                                <option value="1">Piso 1</option>
-                                <option value="2">Piso 2</option>
-                                <option value="3">Piso 3</option>
-                            </select>
-                        </label>
-
-                        <label class="block">
-                            <span class="text-gray-700 font-medium">Baño de:</span>
-                            <select id="sexo" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary/20 bg-gray-50 h-11">
-                                <option value="M">Mujeres</option>
-                                <option value="H">Hombres</option>
-                                <option value="Mixto">Mixto</option>
-                            </select>
-                        </label>
-
-                        <label class="block">
-                            <span class="text-gray-700 font-medium">Ubicación (Pasillo)</span>
-                            <select id="pasillo" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary/20 bg-gray-50 h-11">
->>>>>>> origin/dev
                                 <option value="frente">Frente</option>
                                 <option value="atras">Atrás</option>
                             </select>
                         </label>
                     </div>
 
-<<<<<<< HEAD
                     <!-- Taza u orinal -->
-=======
->>>>>>> origin/dev
                     <div class="mt-4">
                         <label class="block">
                             <span class="text-gray-700 font-medium">Elemento afectado</span>
                             <div class="mt-2 flex gap-4">
                                 <label class="inline-flex items-center">
-<<<<<<< HEAD
                                     <input type="radio" name="taza_or_orinal" value="taza" class="form-radio text-primary"
                                         checked>
                                     <span class="ml-2">Taza (inodoro)</span>
@@ -304,14 +196,6 @@
                                 <label class="inline-flex items-center">
                                     <input type="radio" name="taza_or_orinal" value="orinal" class="form-radio text-primary">
                                     <span class="ml-2">Orinal (mingitorio)</span>
-=======
-                                    <input type="radio" name="taza_or_orinal" value="taza" class="form-radio text-primary" checked>
-                                    <span class="ml-2">Taza (Inodoro)</span>
-                                </label>
-                                <label class="inline-flex items-center">
-                                    <input type="radio" name="taza_or_orinal" value="orinal" class="form-radio text-primary">
-                                    <span class="ml-2">Orinal (Mingitorio)</span>
->>>>>>> origin/dev
                                 </label>
                             </div>
                         </label>
@@ -320,7 +204,6 @@
 
                 <hr class="border-gray-100">
 
-<<<<<<< HEAD
                 <!-- DATOS DEL USUARIO -->
                 <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
                     <label class="block mb-3">
@@ -349,93 +232,12 @@
                     class="w-full bg-primary hover:bg-blue-900 text-white font-bold py-4 rounded-lg shadow-md hover:shadow-lg transform active:scale-[0.98] transition-all duration-200 flex justify-center items-center gap-2 mt-2">
                     <span class="material-symbols-outlined">send</span>
                     Enviar incidente
-=======
-                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
-                    <label class="block mb-3">
-                        <span class="text-gray-700 font-medium text-sm">Número de Cuenta (Opcional)</span>
-                        <input type="text" id="numero_cuenta" placeholder="Ej. 315123456" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary/20 h-10 text-sm">
-                    </label>
-
-                    <label class="inline-flex items-center cursor-pointer">
-                        <input id="es_anonimo" type="checkbox" class="form-checkbox rounded text-primary focus:ring-primary/50 h-5 w-5 transition duration-150 ease-in-out">
-                        <span class="ml-2 text-gray-700 font-medium">Prefiero enviar reporte anónimo</span>
-                    </label>
-                </div>
-
-                <button type="submit" class="w-full bg-primary hover:bg-blue-900 text-white font-bold py-4 rounded-lg shadow-md hover:shadow-lg transform active:scale-[0.98] transition-all duration-200 flex justify-center items-center gap-2 mt-2">
-                    <span class="material-symbols-outlined">send</span>
-                    ENVIAR INCIDENTE
->>>>>>> origin/dev
                 </button>
             </form>
         </div>
 
     </main>
-<<<<<<< HEAD
     
     <script src="reportar.js"></script>
-=======
-
-    <script>
-        // SI USAS DOCKER LOCAL:
-        const API_URL = "http://localhost:8000";
-        // SI USAS NGROK O OTRA PC, CAMBIA ESTO.
-
-        document.getElementById('form-reporte').addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            // 1. Obtener el valor del radio button seleccionado
-            const tazaOrOrinal = document.querySelector('input[name="taza_or_orinal"]:checked').value;
-
-            // 2. Construir el objeto JSON
-            const payload = {
-                tipo_problema: document.getElementById('tipo_problema').value,
-                edificio: document.getElementById('edificio').value,
-                nivel: parseInt(document.getElementById('nivel').value),
-                sexo: document.getElementById('sexo').value,
-                taza_or_orinal: tazaOrOrinal,
-                pasillo: document.getElementById('pasillo').value,
-                numero_cuenta: document.getElementById('numero_cuenta').value,
-                es_anonimo: document.getElementById('es_anonimo').checked
-            };
-
-            // Validación simple
-            if (!payload.tipo_problema) {
-                alert("Por favor selecciona qué tipo de problema es.");
-                return;
-            }
-
-            // 3. Enviar
-            try {
-                const boton = document.querySelector('button[type="submit"]');
-                const textoOriginal = boton.innerHTML;
-                boton.innerHTML = '<span class="animate-spin material-symbols-outlined">sync</span> Enviando...';
-                boton.disabled = true;
-
-                const res = await fetch(`${API_URL}/reportes/`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (res.ok) {
-                    const data = await res.json();
-                    alert(`¡Reporte recibido!\nTu folio es: ${data.folio}`);
-                    window.location.href = 'consultar.html'; // Te lleva a ver tu reporte
-                } else {
-                    const errorText = await res.text();
-                    alert("Error del servidor: " + errorText);
-                    boton.innerHTML = textoOriginal;
-                    boton.disabled = false;
-                }
-
-            } catch (err) {
-                console.error(err);
-                alert('No se pudo conectar con el servidor. Verifica que Docker esté corriendo.');
-                document.querySelector('button[type="submit"]').disabled = false;
-            }
-        });
-    </script>
->>>>>>> origin/dev
 </body>
 </html>

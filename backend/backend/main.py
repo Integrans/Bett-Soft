@@ -118,7 +118,7 @@ app.add_middleware(
 
 
 app.include_router(reportes.router)
-app.include_router(admin.router)
+app.include_router(admin.router, prefix="/admin")
 
 
 @app.get("/")
