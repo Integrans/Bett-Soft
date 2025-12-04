@@ -42,7 +42,7 @@ class EstadoReporteEnum(enum.Enum):
 
 
 # ---------------------------------------------------------
-# TABLA: BANOS
+# BANOS
 # ---------------------------------------------------------
 
 class Bano(Base):
@@ -59,7 +59,7 @@ class Bano(Base):
 
 
 # ---------------------------------------------------------
-# TABLA: CATEGORIAS INCIDENTE
+# CATEGORIAS INCIDENTE
 # ---------------------------------------------------------
 
 class Categoria(Base):
@@ -74,7 +74,7 @@ class Categoria(Base):
 
 
 # ---------------------------------------------------------
-# TABLA: ESTADOS REPORTE
+# ESTADOS REPORTE
 # ---------------------------------------------------------
 
 class EstadoReporte(Base):
@@ -87,7 +87,7 @@ class EstadoReporte(Base):
 
 
 # ---------------------------------------------------------
-# TABLA: ADMINS
+# AAAAAAAAAAAAAAAADMINS
 # ---------------------------------------------------------
 
 class Admin(Base):
@@ -100,7 +100,7 @@ class Admin(Base):
 
 
 # ---------------------------------------------------------
-# TABLA: REPORTES
+# REPORTEEEEEEEEEEEES
 # ---------------------------------------------------------
 
 class Reporte(Base):
@@ -118,10 +118,27 @@ class Reporte(Base):
     prioridad_asignada = Column(Enum(PrioridadEnum), nullable=False)
     imagen_url = Column(String(300))
 
-    taza_or_orinal = Column(Enum(TazaOrinalEnum), nullable=False)
+    taza_o_orinal = Column(Enum(TazaOrinalEnum), nullable=False)
     pasillo = Column(Enum(PasilloEnum), nullable=False)
     tipo_reporte = Column(Enum(TipoReporteEnum), nullable=False)
+
+    edificio = Column(String(50), nullable=False)
+    sexo = Column(Enum(SexoEnum), nullable=False)
 
     bano = relationship("Bano", back_populates="reportes")
     categoria = relationship("Categoria", back_populates="reportes")
     estado = relationship("EstadoReporte", back_populates="reportes")
+
+# ---------------------------------------------------------
+# HISTORIAL DE REPORTES
+
+class HistorialReporte(Base):
+    __tablename__ = "historial_reporte"
+
+    id_historial = Column(Integer, primary_key=True, autoincrement=True)
+    id_reporte = Column(Integer, ForeignKey("reportes.id_reporte"), nullable=False)
+    id_estado_anterior = Column(Integer, ForeignKey("estados_reporte.id_estado"), nullable=False)
+    id_estado_nuevo = Column(Integer, ForeignKey("estados_reporte.id_estado"), nullable=False)
+    fecha_cambio = Column(DateTime)
+
+    reporte = relationship("Reporte")
