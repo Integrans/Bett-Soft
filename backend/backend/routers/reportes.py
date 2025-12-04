@@ -1,20 +1,15 @@
-<<<<<<< HEAD
-# backend/routers/reportes.py
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Form, UploadFile, File, Depends, HTTPException
 from sqlalchemy.orm import Session
-from datetime import datetime
-
 from database.connection import SessionLocal
 from database import models
-from schemas.reportes_schema import ReporteCreate, ReporteResponse
-from utils.folio_generator import generar_folio  # ya lo usas en el proyecto
+from datetime import datetime
+import shutil
+import os
 
-router = APIRouter(
-    prefix="/reportes",
-    tags=["Reportes"]
-)
+router = APIRouter(prefix="/reportes", tags=["Reportes"])
 
-# Dependencia de DB
+os.makedirs("uploads", exist_ok=True)
+
 def get_db():
     db = SessionLocal()
     try:
@@ -22,124 +17,117 @@ def get_db():
     finally:
         db.close()
 
-@router.post("/", response_model=ReporteResponse, status_code=201)
-def crear_reporte(datos: ReporteCreate, db: Session = Depends(get_db)):
-    """
-    Crea un reporte desde el formulario público.
-    """
+# Mapeo de categorías
+categoria_map = {
+    "fuga": 1,
+    "taza_tapada": 2,
+    "orinal_tapado": 3,
+    "no_papel": 4,
+    "no_jabon": 5,
+    "suciedad": 6,
+    "mal_olor": 7
+}
 
-    # 1. Buscar el baño por edificio / nivel / sexo
-    bano = (
-        db.query(models.Bano)
-        .filter(
-            models.Bano.edificio == datos.edificio,
-            models.Bano.nivel == datos.nivel,
-            models.Bano.sexo == datos.sexo,
-        )
-        .first()
-    )
-    if not bano:
-        raise HTTPException(status_code=400, detail="Baño no válido")
+def calcular_prioridad(tipo_problema: str):
+    tipo = tipo_problema.lower().strip()
 
-    # 2. Buscar la categoría por tipo_problema (nombre en categorias_incidente)
-    categoria = (
-        db.query(models.Categoria)
-        .filter(models.Categoria.nombre == datos.tipo_problema)
-        .first()
-    )
-    if not categoria:
-        raise HTTPException(status_code=400, detail="Tipo de problema no válido")
+    if tipo in ["fuga", "desbordamiento", "inundacion", "inundación"]:
+        return models.PrioridadEnum.alta
 
-    # 3. Número de cuenta (anónimo)
-    if datos.es_anonimo or not datos.numero_cuenta:
-        numero_cuenta = "ANONIMO"
-    else:
-        numero_cuenta = datos.numero_cuenta
+    if tipo in ["taza_tapada", "orinal_tapado", "sin_agua"]:
+        return models.PrioridadEnum.media
 
-    # 4. Generar folio
+    return models.PrioridadEnum.baja
+
+
+def generar_folio(db: Session):
+    fecha = datetime.now().strftime("%Y%m%d")
+    count = db.query(models.Reporte).filter(
+        models.Reporte.folio.like(f"INC-{fecha}-%")
+    ).count()
+    consecutivo = str(count + 1).zfill(4)
+    return f"INC-{fecha}-{consecutivo}"
+
+
+# -------------------------------------------------------
+# 🔵 GET /reportes/ — LISTA LIMPIA DE REPORTES (Opción B)
+# -------------------------------------------------------
+@router.get("/", summary="Obtener lista de reportes")
+def obtener_reportes(db: Session = Depends(get_db)):
+    reportes = db.query(models.Reporte).all()
+    return reportes   # 👈 EXACTAMENTE LO QUE PIDE FASTAPI
+
+
+# -------------------------------------------------------
+# 🟢 POST /reportes/ — CREAR REPORTE
+# -------------------------------------------------------
+@router.post("/", summary="Crear un nuevo reporte")
+def crear_reporte(
+    tipo_problema: str = Form(...),
+    edificio: str = Form(...),
+    nivel: int = Form(...),
+    sexo: str = Form(...),
+    taza_o_orinal: str = Form(None),
+    pasillo: str = Form(None),
+    numero_cuenta: str = Form(None),
+    es_anonimo: bool = Form(False),
+    file_upload: UploadFile = File(None),
+    db: Session = Depends(get_db)
+):
+
     folio = generar_folio(db)
 
-    # 5. Crear objeto Reporte
-    nuevo_reporte = models.Reporte(
-        folio=folio,
-        numero_cuenta=numero_cuenta,
-        id_bano=bano.id_bano,
-        id_categoria=categoria.id_categoria,
-        id_estado=1,  # pendiente / en_proceso dependiendo de tu Enum
-        fecha_creacion=datetime.utcnow(),
-        prioridad_asignada=categoria.prioridad_default,
-        imagen_url=None,  # por ahora
-        taza_o_orinal=datos.taza_o_orinal,
-        pasillo=datos.pasillo,
-        tipo_reporte=models.TipoReporteEnum(datos.tipo_problema),
-        edificio=datos.edificio,
-        sexo=datos.sexo,
+    cuenta_final = "ANONIMO" if es_anonimo else numero_cuenta
+
+    edificio_normalizado = (
+        edificio.replace("A", "A-", 1)
+        if edificio.startswith("A")
+        else edificio
     )
-        
-
-    db.add(nuevo_reporte)
-    db.commit()
-    db.refresh(nuevo_reporte)
-
-    return ReporteResponse(
-        folio=nuevo_reporte.folio,
-        mensaje="Reporte creado correctamente"
-    )
-
-    # 6. Devolver el objeto usando el schema de respuesta
-    return ReporteResponse.from_orm(nuevo_reporte)
-=======
-from fastapi import APIRouter, HTTPException, Depends
-from sqlalchemy.orm import Session
-from database.connection import get_db
-from database import models
-from schemas.reportes_schema import ReporteCreate, ReporteResponse 
-import uuid
-from datetime import datetime
-
-router = APIRouter(prefix="/reportes", tags=["reportes"])
-
-@router.post("/", response_model=ReporteResponse)
-def crear_reporte(datos: ReporteCreate, db: Session = Depends(get_db)):
-    
-    nuevo_folio = str(uuid.uuid4())[:8].upper()
-
-    cuenta = "ANONIMO"
-    if not datos.es_anonimo and datos.numero_cuenta:
-        cuenta = datos.numero_cuenta
 
     bano = db.query(models.Bano).filter(
-        models.Bano.edificio == datos.edificio,
-        models.Bano.nivel == datos.nivel,
-        models.Bano.sexo == datos.sexo 
+        models.Bano.edificio == edificio_normalizado,
+        models.Bano.nivel == nivel,
+        models.Bano.sexo == sexo
     ).first()
 
-    id_bano_final = bano.id_bano if bano else 1
+    id_bano_final = bano.id if bano else 1
 
-    id_categoria_final = 1 
+    id_categoria_final = categoria_map.get(tipo_problema, 1)
+
+    imagen_url = None
+    if file_upload:
+        ruta = f"uploads/{folio}_{file_upload.filename}"
+        with open(ruta, "wb") as buffer:
+            shutil.copyfileobj(file_upload.file, buffer)
+        imagen_url = ruta
 
     nuevo_reporte = models.Reporte(
-        folio = nuevo_folio,
-        numero_cuenta = cuenta,
-        id_bano = id_bano_final,
-        id_categoria = id_categoria_final, 
-        id_estado = 1,
-        fecha_creacion = datetime.now(),
-        prioridad_asignada = models.PrioridadEnum.media, 
-        
-        taza_or_orinal = datos.taza_or_orinal,
-        pasillo = datos.pasillo,
-        tipo_reporte = datos.tipo_problema, 
-        imagen_url = None
+        folio=folio,
+        numero_cuenta=cuenta_final,
+        id_bano=id_bano_final,
+        id_categoria=id_categoria_final,
+        id_estado=1,
+        prioridad_asignada=models.PrioridadEnum.media,
+        fecha_creacion=datetime.now(),
+        taza_o_orinal=taza_o_orinal,
+        pasillo=pasillo,
+        tipo_reporte=tipo_problema,
+        imagen_url=imagen_url,
+        edificio=edificio_normalizado,
+        sexo=sexo
     )
 
     try:
         db.add(nuevo_reporte)
         db.commit()
         db.refresh(nuevo_reporte)
-        return {"mensaje": "Reporte creado exitosamente", "folio": nuevo_folio}
+
+        return {
+            "mensaje": "Reporte creado exitosamente",
+            "folio": folio
+        }
+
     except Exception as e:
         db.rollback()
-        print("ERROR EN BD:", e)
         raise HTTPException(status_code=500, detail=str(e))
->>>>>>> origin/dev
