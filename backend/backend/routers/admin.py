@@ -60,7 +60,6 @@ def login_admin(data: AdminLogin, db: Session = Depends(get_db)):
     admin = db.query(Admin).filter(Admin.email == data.email).first()
     if not admin:
         raise HTTPException(status_code=404, detail="Admin no encontrado")
-
     if not verify_password(data.password, admin.password_hash):
         raise HTTPException(status_code=401, detail="Contraseña incorrecta")
 

@@ -176,11 +176,15 @@
       </p>
     </div>
 
-        <!-- Tipo de problema -->
-    <label class="flex flex-col w-full">
+<label>Sexo:</label>
+    <select name="sexo" id="sexo" required> <option value="H">Hombres</option>
+      <option value="M">Mujeres</option>
+      <option value="Mixto">Mixto</option>
+    </select>
+
+<label class="flex flex-col w-full">
       <span>Tipo de problema:</span>
-      <select name="tipo_problema" required>
-        <option value="fuga">Fuga</option>
+      <select name="tipo_problema" id="tipo_problema" required> <option value="fuga">Fuga</option>
         <option value="taza_tapada">Taza tapada</option>
         <option value="orinal_tapado">Orinal tapado</option>
         <option value="no_papel">No hay papel</option>
@@ -190,54 +194,18 @@
       </select>
     </label>
 
-
-    <!-- Edificio -->
-    <label>Edificio:</label>
-    <select name="edificio" required>
-      <option value="">Seleccione el edificio</option>
-      <option value="A-1">Edificio A-1</option>
-      <option value="A-2">Edificio A-2</option>
-      <option value="A-3">Edificio A-3</option>
-      <option value="A-4">Edificio A-4</option>
-      <option value="A-5">Edificio A-5</option>
-      <option value="A-6">Edificio A-6</option>
-      <option value="A-7">Edificio A-7</option>
-      <option value="A-8">Edificio A-8</option>
-      <option value="A-9">Edificio A-9</option>
-      <option value="A-10">Edificio A-10</option>
-      <option value="A-11">Edificio A-11</option>
-      <option value="A-12">Edificio A-12</option>
-      <option value="A-13">Edificio A-13</option>
-      <option value="A-14">Edificio A-14</option>
-      <option value="A-15">Edificio A-15</option>
-    </select>
-
-    <!-- Nivel -->
-    <label>Nivel:</label>
-    <input type="number" name="nivel" required>
-
-    <!-- Sexo -->
-    <label>Sexo:</label>
-    <select name="sexo" required>
-      <option value="H">Hombres</option>
-      <option value="M">Mujeres</option>
-      <option value="Mixto">Mixto</option>
-    </select>
-
     <label>Taza u orinal:</label>
-    <select name="taza_o_orinal" required>
-        <option value="" disabled selected>Seleccione una opción</option>
+    <select name="taza_o_orinal" id="taza_orinal" required> <option value="" disabled selected>Seleccione una opción</option>
         <option value="taza">Taza</option>
         <option value="orinal">Orinal</option>
     </select>
-
 
     <!-- Pasillo -->
     <label>Pasillo:</label>
     <select name="pasillo">
       <option value="">--</option>
-      <option value="frente">Frente</option>
-      <option value="atras">Atrás</option>
+      <option value="frente">Frente (Pasillo que corresponde a los lavabos.)</option>
+      <option value="atras">Atrás  (Pasillo que corresponde a donde no están los lavabos.)</option>
     </select>
 
   </div>
