@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="es" class="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel de Administración - BettSoft</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+
+  <!-- Fuentes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    rel="stylesheet"
+  />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "#003366",
+            "background-light": "#F0F2F5",
+          },
+          fontFamily: {
+            display: ["Public Sans", "sans-serif"],
+          },
+          borderRadius: {
+            lg: "1rem",
+          },
+        },
+      },
+    };
+  </script>
+</head>
+
+<body class="font-display bg-background-light text-slate-800 antialiased">
+  <div class="min-h-screen flex flex-col">
+
+    <!-- HEADER azul con menú -->
+    <header class="bg-primary text-white shadow-md">
+      <!-- Barra superior -->
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+
+        <!-- Logo -->
+        <a href="index.html" class="flex items-center">
+          <img
+            src="images/logo.png"
+            alt="Logo FES Acatlán"
+            class="h-10 sm:h-14 w-auto"
+          />
+        </a>
+
+        <!-- Menú de escritorio -->
+        <nav class="hidden sm:flex gap-8 text-sm md:text-base">
+          <a href="index.html"
+             class="pb-1 border-b-2 border-transparent hover:border-white transition">
+            Inicio
+          </a>
+          <a href="reportar.html"
+             class="pb-1 border-b-2 border-transparent hover:border-white transition">
+            Nuevo reporte
+          </a>
+          <a href="consultar.html"
+             class="pb-1 border-b-2 border-transparent hover:border-white transition">
+            Consultar reporte
+          </a>
+        </nav>
+
+        <!-- Botón Cerrar sesión (solo escritorio) -->
+        <button
+          type="button"
+          class="hidden sm:inline-flex items-center gap-2 text-white text-sm font-medium
+                 hover:shadow-md hover:bg-white/10 px-3 py-2 rounded-md transition"
+        >
+          <span class="material-icons text-base">logout</span>
+          <span>Cerrar sesión</span>
+        </button>
+
+        <!-- Botón hamburguesa (solo móvil) -->
+        <button
+          type="button"
+          class="inline-flex items-center justify-center sm:hidden p-2 rounded-md hover:bg.white/10 transition"
+          onclick="toggleMobileMenu()"
+          aria-label="Abrir menú"
+        >
+          <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+               viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Menú móvil desplegable -->
+      <div id="mobile-menu"
+           class="sm:hidden hidden border-t border-white/20 bg-primary/95">
+        <nav class="flex flex-col px-4 py-3 gap-3 text-sm">
+          <a href="index.html"
+             class="py-1 border-b border-white/10">
+            Inicio
+          </a>
+          <a href="reportar.html"
+             class="py-1 border-b border-white/10">
+            Nuevo reporte
+          </a>
+          <a href="consultar.html"
+             class="py-1 border-b border-white/10">
+            Consultar reporte
+          </a>
+          <button
+            type="button"
+            class="pt-2 flex items-center gap-2 text-left"
+          >
+            <span class="material-icons text-base">logout</span>
+            <span>Cerrar sesión</span>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- CONTENIDO -->
+    <main class="flex-1 px-4 py-8 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-6xl space-y-8">
+
+        <!-- Título -->
+        <section class="text-center">
+          <h1 class="text-3xl font-bold text-primary mb-2">
+            Panel de administración
+          </h1>
+          <p class="text-slate-600">
+            Gestiona los reportes de sanitarios de la FES Acatlán
+          </p>
+        </section>
+
+            <!-- Filtros -->
+<div class="grid gap-4 md:grid-cols-4">
+  <!-- Buscar por folio -->
+  <div>
+    <label for="search-folio" class="block text-sm font-medium text-slate-700">
+      Buscar por folio
+    </label>
+    <input
+      id="search-folio"
+      type="text"
+      placeholder="INC-00000000-0000"
+      class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
+    />
+  </div>
+
+  <!-- Estado -->
+  <div>
+    <label for="filter-estado" class="block text-sm font-medium text-slate-700">
+      Estado
+    </label>
+    <select
+      id="filter-estado"
+      class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
+    >
+      <option value="todos">Todos</option>
+      <option value="1">Pendiente</option>
+      <option value="2">En proceso</option>
+      <option value="3">Resuelto</option>
+      <option value="4">Descartado</option>
+    </select>
+  </div>
+
+  <!-- Edificio -->
+  <div>
+    <label for="filter-edificio" class="block text-sm font-medium text-slate-700">
+      Edificio
+    </label>
+    <select
+      id="filter-edificio"
+      class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
+    >
+      <option value="todos">Todos</option>
+      <option value="A-1">Edificio A-1</option>
+      <option value="A-2">Edificio A-2</option>
+      <option value="A-3">Edificio A-3</option>
+      <option value="A-4">Edificio A-4</option>
+      <option value="A-5">Edificio A-5</option>
+      <option value="A-6">Edificio A-6</option>
+      <option value="A-7">Edificio A-7</option>
+      <option value="A-8">Edificio A-8</option>
+      <option value="A-9">Edificio A-9</option>
+      <option value="A-10">Edificio A-10</option>
+      <option value="A-11">Edificio A-11</option>
+      <option value="A-12">Edificio A-12</option>
+      <option value="A-13">Edificio A-13</option>
+      <option value="A-14">Edificio A-14</option>
+      <option value="A-15">Edificio A-15</option>
+    </select>
+  </div>
+
+  <!-- Fecha -->
+  <div>
+    <label for="filter-fecha" class="block text-sm font-medium text-slate-700">
+      Fecha
+    </label>
+    <select
+      id="filter-fecha"
+      class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
+    >
+      <option value="todas">Todas</option>
+      <option value="hoy">Hoy</option>
+      <option value="ultima_semana">Última semana</option>
+      <option value="ultimo_mes">Último mes</option>
+    </select>
+  </div>
+</div>
+
+        </section>
+
+        <!-- LISTA DE REPORTES (dinámica) -->
+        <section id="reports-container" class="space-y-4">
+          <!-- Aquí se insertan las tarjetas desde JavaScript -->
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- JS embebido -->
+    <script>
+  // ========================
+  // CONFIG
+  // ========================
+  const API_BASE = "http://127.0.0.1:8000";
+  let allReportes = [];
+
+  // ========================
+  // UTILIDADES
+  // ========================
+
+  function mapEstado(id_estado) {
+    switch (id_estado) {
+      case 1:
+        return { texto: "Pendiente", clase: "bg-yellow-100 text-yellow-800" };
+      case 2:
+        return { texto: "En proceso", clase: "bg-blue-100 text-blue-800" };
+      case 3:
+        return { texto: "Resuelto", clase: "bg-green-100 text-green-800" };
+      case 4:
+        return { texto: "Descartado", clase: "bg-slate-200 text-slate-700" };
+      default:
+        return { texto: "Sin estado", clase: "bg-slate-200 text-slate-700" };
+    }
+  }
+
+  function mapTipoProblema(code) {
+  if (!code) return "-";
+
+  const map = {
+    no_papel: "Falta de papel",
+    taza_tapada: "WC tapado",
+    fuga: "Fuga de agua",
+    sanitario_sucio: "Sanitario sucio",
+    orinal_tapado: "Mingitorio tapado",
+    no_jabon: "Falta de jabon",
+  };
+
+  // Si está en el mapa, devuelve el texto bonito
+  if (map[code]) return map[code];
+
+  // Si no, hace un fallback: reemplaza guiones bajos y capitaliza
+  return code
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+  function formatFecha(fechaStr) {
+    if (!fechaStr) return "-";
+    const fecha = new Date(fechaStr);
+    return fecha.toLocaleString("es-MX", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  }
+
+  // ========================
+  // RENDER DE TARJETAS
+  // ========================
+  function renderReports(reportes) {
+  const container = document.getElementById("reports-container");
+  container.innerHTML = "";
+
+  if (!reportes || reportes.length === 0) {
+    container.innerHTML =
+      '<p class="text-center text-slate-500 text-sm">No hay reportes para mostrar. Ajusta los filtros o intenta de nuevo.</p>';
+    return;
+  }
+
+  reportes.forEach((r) => {
+    const estadoInfo = mapEstado(r.id_estado);
+
+    const tipoProblema = mapTipoProblema(r.tipo_reporte || r.tipo_problema);
+    const edificio = r.edificio || "-";
+    const genero = r.sexo || "-";
+
+    const card = document.createElement("article");
+    card.className =
+      "rounded-xl border border-slate-200 bg-white px-6 py-4 shadow-sm mb-4";
+
+    card.innerHTML = `
+      <div class="flex flex-col gap-3">
+        <!-- Fila superior: título + estado -->
+        <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h3 class="text-base font-semibold text-slate-900">
+              Reporte #${r.folio}
+            </h3>
+            <p class="text-xs text-slate-500">ID interno: ${r.id_reporte}</p>
+          </div>
+
+          <div class="flex items-center gap-3 self-start md:self-auto">
+            <span
+              class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${estadoInfo.clase}"
+            >
+              ${estadoInfo.texto}
+            </span>
+
+            <select
+              class="estado-select block w-30 rounded-full border border-slate-300 px-6 py-1 text-xs focus:border-blue-500 focus:ring-blue-500"
+              data-folio="${r.folio}"
+            >
+              <option value="1">Pendiente</option>
+              <option value="2">En proceso</option>
+              <option value="3">Resuelto</option>
+              <option value="4">Descartado</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Detalles del reporte ocupando todo el ancho -->
+        <div class="mt-2 grid gap-4 text-sm md:grid-cols-3">
+          <div>
+            <p class="font-medium text-slate-700">Fecha de reporte</p>
+            <p class="text-slate-600">${formatFecha(r.fecha_creacion)}</p>
+
+            <p class="mt-3 font-medium text-slate-700">Prioridad</p>
+            <p class="text-slate-600 capitalize">
+              ${r.prioridad_asignada || "-"}
+            </p>
+          </div>
+
+          <div>
+            <p class="font-medium text-slate-700">Tipo de problema</p>
+            <p class="text-slate-600">${tipoProblema}</p>
+
+            <p class="mt-3 font-medium text-slate-700">Número de cuenta</p>
+            <p class="text-slate-600">${r.numero_cuenta || "-"}</p>
+          </div>
+
+          <div>
+            <p class="font-medium text-slate-700">Ubicación</p>
+            <p class="text-slate-600">
+              ${edificio}<br />
+              Género: ${genero}
+            </p>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Seleccionar el estado actual en el dropdown
+    const select = card.querySelector(".estado-select");
+    if (select) {
+      select.value = String(r.id_estado);
+
+      select.addEventListener("change", async (e) => {
+        const nuevoEstado = parseInt(e.target.value, 10);
+        await actualizarEstado(r.folio, nuevoEstado);
+      });
+    }
+
+    container.appendChild(card);
+  });
+}
+
+
+  // ========================
+  // FILTROS (folio, estado, edificio, fecha)
+  // ========================
+
+  function aplicarFiltros() {
+    const folioInput = document
+      .getElementById("search-folio")
+      .value.trim()
+      .toLowerCase();
+    const estadoValue = document.getElementById("filter-estado").value;
+    const edificioValue = document.getElementById("filter-edificio").value;
+    const fechaValue = document.getElementById("filter-fecha").value;
+
+    const ahora = new Date();
+    let desde = null;
+
+    if (fechaValue === "hoy") {
+      desde = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate());
+    } else if (fechaValue === "ultima_semana") {
+      desde = new Date(ahora);
+      desde.setDate(desde.getDate() - 7);
+    } else if (fechaValue === "ultimo_mes") {
+      desde = new Date(ahora);
+      desde.setMonth(desde.getMonth() - 1);
+    }
+
+    let filtrados = allReportes.filter((r) => {
+      // folio
+      if (folioInput && !r.folio.toLowerCase().includes(folioInput)) {
+        return false;
+      }
+
+      // estado (id_estado: 1,2,3,4)
+      if (estadoValue !== "todos" && r.id_estado !== Number(estadoValue)) {
+        return false;
+      }
+
+      // edificio (comparamos string exacto)
+      if (edificioValue !== "todos" && r.edificio !== edificioValue) {
+        return false;
+      }
+
+      // rango de fecha
+      if (desde) {
+        const fechaRep = new Date(r.fecha_creacion);
+        if (fechaRep < desde) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+
+    // ordenar del más reciente al más antiguo
+    filtrados.sort(
+      (a, b) =>
+        new Date(b.fecha_creacion).getTime() -
+        new Date(a.fecha_creacion).getTime()
+    );
+
+    renderReports(filtrados);
+  }
+
+  // ========================
+  // PETICIONES AL BACKEND
+  // ========================
+
+  async function cargarReportes() {
+    try {
+      const resp = await fetch(`${API_BASE}/admin/reportes`);
+      if (!resp.ok) {
+        throw new Error("Error al cargar reportes");
+      }
+      allReportes = await resp.json();
+      aplicarFiltros();
+    } catch (err) {
+      console.error(err);
+      const container = document.getElementById("reports-container");
+      container.innerHTML =
+        '<p class="text-center text-red-500 text-sm">Error al cargar reportes. Revisa el servidor.</p>';
+    }
+  }
+
+  async function actualizarEstado(folio, nuevoEstado) {
+    try {
+      const resp = await fetch(
+        `${API_BASE}/admin/reportes/${encodeURIComponent(folio)}/estado`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id_estado: nuevoEstado }),
+        }
+      );
+
+      if (!resp.ok) {
+        console.error("Respuesta no OK al actualizar estado", resp.status);
+        alert("No se pudo actualizar el estado del reporte. Intenta nuevamente.");
+        return;
+      }
+
+      // actualizamos en memoria
+      const idx = allReportes.findIndex((r) => r.folio === folio);
+      if (idx !== -1) {
+        allReportes[idx].id_estado = nuevoEstado;
+      }
+
+      aplicarFiltros();
+    } catch (err) {
+      console.error("Error de conexión al actualizar estado:", err);
+      alert("Error de conexión con el servidor al actualizar estado.");
+    }
+  }
+
+  // ========================
+  // EVENTOS
+  // ========================
+
+  document.addEventListener("DOMContentLoaded", () => {
+    // cargar reportes al entrar
+    cargarReportes();
+
+    // filtros
+    document
+      .getElementById("search-folio")
+      .addEventListener("input", aplicarFiltros);
+    document
+      .getElementById("filter-estado")
+      .addEventListener("change", aplicarFiltros);
+    document
+      .getElementById("filter-edificio")
+      .addEventListener("change", aplicarFiltros);
+    document
+      .getElementById("filter-fecha")
+      .addEventListener("change", aplicarFiltros);
+
+    // botón limpiar filtros (si lo tienes)
+    const btnLimpiar = document.getElementById("btn-limpiar-filtros");
+    if (btnLimpiar) {
+      btnLimpiar.addEventListener("click", () => {
+        document.getElementById("search-folio").value = "";
+        document.getElementById("filter-estado").value = "todos";
+        document.getElementById("filter-edificio").value = "todos";
+        document.getElementById("filter-fecha").value = "todas";
+        aplicarFiltros();
+      });
+    }
+  });
+</script>
+
+
+
+</body>
+</html>
