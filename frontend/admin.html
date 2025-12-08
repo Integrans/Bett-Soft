@@ -166,21 +166,10 @@
                       focus:border-primary focus:ring-primary"
               >
                 <option value="">Todos</option>
-                  <button onclick="cambiarEstado(${rep.id_reporte}, 'en_proceso')"
-                      class="px-2 py-1 rounded bg-yellow-200 text-yellow-800 hover:bg-yellow-300 text-xs">
-                      En proceso
-                  </button>
-
-                  <button onclick="cambiarEstado(${rep.id_reporte}, 'resuelto')"
-                      class="px-2 py-1 rounded bg-green-200 text-green-800 hover:bg-green-300 text-xs">
-                      Resuelto
-                  </button>
-
-                  <button onclick="cambiarEstado(${rep.id_reporte}, 'descartado')"
-                      class="px-2 py-1 rounded bg-slate-200 text-slate-800 hover:bg-slate-300 text-xs">
-                      Descartado
-                  </button>
-
+                <option value="1">Pendiente</option>
+                <option value="2">En proceso</option>
+                <option value="3">Resuelto</option>
+                <option value="4">Descartado</option>
               </select>
             </div>
 
@@ -211,7 +200,38 @@
         </section>
 
             <!-- LISTA DE REPORTES -->
-            <section id="lista-reportes" class="space-y-4"></section>
+            <section id="lista-reportes" class="space-y-4">
+            <!-- MODAL DETALLES -->
+            <div id="modal-detalle" class="fixed inset-0 hidden bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+              <div class="bg-white p-6 rounded-lg shadow-xl max-w-lg w-full relative">
+
+                <button onclick="cerrarModal()" class="absolute top-3 right-3 text-slate-500 hover:text-black">
+                  ✕
+                </button>
+
+                <h2 class="text-xl font-bold text-primary mb-4">Detalles del reporte</h2>
+
+                <div id="contenido-detalle" class="space-y-2 text-sm"></div>
+
+              </div>
+            </div>
+
+            </section>
+            <!-- MODAL DE DETALLES — DEBE IR FUERA DEL LISTA-REPORTES -->
+              <div id="modal-detalle" class="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center hidden">
+                <div class="bg-white w-11/12 max-w-lg rounded-lg shadow-lg p-6">
+                    <h2 class="text-xl font-semibold mb-4">Detalles del reporte</h2>
+
+                    <div id="contenido-detalle" class="space-y-2">
+                        <!-- Se llena dinámicamente -->
+                    </div>
+
+                    <button onclick="cerrarModal()"
+                        class="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                        Cerrar
+                    </button>
+                </div>
+              </div>            
 
           </div>
         </main>

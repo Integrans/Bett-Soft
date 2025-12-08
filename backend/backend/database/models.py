@@ -118,10 +118,15 @@ class Reporte(Base):
 
     fecha_creacion = Column(DateTime, nullable=False)
 
-    prioridad_asignada = Column(Enum(PrioridadEnum), nullable=False)
+    # Nuevo — lo requiere el backend
+    es_anonimo = Column(Integer, default=0)  # 0 = No, 1 = Sí
 
-    imagen_url = Column(String(300))
+    # Para prioridad — el backend NO envía nada, así que lo hacemos opcional
+    prioridad_asignada = Column(Enum(PrioridadEnum), nullable=True)
 
+    imagen_url = Column(String(300), nullable=True)
+
+    # Coincidir nombres con el backend
     taza_o_orinal = Column(Enum(TazaOrinalEnum), nullable=True)
     pasillo = Column(Enum(PasilloEnum), nullable=True)
 

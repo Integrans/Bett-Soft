@@ -176,13 +176,13 @@
       </p>
     </div>
 
-        <!-- Tipo de problema -->
+    <!-- 1) Tipo de problema -->
     <label class="flex flex-col w-full">
       <span>Tipo de problema:</span>
-      <select name="tipo_problema" required>
+      <select name="tipo_problema" id="select-tipo" required>
         <option value="fuga">Fuga</option>
-        <option value="taza_tapada">Taza tapada</option>
-        <option value="orinal_tapado">Orinal tapado</option>
+        <option value="taza_tapada">WC tapado</option>
+        <option value="orinal_tapado">Mingitorio tapado</option>
         <option value="no_papel">No hay papel</option>
         <option value="no_jabon">No hay jabón</option>
         <option value="suciedad">Suciedad</option>
@@ -190,49 +190,36 @@
       </select>
     </label>
 
-
-    <!-- Edificio -->
+    <!-- 2) Edificio -->
     <label>Edificio:</label>
-    <select name="edificio" required>
+    <select id="select-edificio" name="edificio" required>
       <option value="">Seleccione el edificio</option>
-      <option value="A-1">Edificio A-1</option>
-      <option value="A-2">Edificio A-2</option>
-      <option value="A-3">Edificio A-3</option>
-      <option value="A-4">Edificio A-4</option>
-      <option value="A-5">Edificio A-5</option>
-      <option value="A-6">Edificio A-6</option>
-      <option value="A-7">Edificio A-7</option>
-      <option value="A-8">Edificio A-8</option>
-      <option value="A-9">Edificio A-9</option>
-      <option value="A-10">Edificio A-10</option>
-      <option value="A-11">Edificio A-11</option>
-      <option value="A-12">Edificio A-12</option>
-      <option value="A-13">Edificio A-13</option>
-      <option value="A-14">Edificio A-14</option>
-      <option value="A-15">Edificio A-15</option>
+      <option value="A1-A2">Edificio A-1 / A-2</option>
+      <option value="A3-A4">Edificio A-3 / A-4</option>
+      <option value="A5-A6">Edificio A-5 / A-6</option>
+      <option value="A7-A8">Edificio A-7 / A-8</option>
+      <option value="A9-A10">Edificio A-9 / A-10</option>
+      <option value="A11-A12">Edificio A-11 / A-12</option>
+      <option value="Idiomas">Idiomas (A-13 / A-14)</option>
+      <option value="A15">Edificio A-15</option>
+      <option value="CEDETEC">CEDETEC</option>
+      <option value="Posgrado">Posgrado</option>
+      <option value="CEMM">CEMM</option>
     </select>
 
-    <!-- Nivel -->
+    <!-- 3) Nivel -->
     <label>Nivel:</label>
-    <input type="number" name="nivel" required>
+    <select id="select-nivel" name="nivel" required>
+      <option value="">Seleccione nivel</option>
+    </select>
 
-    <!-- Sexo -->
+    <!-- 4) Sexo -->
     <label>Sexo:</label>
-    <select name="sexo" required>
-      <option value="H">Hombres</option>
-      <option value="M">Mujeres</option>
-      <option value="Mixto">Mixto</option>
+    <select id="select-sexo" name="sexo" required>
+      <option value="">Seleccione sexo</option>
     </select>
 
-    <label>Taza u orinal:</label>
-    <select name="taza_o_orinal" required>
-        <option value="" disabled selected>Seleccione una opción</option>
-        <option value="taza">Taza</option>
-        <option value="orinal">Orinal</option>
-    </select>
-
-
-    <!-- Pasillo -->
+    <!-- 5) Pasillo -->
     <label>Pasillo:</label>
     <select name="pasillo">
       <option value="">--</option>
@@ -252,17 +239,45 @@
   </label>
 
   <label>Imagen (opcional):</label>
-  <input type="file" name="file_upload">
+      <!-- CAMARA: vista previa, botones tomar/confirmar/retomar -->
+    <div id="camera-wrapper" class="flex flex-col gap-2">
+      <label class="font-medium">Imagen (toma desde la cámara)</label>
+
+      <!-- Video en vivo -->
+      <div class="relative">
+        <video id="video" autoplay playsinline class="w-full rounded bg-black"></video>
+        <!-- preview canvas oculto hasta tomar la foto -->
+        <canvas id="canvas" class="w-full rounded hidden"></canvas>
+      </div>
+
+      <!-- Controles -->
+      <div class="flex gap-2">
+        <button type="button" id="btn-start" class="px-4 py-2 bg-primary text-white rounded">Abrir cámara</button>
+        <button type="button" id="btn-take" class="px-4 py-2 bg-accent text-white rounded hidden">Tomar foto</button>
+        <button type="button" id="btn-retake" class="px-4 py-2 border rounded hidden">Retomar</button>
+        <button type="button" id="btn-confirm" class="px-4 py-2 bg-green-600 text-white rounded hidden">Confirmar</button>
+      </div>
+
+      <!-- Fallback para dispositivos que no soporten getUserMedia -->
+      <div id="fallback-file" class="mt-2 hidden">
+        <p class="text-sm text-slate-500">Si tu navegador no permite cámara, sube una foto (preferentemente tomada ahora).</p>
+        <input type="file" id="file-fallback" accept="image/*" capture="environment" name="file_upload">
+      </div>
+    </div>
+
 
   <!-- Botón enviar -->
   <button
     type="submit"
-    class="flex h-14 w-full items-center justify-center rounded-lg bg-primary px-6 py-2.5 text-lg font-bold text-white shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+    class="flex h-14 w-full items-center justify-center rounded-lg bg-primary px-6 py-2.5 text-lg font-bold text-white shadow-sm transition-colors hover:bg-primary/90"
   >
     Enviar Incidente
   </button>
 
 </form>
+
+
+
       </div>
     </main>
   </div>
@@ -278,7 +293,5 @@
 
 </body>
 </html>
-
-
 </body>
 </html>

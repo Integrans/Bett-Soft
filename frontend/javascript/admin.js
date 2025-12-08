@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
-    // Mapeo entre estados de BD -> texto visible
-    const mappingTexto = {
-        "pendiente": "Pendiente",
-        "en_proceso": "En proceso",
-        "resuelto": "Resuelto",
-        "descartado": "Descartado"
+    // Mapeo de estados segun su número en la BD
+    const mappingTextoNum = {
+        1: "Pendiente",
+        2: "En proceso",
+        3: "Resuelto",
+        4: "Descartado"
     };
 
     // Colores de etiquetas según estado
@@ -16,18 +16,21 @@ document.addEventListener("DOMContentLoaded", async () => {
         "Descartado": "bg-slate-300 text-slate-800"
     };
 
-    // Formatear fecha "YYYY-MM-DDTHH:MM:SS" a DD/MM/YYYY
+    // Formatear fecha
     function formatearFecha(fechaStr) {
         const fecha = new Date(fechaStr);
         return fecha.toLocaleDateString("es-ES");
     }
 
-    // Formatear hora HH:MM:SS a HH:MM
+    // Formatear hora
     function formatearHora(fechaStr) {
         const fecha = new Date(fechaStr);
         return fecha.toLocaleTimeString("es-ES", { hour: '2-digit', minute: '2-digit' });
     }
 
+    // =============================
+    //   CARGAR LISTA DE REPORTES
+    // =============================
     async function cargarReportes() {
         try {
             const response = await fetch("http://127.0.0.1:8000/reportes");
@@ -41,8 +44,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             reportes.forEach(rep => {
 
-                const estadoEnum = Object.keys(mappingTexto).find(key => mappingTexto[key] === mappingTexto[rep.id_estado] || mappingTexto[key] === mappingTexto[rep.id_estado]);
-                const estadoTexto = mappingTexto[rep.id_estado] || mappingTexto["pendiente"];
+                const estadoTexto = mappingTextoNum[rep.id_estado] || "Pendiente";
                 const estadoClase = clasesEstado[estadoTexto];
 
                 const item = `
@@ -113,17 +115,29 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    // Cargar reportes al abrir la página
+    // Cargar reportes al abrir
     cargarReportes();
 });
 
-// --- Cambiar estado ---
-async function cambiarEstado(id_reporte, estado) {
+
+// =============================
+//    CAMBIAR ESTADO REPORTE
+// =============================
+async function cambiarEstado(id_reporte, estadoTexto) {
+
+    const estados = {
+        "en_proceso": 2,
+        "resuelto": 3,
+        "descartado": 4
+    };
+
+    const nuevoEstado = estados[estadoTexto];
+
     try {
         const response = await fetch(`http://127.0.0.1:8000/reportes/${id_reporte}/estado-simple`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ estado }) // debe ser string exacto: "en_proceso", "resuelto", "descartado"
+            body: JSON.stringify({ nuevo_estado: nuevoEstado })
         });
 
         if (!response.ok) {
@@ -142,7 +156,44 @@ async function cambiarEstado(id_reporte, estado) {
     }
 }
 
-// --- Ver detalles ---
-function verDetalles(folio) {
-    window.location.href = `detalle.html?folio=${folio}`;
+
+// =============================
+//      VER DETALLES (MODAL)
+// =============================
+async function verDetalles(folio) {
+    try {
+        const res = await fetch(`http://127.0.0.1:8000/reportes/folio/${folio}`);
+        if (!res.ok) throw new Error("No se pudo cargar el reporte");
+
+        const rep = await res.json();
+
+        const modal = document.getElementById("modal-detalle");
+        const cont = document.getElementById("contenido-detalle");
+
+        cont.innerHTML = `
+            <p><strong>Folio:</strong> ${rep.folio}</p>
+            <p><strong>Problema:</strong> ${rep.tipo_reporte}</p>
+            <p><strong>Edificio:</strong> ${rep.edificio}</p>
+            <p><strong>Pasillo:</strong> ${rep.pasillo}</p>
+            <p><strong>Sexo:</strong> ${rep.sexo}</p>
+            <p><strong>Fecha:</strong> ${rep.fecha_creacion}</p>
+            
+
+            ${rep.imagen_url ? `<img src="${rep.imagen_url}" class="w-full rounded mt-2">` : ""}
+        `;
+
+        modal.classList.remove("hidden");
+
+    } catch (err) {
+        console.error(err);
+        alert("Error al cargar detalles");
+    }
+}
+
+
+// =============================
+//          CERRAR MODAL
+// =============================
+function cerrarModal() {
+    document.getElementById("modal-detalle").classList.add("hidden");
 }
