@@ -170,6 +170,13 @@ async function verDetalles(folio) {
         const modal = document.getElementById("modal-detalle");
         const cont = document.getElementById("contenido-detalle");
 
+        // Construimos la URL completa SOLO si existe una imagen
+        let imagenHTML = "";
+        if (rep.imagen_url) {
+            const urlCompleta = `http://127.0.0.1:8000/uploads/${rep.imagen_url}`;
+            imagenHTML = `<img src="${urlCompleta}" class="w-full rounded mt-3 border shadow">`;
+        }
+
         cont.innerHTML = `
             <p><strong>Folio:</strong> ${rep.folio}</p>
             <p><strong>Problema:</strong> ${rep.tipo_reporte}</p>
@@ -177,9 +184,8 @@ async function verDetalles(folio) {
             <p><strong>Pasillo:</strong> ${rep.pasillo}</p>
             <p><strong>Sexo:</strong> ${rep.sexo}</p>
             <p><strong>Fecha:</strong> ${rep.fecha_creacion}</p>
-            
 
-            ${rep.imagen_url ? `<img src="${rep.imagen_url}" class="w-full rounded mt-2">` : ""}
+            ${imagenHTML}
         `;
 
         modal.classList.remove("hidden");
@@ -189,6 +195,7 @@ async function verDetalles(folio) {
         alert("Error al cargar detalles");
     }
 }
+
 
 
 // =============================

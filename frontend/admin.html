@@ -201,7 +201,7 @@
 
             <!-- LISTA DE REPORTES -->
             <section id="lista-reportes" class="space-y-4">
-            <!-- MODAL DETALLES -->
+            <!-- MODAL DETALLES (VERSIÓN CORRECTA, SE DEJA ACTIVA) -->
             <div id="modal-detalle" class="fixed inset-0 hidden bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
               <div class="bg-white p-6 rounded-lg shadow-xl max-w-lg w-full relative">
 
@@ -217,21 +217,25 @@
             </div>
 
             </section>
-            <!-- MODAL DE DETALLES — DEBE IR FUERA DEL LISTA-REPORTES -->
-              <div id="modal-detalle" class="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center hidden">
-                <div class="bg-white w-11/12 max-w-lg rounded-lg shadow-lg p-6">
-                    <h2 class="text-xl font-semibold mb-4">Detalles del reporte</h2>
 
-                    <div id="contenido-detalle" class="space-y-2">
-                        <!-- Se llena dinámicamente -->
-                    </div>
+            <!-- 🚫 MODAL DUPLICADO — SE DESACTIVA PARA EVITAR CONFLICTOS -->
+            <!--
+            <div id="modal-detalle" class="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center hidden">
+              <div class="bg-white w-11/12 max-w-lg rounded-lg shadow-lg p-6">
+                  <h2 class="text-xl font-semibold mb-4">Detalles del reporte</h2>
 
-                    <button onclick="cerrarModal()"
-                        class="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-                        Cerrar
-                    </button>
-                </div>
-              </div>            
+                  <div id="contenido-detalle" class="space-y-2">
+                      <!-- Se llena dinámicamente -->
+                  </div>
+
+                  <button onclick="cerrarModal()"
+                      class="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                      Cerrar
+                  </button>
+              </div>
+            </div>
+
+            
 
           </div>
         </main>

@@ -1,12 +1,8 @@
-from fastapi import FastAPI, Form, UploadFile, File, HTTPException, Depends
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy.orm import Session
-from database.connection import Base, engine, SessionLocal
-from database import models
+from database.connection import Base, engine
 from routers import reportes, admin, banos, categorias
-from datetime import datetime
 import os
-import shutil
 
 # Crear carpeta de uploads si no existe
 os.makedirs("uploads", exist_ok=True)
@@ -29,108 +25,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Sesión de la BD
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-# Mapeo de categorías
-categoria_map = {
-    "fuga": 1,
-    "taza_tapada": 2,
-    "orinal_tapado": 3,
-    "no_papel": 4,
-    "no_jabon": 5,
-    "suciedad": 6,
-    "mal_olor": 7
-}
-
-# Generar folio
-def generar_folio(db: Session):
-    fecha = datetime.now().strftime("%Y%m%d")
-    count = db.query(models.Reporte).filter(
-        models.Reporte.folio.like(f"INC-{fecha}-%")
-    ).count()
-    consecutivo = str(count + 1).zfill(4)
-    return f"INC-{fecha}-{consecutivo}"
-
-# -----------------------------------------
-# CORRECCIÓN: el endpoint debe ser "/reportes/"
-# -----------------------------------------
-@app.post("/reportes/")
-def crear_reporte(
-    tipo_problema: str = Form(...),
-    edificio: str = Form(...),
-    nivel: int = Form(...),
-    sexo: str = Form(...),
-    taza_or_orinal: str = Form(None),
-    pasillo: str = Form(None),
-    numero_cuenta: str = Form(None),
-    es_anonimo: bool = Form(False),
-    file_upload: UploadFile = File(None),
-    db: Session = Depends(get_db)
-):
-    folio = generar_folio(db)
-
-    cuenta_final = "ANONIMO" if es_anonimo else numero_cuenta
-
-    # Normalizar edificio (A3 -> A-3)
-    edificio_normalizado = (
-        edificio.replace("A", "A-", 1)
-        if edificio.startswith("A")
-        else edificio
-    )
-
-    # Buscar baño
-    bano = db.query(models.Bano).filter(
-        models.Bano.edificio == edificio_normalizado,
-        models.Bano.nivel == nivel,
-        models.Bano.sexo == sexo
-    ).first()
-
-    id_bano_final = bano.id if bano else 1
-    id_categoria_final = categoria_map.get(tipo_problema, 1)
-
-    # Guardar imagen
-    imagen_url = None
-    if file_upload:
-        ruta = f"uploads/{folio}_{file_upload.filename}"
-        with open(ruta, "wb") as buffer:
-            shutil.copyfileobj(file_upload.file, buffer)
-        imagen_url = ruta
-
-    nuevo_reporte = models.Reporte(
-        folio=folio,
-        numero_cuenta=cuenta_final,
-        id_bano=id_bano_final,
-        id_categoria=id_categoria_final,
-        fecha_creacion=datetime.now(),
-        tipo_reporte=tipo_problema,
-        imagen_url=imagen_url,
-        es_anonimo=es_anonimo
-    )
-
-    try:
-        db.add(nuevo_reporte)
-        db.commit()
-        db.refresh(nuevo_reporte)
-        return {"mensaje": "Reporte creado exitosamente", "folio": folio}
-    except Exception as e:
-        db.rollback()
-        raise HTTPException(status_code=500, detail=str(e))
-
-
 @app.get("/")
 def root():
     return {"mensaje": "API BettSoft funcionando correctamente"}
 
-
-# Routers
+# IMPORTANTE: solo se montan los routers, sin duplicar rutas
 app.include_router(reportes.router)
 app.include_router(admin.router)
 app.include_router(banos.router)
 app.include_router(categorias.router)
-

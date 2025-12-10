@@ -1,3 +1,4 @@
+// javascript/reportar.js
 document.addEventListener("DOMContentLoaded", () => {
     console.log("reportar.js cargado correctamente");
 
@@ -5,6 +6,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const edificioSelect = document.getElementById("select-edificio");
     const nivelSelect = document.getElementById("select-nivel");
     const sexoSelect = document.getElementById("select-sexo");
+    const form = document.getElementById("reporte-form");
+
+    // Cámara / preview elements (según tu reportar.html)
+    const video = document.getElementById("video");
+    const canvas = document.getElementById("canvas");
+    const btnStart = document.getElementById("btn-start");
+    const btnTake = document.getElementById("btn-take");
+    const btnRetake = document.getElementById("btn-retake");
+    const btnConfirm = document.getElementById("btn-confirm");
+    const fileFallback = document.getElementById("file-fallback"); // input name="file_upload"
+
+    // Estado de la cámara
+    let stream = null;
+    let currentPhotoBlob = null; // Blob de la foto confirmada (si la hay)
 
     // reglas de edificios -> qué sexo hay en cada nivel
     const reglas = {
@@ -94,111 +109,255 @@ document.addEventListener("DOMContentLoaded", () => {
             <option value="H">Hombres</option>`;
     }
 
-    // Listeners
+    // listeners de selects
     tipoSelect.addEventListener("change", () => {
         poblarNiveles();
         poblarSexoSegunNivel();
     });
-
     edificioSelect.addEventListener("change", () => {
         poblarNiveles();
         poblarSexoSegunNivel();
     });
-
     nivelSelect.addEventListener("change", () => {
         poblarSexoSegunNivel();
     });
 
-    // =======================================================
-    //     📸 CONFIGURACIÓN PARA FORZAR CÁMARA + PREVIEW
-    // =======================================================
+    // ---------- Cámara: helpers ----------
+    function showVideoUI() {
+        if (video) video.classList.remove("hidden");
+        if (canvas) canvas.classList.add("hidden");
+        if (btnTake) btnTake.classList.remove("hidden");
+        if (btnConfirm) btnConfirm.classList.add("hidden");
+        if (btnRetake) btnRetake.classList.add("hidden");
+    }
 
-    const inputCamara = document.querySelector('[name="file_upload"]');
-    const preview = document.getElementById("preview-foto");
-    const btnRepetir = document.getElementById("repetir-foto");
+    function showPreviewUI() {
+        if (video) video.classList.add("hidden");
+        if (canvas) canvas.classList.remove("hidden");
+        if (btnTake) btnTake.classList.add("hidden");
+        if (btnConfirm) btnConfirm.classList.remove("hidden");
+        if (btnRetake) btnRetake.classList.remove("hidden");
+    }
 
-    // Forzar cámara siempre
-    inputCamara.setAttribute("accept", "image/*");
-    inputCamara.setAttribute("capture", "environment");
+    // Inicia stream desde cámara (permite cámara trasera con facingMode 'environment')
+    async function startCamera() {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            console.warn("getUserMedia no soportado en este navegador");
+            if (fileFallback) fileFallback.parentElement.classList.remove("hidden");
+            return;
+        }
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: { ideal: "environment" } },
+                audio: false
+            });
+            if (video) {
+                video.srcObject = stream;
+                video.play().catch(()=>{});
+                showVideoUI();
+            }
+        } catch (err) {
+            console.error("Error al abrir cámara:", err);
+            if (fileFallback) fileFallback.parentElement.classList.remove("hidden");
+        }
+    }
 
-    // Mostrar previsualización
-    inputCamara.addEventListener("change", () => {
-        const file = inputCamara.files[0];
-        if (!file) return;
+    // Detener stream cuando ya no sea necesario
+    function stopCamera() {
+        if (stream) {
+            stream.getTracks().forEach(t => t.stop());
+            stream = null;
+        }
+    }
 
-        const url = URL.createObjectURL(file);
-        preview.src = url;
-        preview.classList.remove("hidden");
-        btnRepetir.classList.remove("hidden");
-    });
+    // Toma foto del video al canvas
+    function takePhotoToCanvas() {
+        if (!video || !canvas) return;
+        const w = video.videoWidth || 1280;
+        const h = video.videoHeight || 720;
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(video, 0, 0, w, h);
+        showPreviewUI();
+    }
 
-    // Repetir foto
-    btnRepetir.addEventListener("click", () => {
-        inputCamara.value = "";
-        preview.src = "";
-        preview.classList.add("hidden");
-        btnRepetir.classList.add("hidden");
-    });
+    // Convierte canvas a blob (jpeg)
+    function canvasToBlobPromise(canvasEl, quality = 0.85) {
+        return new Promise((resolve) => {
+            canvasEl.toBlob((blob) => {
+                resolve(blob);
+            }, "image/jpeg", quality);
+        });
+    }
+
+    // ---------- Wiring de botones (si existen en DOM) ----------
+    if (btnStart) {
+        btnStart.addEventListener("click", async () => {
+            await startCamera();
+        });
+    }
+
+    if (btnTake) {
+        btnTake.addEventListener("click", () => {
+            takePhotoToCanvas();
+        });
+    }
+
+    if (btnRetake) {
+        btnRetake.addEventListener("click", () => {
+            // volver a cámara, borrar foto previa
+            currentPhotoBlob = null;
+            if (canvas) {
+                const ctx = canvas.getContext && canvas.getContext("2d");
+                if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+            showVideoUI();
+        });
+    }
+
+    if (btnConfirm) {
+        btnConfirm.addEventListener("click", async () => {
+            if (!canvas) return;
+            // convertir canvas a blob y guardarlo
+            const blob = await canvasToBlobPromise(canvas);
+            if (blob) {
+                // crear nombre de archivo simple
+                const filename = `foto_incidente.jpg`;
+                currentPhotoBlob = new File([blob], filename, { type: blob.type });
+                // ya no necesitamos el video abierto
+                stopCamera();
+            }
+            // UI: dejar canvas visible como preview y ocultar controles
+            if (btnTake) btnTake.classList.add("hidden");
+            if (btnConfirm) btnConfirm.classList.add("hidden");
+            if (btnRetake) btnRetake.classList.remove("hidden");
+        });
+    }
+
+    // Si el usuario usa el fallback file input (por ejemplo navegador que no permite getUserMedia)
+    if (fileFallback) {
+        // Aseguramos atributos para forzar cámara en mobile si es posible
+        fileFallback.setAttribute("accept", "image/*");
+        fileFallback.setAttribute("capture", "environment");
+
+        fileFallback.addEventListener("change", () => {
+            const f = fileFallback.files && fileFallback.files[0];
+            if (!f) return;
+            currentPhotoBlob = f; // usaremos este file al enviar
+            // mostrar canvas preview con la imagen seleccionada (opcional)
+            const reader = new FileReader();
+            reader.onload = function (ev) {
+                if (!canvas) return;
+                const img = new Image();
+                img.onload = function () {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const ctx = canvas.getContext("2d");
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    // mostrar canvas como preview
+                    canvas.classList.remove("hidden");
+                    if (video) video.classList.add("hidden");
+                    if (btnRetake) btnRetake.classList.remove("hidden");
+                    if (btnConfirm) btnConfirm.classList.add("hidden");
+                    if (btnTake) btnTake.classList.add("hidden");
+                };
+                img.src = ev.target.result;
+            };
+            reader.readAsDataURL(f);
+        });
+    }
 
     // ================================
     //       ENVÍO DEL FORMULARIO
     // ================================
-    const form = document.getElementById("reporte-form");
+    if (!form) {
+        console.error("No se encontró el formulario con id 'reporte-form'");
+        return;
+    }
+
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const numeroCuenta = document.querySelector('[name="numero_cuenta"]').value.trim();
+        // Recolectar campos
+        const numeroCuenta = (document.querySelector('[name="numero_cuenta"]') || {}).value || "";
         const tipoProblema = tipoSelect.value;
         const edificio = edificioSelect.value;
         const nivel = nivelSelect.value;
         const sexo = sexoSelect.value;
-        const pasillo = document.querySelector('[name="pasillo"]').value;
-        const esAnonimo = document.querySelector('[name="es_anonimo"]').checked;
-        const fileUpload = document.querySelector('[name="file_upload"]').files[0];
+        const pasillo = (document.querySelector('[name="pasillo"]') || {}).value || "";
+        const esAnonimoChecked = (document.querySelector('[name="es_anonimo"]') || {}).checked || false;
 
-        if (!tipoProblema || !edificio || !nivel || !sexo) {
+        // Validación mínima (backend también valida)
+        if (!tipoProblema || !edificio || nivel === "" || !sexo) {
             alert("Por favor llena todos los campos obligatorios.");
             return;
         }
 
-        const taza_o_orinal = esMingitorioSegunTipo(tipoProblema) ? "orinal" : "taza";
-
+        // preparar formdata exactamente con las claves que espera el backend
         const formData = new FormData();
         formData.append("numero_cuenta", numeroCuenta);
         formData.append("tipo_problema", tipoProblema);
         formData.append("edificio", edificio);
-        formData.append("nivel", nivel);
+        formData.append("nivel", nivel); // backend convertirá a int
         formData.append("sexo", sexo);
-        formData.append("taza_o_orinal", taza_o_orinal);
+        formData.append("taza_o_orinal", esMingitorioSegunTipo(tipoProblema) ? "orinal" : "taza");
         formData.append("pasillo", pasillo);
-        formData.append("es_anonimo", esAnonimo);
+        // FastAPI parsea "true"/"false" para booleans; enviamos string "true" o "false"
+        formData.append("es_anonimo", esAnonimoChecked ? "true" : "false");
 
-        if (fileUpload) formData.append("file_upload", fileUpload);
+        // adjuntar foto confirmada (preferir currentPhotoBlob > fallback file input)
+        if (currentPhotoBlob) {
+            formData.append("file_upload", currentPhotoBlob, currentPhotoBlob.name || "foto_incidente.jpg");
+        } else {
+            // si no hay currentPhotoBlob, revisar fallback (por si usuario seleccionó archivo)
+            if (fileFallback && fileFallback.files && fileFallback.files[0]) {
+                formData.append("file_upload", fileFallback.files[0], fileFallback.files[0].name);
+            }
+            // Si tampoco hay file, no se agrega (imagen es opcional)
+        }
 
         try {
-            const response = await fetch("http://127.0.0.1:8000/reportes/", {
+            const resp = await fetch("http://127.0.0.1:8000/reportes/", {
                 method: "POST",
                 body: formData
             });
 
-            if (response.ok) {
+            if (resp.ok) {
                 alert("Reporte enviado con éxito.");
+                // limpiar estado UI
                 form.reset();
-                preview.src = "";
-                preview.classList.add("hidden");
-                btnRepetir.classList.add("hidden");
+                currentPhotoBlob = null;
+                if (canvas) {
+                    const ctx = canvas.getContext && canvas.getContext("2d");
+                    if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    canvas.classList.add("hidden");
+                }
+                if (video) {
+                    video.pause();
+                    video.srcObject = null;
+                    video.classList.add("hidden");
+                }
+                stopCamera();
+                // reset selects UI
                 nivelSelect.innerHTML = `<option value="">Seleccione nivel</option>`;
                 sexoSelect.innerHTML = `<option value="">Seleccione sexo</option>`;
             } else {
-                const t = await response.text().catch(()=>null);
-                console.error("Error del servidor:", t);
-                alert("Error al enviar reporte.");
+                const txt = await resp.text().catch(()=>null);
+                console.error("Error del servidor:", txt || resp.status);
+                alert("Error al enviar reporte. Revisa la consola para más detalle.");
             }
         } catch (err) {
+            console.error("Error al enviar:", err);
             alert("No se pudo conectar con el servidor.");
-            console.error(err);
         }
     });
 
+    // Inicializar estados UI: esconder canvas si existe
+    if (canvas) canvas.classList.add("hidden");
+    if (video) video.classList.add("hidden");
+    // show fallback file input hidden by default (HTML already hides fallback)
+    // listo
     poblarNiveles();
 });
