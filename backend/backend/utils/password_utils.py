@@ -1,14 +1,15 @@
-import hashlib
+from passlib.context import CryptContext
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def hash_password(password: str) -> str:
     """
-    Genera un hash SHA-256 en formato hex (igual que el que tienes en la tabla admins).
+    Convierte la contraseña en un hash seguro.
     """
-    return hashlib.sha256(password.encode("utf-8")).hexdigest()
+    return pwd_context.hash(password)
 
-
-def verify_password(password: str, stored_hash: str) -> bool:
+def verify_password(password: str, hashed: str) -> bool:
     """
-    Compara la contraseña en texto plano contra el hash guardado en la BD.
+    Verifica si la contraseña ingresada coincide con el hash guardado.
     """
-    return hash_password(password) == stored_hash
+    return pwd_context.verify(password, hashed)

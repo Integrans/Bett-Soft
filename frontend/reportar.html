@@ -1,78 +1,143 @@
 <!DOCTYPE html>
 <html class="light" lang="es">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BettSoft - Nuevo Reporte</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BettSoft - Reporte de Sanitarios</title>
 
-    <!-- Tailwind -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet"
+  />
 
-    <script>
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        primary: "#003366",  // Azul institucional
-                        accent: "#D4AF37",   // Dorado
-                        bg_light: "#F0F2F5", // Fondo gris suave
-                        surface: "#FFFFFF",  // Blanco puro
-                    }
-                }
-            }
-        }
-    </script>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#003366",
+            "accent": "#D4AF37",
+            "background-light": "#F0F2F5",
+            "background-dark": "#111621",
+            "surface": "#FFFFFF",
+            "text-main": "#212529",
+          },
+          fontFamily: {
+            "display": ["Public Sans", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.5rem",
+            "lg": "1rem",
+            "xl": "1.5rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
 </head>
 
-<body class="bg-bg_light text-gray-800 font-sans min-h-screen flex flex-col">
+<body class="font-display bg-background-light dark:bg-background-dark text-text-main">
+  <div class="relative flex min-h-screen w-full flex-col">
 
+    <!-- HEADER NUEVO -->
 <!-- HEADER -->
-<header class="bg-primary text-white shadow-md sticky top-0 z-50">
-  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+<header class="bg-primary text-white shadow-md">
+  <!-- Barra superior -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
 
-    <!-- LOGO IZQUIERDA -->
+    <!-- Logo -->
     <a href="index.html" class="flex items-center">
-      <img src="Images/logo.png" alt="BettSoft" class="h-10 object-contain">
+      <img
+        src="images/logo.png"
+        alt="Logo FES Acatlán"
+        class="h-10 sm:h-14 w-auto"
+      />
     </a>
 
-    <!-- MENÚ CENTRO (DESKTOP) -->
-    <nav class="hidden md:flex gap-8 text-sm font-medium items-center">
-      <a href="index.html" class="hover:text-white/80 transition">Inicio</a>
-      <a href="reportar.html" class="border-b-2 border-white pb-1">Nuevo reporte</a>
-      <a href="consultar.html" class="hover:text-white/80 transition">Consultar reporte</a>
+    <!-- Menú de escritorio -->
+    <nav class="hidden sm:flex gap-8 text-sm md:text-base">
+      <a href="index.html"
+         class="pb-1 border-b-2 border-transparent hover:border-white transition">
+        Inicio
+      </a>
+      <a href="reportar.html"
+         class="pb-1 border-b-2 border-white font-semibold">
+        Nuevo Incidente
+      </a>
+      <a href="consultar.html"
+         class="pb-1 border-b-2 border-transparent hover:border-white transition">
+        Consultar Incidente
+      </a>
     </nav>
 
-    <!-- BOTÓN LOGIN DERECHA -->
-    <div class="hidden md:block">
-      <a
-        href="login.html"
-        class="border border-white text-white font-semibold px-4 py-2 rounded-md hover:bg-white hover:text-primary transition"
-      >
-        Iniciar sesión
-      </a>
-    </div>
+    <!-- Botón Iniciar sesión (solo escritorio) -->
+    <a
+      href="login.html"
+      class="hidden sm:inline-flex items-center gap-2 text-white text-sm font-medium
+             hover:shadow-md hover:bg-white/10 px-3 py-2 rounded-md transition"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+           viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15 3h4a2 2 0 012 2v4m0 6v4a2 2 0 01-2 2h-4m-6 0H5a2 2 0 01-2-2v-4m0-6V5a2 2 0 012-2h4" />
+      </svg>
+      Iniciar sesión
+    </a>
 
-    <!-- BOTÓN HAMBURGUESA (MÓVIL) -->
-    <button id="btn-menu" class="md:hidden">
-      <span id="icon-open" class="material-symbols-outlined text-white text-3xl">
-        menu
-      </span>
-      <span id="icon-close" class="material-symbols-outlined text-white text-3xl hidden">
-        close
-      </span>
+    <!-- Botón hamburguesa (solo móvil) -->
+    <button
+      type="button"
+      class="inline-flex items-center justify-center sm:hidden p-2 rounded-md hover:bg-white/10 transition"
+      onclick="toggleMobileMenu()"
+      aria-label="Abrir menú"
+    >
+      <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+           viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
     </button>
-
   </div>
 
-  <!-- MENÚ MÓVIL -->
-  <div id="menu-mobile" class="hidden md:hidden bg-primary border-t border-blue-900">
-    <nav class="flex flex-col p-4 gap-3 text-sm">
-      <a href="index.html" class="hover:text-white/80">Inicio</a>
-      <a href="reportar.html" class="hover:text-white/80">Nuevo reporte</a>
-      <a href="consultar.html" class="hover:text-white/80">Consultar reporte</a>
-      <a href="login.html" class="mt-2 border border-white text-center py-2 rounded-md font-semibold hover:bg-white hover:text-primary transition">
+  <!-- Menú móvil desplegable -->
+  <div id="mobile-menu"
+       class="sm:hidden hidden border-t border-white/20 bg-primary/95">
+    <nav class="flex flex-col px-4 py-3 gap-3 text-sm">
+      <a href="index.html"
+         class="py-1 border-b border-white/10">
+        Inicio
+      </a>
+      <a href="reportar.html"
+         class="py-1 border-b border-white/10 font-semibold">
+        Nuevo Incidente
+      </a>
+      <a href="consultar.html"
+         class="py-1 border-b border-white/10">
+        Consultar Incidente
+      </a>
+      <a href="login.html"
+         class="pt-2 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M15 3h4a2 2 0 012 2v4m0 6v4a2 2 0 01-2 2h-4m-6 0H5a2 2 0 01-2-2v-4m0-6V5a2 2 0 012-2h4" />
+        </svg>
         Iniciar sesión
       </a>
     </nav>
@@ -81,163 +146,264 @@
 
 
 
-    <!-- MAIN -->
-    <main class="flex-1 w-full max-w-3xl mx-auto px-4 py-8">
+    <!-- FIN HEADER -->
 
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="flex flex-1 justify-center px-4 py-6 sm:px-6 lg:px-8">
+      <div class="w-full max-w-2xl">
         <div class="mb-6 text-center">
-            <h1 class="text-3xl font-bold text-primary">Levantar incidente</h1>
-            <p class="text-gray-500 mt-2">Ayúdanos a mantener las instalaciones en buen estado.</p>
+          <h1 class="text-3xl font-bold text-primary">
+            Reporte de incidencia
+          </h1>
         </div>
 
-        <div class="bg-surface rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+<form 
+  id="reporte-form"
+  class="flex flex-col gap-6"
+  enctype="multipart/form-data"
+>
+  <!-- Card principal -->
+  <section class="rounded-2xl bg-surface/95 shadow-lg border border-slate-100 px-6 py-6 sm:px-8 sm:py-7 space-y-6">
 
-            <div class="h-2 bg-gradient-to-r from-primary to-blue-400"></div>
+    <!-- Título y descripción -->
+    <header class="space-y-1">
+      <p class="text-2xl font-bold text-primary tracking-[-0.02em]">
+        Detalles del incidente
+      </p>
+      <p class="text-sm text-slate-500">
+        Utiliza este formulario para reportar cualquier problema en los sanitarios de la FES Acatlán.
+      </p>
+    </header>
 
-            <form id="form-reporte" class="p-6 sm:p-8 flex flex-col gap-6">
+    <!-- Campos principales -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
 
-                <!-- DETALLES DEL PROBLEMA -->
-                <div>
-                    <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 mb-4">
-                        <span class="material-symbols-outlined text-primary">error</span>
-                        Detalles del problema
-                    </h3>
+      <!-- Tipo de problema -->
+      <div class="md:col-span-2">
+        <label class="block text-sm font-medium text-slate-700 mb-1">
+          Tipo de problema
+        </label>
+        <select
+          name="tipo_problema"
+          id="select-tipo"
+          required
+          class="mt-0 block w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/40"
+        >
+          <option value="fuga">Fuga</option>
+          <option value="taza_tapada">WC tapado</option>
+          <option value="orinal_tapado">Mingitorio tapado</option>
+          <option value="no_papel">No hay papel</option>
+          <option value="no_jabon">No hay jabón</option>
+          <option value="suciedad">Suciedad</option>
+          <option value="mal_olor">Mal olor</option>
+        </select>
+      </div>
 
-                    <label class="block">
-                        <span class="text-gray-700 font-medium">Tipo de incidente</span>
-                        <select id="tipo_problema" required
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary/20 bg-gray-50 h-12">
-                            <option value="" disabled selected>Selecciona una opción...</option>
-                            <option value="fuga">💦 Fuga de agua</option>
-                            <option value="taza_tapada">🚽 Taza tapada</option>
-                            <option value="orinal_tapado">🛑 Orinal tapado</option>
-                            <option value="no_papel">🧻 Falta de papel</option>
-                            <option value="no_jabon">🧼 Falta de jabón</option>
-                            <option value="suciedad">🧹 Suciedad excesiva</option>
-                            <option value="mal_olor">🤢 Mal olor</option>
-                        </select>
-                    </label>
-                </div>
+      <!-- Edificio -->
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">
+          Edificio
+        </label>
+        <select
+          id="select-edificio"
+          name="edificio"
+          required
+          class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/40"
+        >
+          <option value="">Seleccione el edificio</option>
+          <option value="A1-A2">Edificio A-1 / A-2</option>
+          <option value="A3-A4">Edificio A-3 / A-4</option>
+          <option value="A5-A6">Edificio A-5 / A-6</option>
+          <option value="A7-A8">Edificio A-7 / A-8</option>
+          <option value="A9-A10">Edificio A-9 / A-10</option>
+          <option value="A11-A12">Edificio A-11 / A-12</option>
+          <option value="Idiomas">Idiomas (A-13 / A-14)</option>
+          <option value="A15">Edificio A-15</option>
+          <option value="CEDETEC">CEDETEC</option>
+          <option value="Posgrado">Posgrado</option>
+          <option value="CEMM">CEMM</option>
+        </select>
+      </div>
 
-                <hr class="border-gray-100">
+      <!-- Nivel -->
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">
+          Nivel
+        </label>
+        <select
+          id="select-nivel"
+          name="nivel"
+          required
+          class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/40"
+        >
+          <option value="">Seleccione nivel</option>
+        </select>
+      </div>
 
-                <!-- UBICACIÓN -->
-                <div>
-                    <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 mb-4">
-                        <span class="material-symbols-outlined text-primary">location_on</span>
-                        Ubicación
-                    </h3>
+      <!-- Sexo -->
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">
+          Sexo
+        </label>
+        <select
+          id="select-sexo"
+          name="sexo"
+          required
+          class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/40"
+        >
+          <option value="">Seleccione sexo</option>
+        </select>
+      </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <!-- Edificio -->
-                        <label class="block">
-                            <span class="text-gray-700 font-medium">Edificio</span>
-                            <select id="edificio" required
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary/20 bg-gray-50 h-11">
-                                <option value="A-1">Edificio A1</option>
-                                <option value="A-2">Edificio A2</option>
-                                <option value="A-3">Edificio A3</option>
-                                <option value="A-4">Edificio A4</option>
-                                <option value="A-5">Edificio A5</option>
-                                <option value="A-6">Edificio A6</option>
-                                <option value="A-7">Edificio A7</option>
-                                <option value="A-8">Edificio A8</option>
-                                <option value="A-9">Edificio A9</option>
-                                <option value="A-10">Edificio A10</option>
-                                <option value="A-11">Edificio A11</option>
-                                <option value="A-12">Edificio A12</option>
-                                <option value="A-13">Edificio A13</option>
-                                <option value="A-14">Edificio A14</option>
-                                <option value="A-15">Edificio A15</option>
-                            </select>
-                        </label>
+      <!-- Pasillo -->
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">
+          Pasillo
+        </label>
+        <select
+          name="pasillo"
+          class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/40"
+        >
+          <option value="">--</option>
+          <option value="frente">Frente</option>
+          <option value="atras">Atrás</option>
+        </select>
+      </div>
 
-                        <!-- Nivel (solo 1 y 2 porque así está en la tabla banos) -->
-                        <label class="block">
-                            <span class="text-gray-700 font-medium">Nivel / Piso</span>
-                            <select id="nivel" required
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary/20 bg-gray-50 h-11">
-                                <option value="1">Piso 1</option>
-                                <option value="2">Piso 2</option>
-                            </select>
-                        </label>
+    </div>
+  </section>
 
-                        <!-- Sexo -->
-                        <label class="block">
-                            <span class="text-gray-700 font-medium">Baño de:</span>
-                            <select id="sexo" required
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary/20 bg-gray-50 h-11">
-                                <option value="M">Mujeres</option>
-                                <option value="H">Hombres</option>
-                                <option value="Mixto">Mixto</option>
-                            </select>
-                        </label>
+  <!-- Card de datos opcionales -->
+  <section class="rounded-2xl bg-surface/95 shadow border border-slate-100 px-6 py-5 sm:px-8 sm:py-6 space-y-4">
+    <h2 class="text-base font-semibold text-slate-800">
+      Datos adicionales
+    </h2>
 
-                        <!-- Pasillo -->
-                        <label class="block">
-                            <span class="text-gray-700 font-medium">Ubicación (Pasillo)</span>
-                            <select id="pasillo" required
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary/20 bg-gray-50 h-11">
-                                <option value="frente">Frente</option>
-                                <option value="atras">Atrás</option>
-                            </select>
-                        </label>
-                    </div>
+    <!-- Número de cuenta -->
+    <div class="space-y-1">
+      <label class="block text-sm font-medium text-slate-700">
+        Número de cuenta <span class="text-slate-400">(opcional)</span>
+      </label>
+      <input
+        type="text"
+        name="numero_cuenta"
+        class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/40"
+        placeholder="Ej. 318241144"
+      />
+      <p class="text-xs text-slate-400">
+        Si marcas el reporte como anónimo, este campo se ignorará.
+      </p>
+    </div>
 
-                    <!-- Taza u orinal -->
-                    <div class="mt-4">
-                        <label class="block">
-                            <span class="text-gray-700 font-medium">Elemento afectado</span>
-                            <div class="mt-2 flex gap-4">
-                                <label class="inline-flex items-center">
-                                    <input type="radio" name="taza_or_orinal" value="taza" class="form-radio text-primary"
-                                        checked>
-                                    <span class="ml-2">Taza (inodoro)</span>
-                                </label>
-                                <label class="inline-flex items-center">
-                                    <input type="radio" name="taza_or_orinal" value="orinal" class="form-radio text-primary">
-                                    <span class="ml-2">Orinal (mingitorio)</span>
-                                </label>
-                            </div>
-                        </label>
-                    </div>
-                </div>
+    <!-- Anónimo -->
+    <label class="flex items-center gap-2 text-sm text-slate-700">
+      <input
+        type="checkbox"
+        name="es_anonimo"
+        value="true"
+        class="rounded border-slate-300 text-primary focus:ring-primary/60"
+      />
+      Prefiero enviar reporte anónimo
+    </label>
+  </section>
 
-                <hr class="border-gray-100">
+  <!-- Card de imagen / cámara -->
+  <section class="rounded-2xl bg-surface/95 shadow border border-slate-100 px-6 py-5 sm:px-8 sm:py-6 space-y-4">
 
-                <!-- DATOS DEL USUARIO -->
-                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
-                    <label class="block mb-3">
-                        <span class="text-gray-700 font-medium text-sm">Número de cuenta (opcional)</span>
-                        <input
-                            type="text"
-                            id="numero_cuenta"
-                            placeholder="Ej. 315123456"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary/20 h-10 text-sm">
-                    </label>
+    <div class="space-y-1">
+      <h2 class="text-base font-semibold text-slate-800">
+        Imagen <span class="text-slate-400 text-xs">(opcional)</span>
+      </h2>
+      <p class="text-xs text-slate-500">
+        Puedes tomar una foto con la cámara o subirla desde tus archivos.
+      </p>
+    </div>
 
-                    <label class="inline-flex items-center cursor-pointer">
-                        <input id="es_anonimo" type="checkbox"
-                            class="form-checkbox rounded text-primary focus:ring-primary/50 h-5 w-5 transition duration-150 ease-in-out">
-                        <span class="ml-2 text-gray-700 font-medium">Prefiero enviar reporte anónimo</span>
-                    </label>
+    <div id="camera-wrapper" class="flex flex-col gap-3">
+      <!-- Video en vivo / preview -->
+      <div class="relative overflow-hidden rounded-xl border border-dashed border-slate-300 bg-slate-50">
+        <video
+          id="video"
+          autoplay
+          playsinline
+          class="w-full max-h-80 object-cover rounded-xl bg-black/60"
+        ></video>
+        <canvas
+          id="canvas"
+          class="w-full max-h-80 object-contain rounded-xl hidden bg-black"
+        ></canvas>
+      </div>
 
-                    <p class="text-xs text-gray-500 mt-2">
-                        Si marca el reporte como anónimo, el número de cuenta se ignorará aunque lo haya escrito.
-                    </p>
-                </div>
+      <!-- Controles cámara -->
+      <div class="flex flex-wrap gap-2">
+        <button
+          type="button"
+          id="btn-start"
+          class="inline-flex items-center justify-center gap-1 rounded-full bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary/90"
+        >
+          Abrir cámara
+        </button>
+        <button
+          type="button"
+          id="btn-take"
+          class="inline-flex items-center justify-center gap-1 rounded-full bg-accent px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-accent/90 hidden"
+        >
+          Tomar foto
+        </button>
+        <button
+          type="button"
+          id="btn-retake"
+          class="inline-flex items-center justify-center gap-1 rounded-full border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 hidden"
+        >
+          Retomar
+        </button>
+        <button
+          type="button"
+          id="btn-confirm"
+          class="inline-flex items-center justify-center gap-1 rounded-full bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700 hidden"
+        >
+          Confirmar
+        </button>
+      </div>
 
-                <!-- BOTÓN ENVIAR -->
-                <button
-                    type="submit"
-                    class="w-full bg-primary hover:bg-blue-900 text-white font-bold py-4 rounded-lg shadow-md hover:shadow-lg transform active:scale-[0.98] transition-all duration-200 flex justify-center items-center gap-2 mt-2">
-                    <span class="material-symbols-outlined">send</span>
-                    Enviar incidente
-                </button>
-            </form>
-        </div>
+      <!-- Fallback archivo -->
+      <div id="fallback-file" class="mt-2 hidden">
+        <p class="text-xs text-slate-500 mb-1">
+          Si tu navegador no permite cámara, sube una foto (preferentemente tomada ahora).
+        </p>
+        <input
+          type="file"
+          id="file-fallback"
+          accept="image/*"
+          capture="environment"
+          name="file_upload"
+          class="block w-full text-sm text-slate-600 file:mr-4 file:rounded-full file:border-0 file:bg-primary/10 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-primary hover:file:bg-primary/20"
+        />
+      </div>
+    </div>
+  </section>
 
+  <!-- Botón enviar -->
+  <button
+    type="submit"
+    class="mt-2 flex h-14 w-full items-center justify-center rounded-full bg-primary px-8 text-lg font-semibold text-white shadow-md transition hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:ring-offset-2"
+  >
+    Enviar incidente
+  </button>
+</form>
+
+      </div>
     </main>
-    
-    <script src="reportar.js"></script>
+  </div>
+  <script>
+  function toggleMobileMenu() {
+    const menu = document.getElementById('mobile-menu');
+    menu.classList.toggle('hidden');
+  }
+</script>
+<script src="./javascript/reportar.js"></script>
+</body>
+
+</html>
 </body>
 </html>
