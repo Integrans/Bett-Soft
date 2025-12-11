@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Form, UploadFile, File, Depends, HTTPException
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 from database.connection import SessionLocal
 from database import models
@@ -6,6 +7,7 @@ from datetime import datetime
 import shutil
 import os
 from typing import List, Optional
+from utils.excel_generator import generar_excel_reportes
 
 router = APIRouter(prefix="/reportes", tags=["Reportes"])
 
@@ -186,19 +188,15 @@ def crear_reporte(
     prioridad_final = calcular_prioridad(tipo_problema)
 
     # --- guardar imagen (sanitizar nombre) ---
-    
     imagen_url = None
     if file_upload:
-       filename = file_upload.filename
-       # Si viene vacío (caso de blobs del frontend), creamos un nombre automático
-       if not filename or filename.strip() == "":
-          filename = f"foto_{int(datetime.now().timestamp())}.jpg"
-       ruta = f"uploads/{folio}_{filename}"
-
-    with open(ruta, "wb") as buffer:
-        shutil.copyfileobj(file_upload.file, buffer)
-
-    imagen_url = ruta
+        filename = os.path.basename(file_upload.filename or "")
+        # prevenir nombres vacíos
+        if filename:
+            ruta = f"uploads/{folio}_{filename}"
+            with open(ruta, "wb") as buffer:
+                shutil.copyfileobj(file_upload.file, buffer)
+            imagen_url = ruta
 
     # --- crear objeto Reporte ---
     try:
@@ -244,3 +242,104 @@ def obtener_reporte_por_folio(folio: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Reporte no encontrado")
 
     return reporte
+
+# -----------------------------------------------------------
+# ENDPOINTS PARA GENERAR EXCEL
+# -----------------------------------------------------------
+
+@router.get("/descargar/todos", summary="Descargar todos los reportes en Excel")
+def descargar_todos_reportes(db: Session = Depends(get_db)):
+    """
+    Descarga un Excel con todos los reportes de incidencias.
+    """
+    reportes = db.query(models.Reporte).all()
+    
+    if not reportes:
+        raise HTTPException(status_code=404, detail="No hay reportes para descargar")
+    
+    ruta_archivo = generar_excel_reportes(reportes)
+    
+    return FileResponse(
+        path=ruta_archivo,
+        filename=os.path.basename(ruta_archivo),
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+
+
+@router.get("/descargar/edificio/{edificio}", summary="Descargar reportes de un edificio en Excel")
+def descargar_reportes_edificio(edificio: str, db: Session = Depends(get_db)):
+    """
+    Descarga un Excel con los reportes de un edificio específico.
+    Ejemplo: /reportes/descargar/edificio/A3-A4
+    """
+    reportes = db.query(models.Reporte).filter(
+        models.Reporte.edificio == edificio
+    ).all()
+    
+    if not reportes:
+        raise HTTPException(status_code=404, detail=f"No hay reportes para el edificio {edificio}")
+    
+    nombre_archivo = f"reportes_{edificio}"
+    ruta_archivo = generar_excel_reportes(reportes, nombre_archivo)
+    
+    return FileResponse(
+        path=ruta_archivo,
+        filename=os.path.basename(ruta_archivo),
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+
+
+@router.get("/descargar/prioridad/{prioridad}", summary="Descargar reportes por prioridad en Excel")
+def descargar_reportes_prioridad(prioridad: str, db: Session = Depends(get_db)):
+    """
+    Descarga un Excel con los reportes de una prioridad específica.
+    Prioridades: alta, media, baja
+    """
+    try:
+        prioridad_enum = models.PrioridadEnum(prioridad.lower())
+    except Exception:
+        raise HTTPException(status_code=400, detail=f"Prioridad inválida: {prioridad}")
+    
+    reportes = db.query(models.Reporte).filter(
+        models.Reporte.prioridad_asignada == prioridad_enum
+    ).all()
+    
+    if not reportes:
+        raise HTTPException(status_code=404, detail=f"No hay reportes con prioridad {prioridad}")
+    
+    nombre_archivo = f"reportes_prioridad_{prioridad}"
+    ruta_archivo = generar_excel_reportes(reportes, nombre_archivo)
+    
+    return FileResponse(
+        path=ruta_archivo,
+        filename=os.path.basename(ruta_archivo),
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+
+
+@router.get("/descargar/fecha/{fecha}", summary="Descargar reportes por fecha en Excel")
+def descargar_reportes_fecha(fecha: str, db: Session = Depends(get_db)):
+    """
+    Descarga un Excel con los reportes de una fecha específica.
+    Formato: YYYY-MM-DD (ej: 2025-12-10)
+    """
+    try:
+        fecha_obj = datetime.strptime(fecha, "%Y-%m-%d").date()
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Formato de fecha inválido. Use: YYYY-MM-DD")
+    
+    reportes = db.query(models.Reporte).filter(
+        models.Reporte.fecha_creacion.ilike(f"{fecha}%")
+    ).all()
+    
+    if not reportes:
+        raise HTTPException(status_code=404, detail=f"No hay reportes para la fecha {fecha}")
+    
+    nombre_archivo = f"reportes_{fecha}"
+    ruta_archivo = generar_excel_reportes(reportes, nombre_archivo)
+    
+    return FileResponse(
+        path=ruta_archivo,
+        filename=os.path.basename(ruta_archivo),
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
