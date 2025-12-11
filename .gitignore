@@ -1,7 +1,14 @@
-# .gitignore
-venv/
+New-Item ".gitignore" -Force -Value @"
 .venv/
 __pycache__/
 *.pyc
+*.pyo
 .env
+*.db
+*.sqlite
+uploads/reportes_excel/*
+.vscode/
+.idea/
+node_modules/
 .DS_Store
+"@

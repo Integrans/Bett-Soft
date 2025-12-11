@@ -40,6 +40,7 @@
       },
     };
   </script>
+  <script src="./javascript/config.js"></script>
   <script src="./javascript/toasts.js"></script>
 </head>
 
@@ -181,7 +182,7 @@
       }
 
       try {
-        const response = await fetch(`http://127.0.0.1:8000/reportes/${folio}`);
+        const response = await fetch(apiConfig.endpoint(`/reportes/${folio}`));
         if (!response.ok) {
           if (response.status === 404) showToast("Reporte no encontrado", "info");
           else showToast("Error al consultar reporte", "error");

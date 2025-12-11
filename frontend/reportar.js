@@ -1,5 +1,6 @@
 // URL base del backend (FastAPI)
-const API_BASE = "http://127.0.0.1:8000";
+// Usar configuración dinámica desde config.js
+// const API_BASE = "http://127.0.0.1:8000"; // DEPRECADO
 const REPORTES_PATH = "/reportes/";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -70,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ---------- Enviar al backend ----------
     try {
-      const response = await fetch(`${API_BASE}${REPORTES_PATH}`, {
+      const response = await fetch(apiConfig.endpoint(REPORTES_PATH), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

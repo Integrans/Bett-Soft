@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // =============================
     async function cargarReportes() {
         try {
-            const response = await fetch("http://127.0.0.1:8000/reportes");
+            const response = await fetch(apiConfig.endpoint('/reportes'));
             if (!response.ok) throw new Error("No se pudieron cargar los reportes");
 
             const reportes = await response.json();
@@ -134,7 +134,7 @@ async function cambiarEstado(id_reporte, estadoTexto) {
     const nuevoEstado = estados[estadoTexto];
 
     try {
-        const response = await fetch(`http://127.0.0.1:8000/reportes/${id_reporte}/estado-simple`, {
+        const response = await fetch(apiConfig.endpoint(`/reportes/${id_reporte}/estado-simple`), {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ nuevo_estado: nuevoEstado })
@@ -162,7 +162,7 @@ async function cambiarEstado(id_reporte, estadoTexto) {
 // =============================
 async function verDetalles(folio) {
     try {
-        const res = await fetch(`http://127.0.0.1:8000/reportes/folio/${folio}`);
+        const res = await fetch(apiConfig.endpoint(`/reportes/folio/${folio}`));
         if (!res.ok) throw new Error("No se pudo cargar el reporte");
 
         const rep = await res.json();
@@ -173,7 +173,7 @@ async function verDetalles(folio) {
         // Construimos la URL completa SOLO si existe una imagen
         let imagenHTML = "";
         if (rep.imagen_url) {
-            const urlCompleta = `http://127.0.0.1:8000/uploads/${rep.imagen_url}`;
+            const urlCompleta = apiConfig.endpoint(`/uploads/${rep.imagen_url}`);
             imagenHTML = `<img src="${urlCompleta}" class="w-full rounded mt-3 border shadow">`;
         }
 
@@ -210,7 +210,7 @@ function cerrarModal() {
 // =============================
 async function descargarReportesExcel(tipo) {
     try {
-        let url = "http://127.0.0.1:8000/reportes/descargar/";
+        let url = apiConfig.endpoint('/reportes/descargar/');
         
         if (tipo === "todos") {
             url += "todos";

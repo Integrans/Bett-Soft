@@ -1,9 +1,9 @@
-// URL del backend
-const API_URL = "http://127.0.0.1:8000/reportes/";
+// URL del backend - Usar configuración dinámica
+// const API_URL = "http://127.0.0.1:8000/reportes/"; // DEPRECADO
 
 async function enviarReporte(formData) {
     try {
-        const response = await fetch(API_URL, {
+        const response = await fetch(apiConfig.endpoint('/reportes/'), {
             method: "POST",
             body: formData
         });
