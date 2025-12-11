@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         try {
-            const response = await fetch("http://127.0.0.1:8000/login", {
+            const response = await fetch(apiConfig.endpoint('/login'), {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -25,21 +25,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (!response.ok) {
                 const err = await response.json();
-                alert("Error de inicio de sesión:\n" + err.detail);
+                showToast("Error de inicio de sesión: " + (err.detail || ""), "error");
                 return;
             }
 
             const result = await response.json();
             console.log(result);
 
-            alert(result.mensaje);
+            showToast(result.mensaje || "Inicio de sesión exitoso", "success");
 
             // Redirigir al panel de admin
             window.location.href = "./admin.html";
 
         } catch (error) {
             console.error("Error al conectar:", error);
-            alert("No se pudo conectar con el servidor.");
+            showToast("No se pudo conectar con el servidor.", "error");
         }
     });
 });

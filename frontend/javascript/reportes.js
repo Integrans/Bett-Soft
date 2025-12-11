@@ -1,9 +1,6 @@
-// URL del backend
-const API_URL = "http://127.0.0.1:8000/reportes/";
-
 async function enviarReporte(formData) {
     try {
-        const response = await fetch(API_URL, {
+        const response = await fetch(apiConfig.endpoint('/reportes/'), {
             method: "POST",
             body: formData
         });
@@ -14,12 +11,12 @@ async function enviarReporte(formData) {
             throw new Error(data.detail || "Error al enviar el reporte");
         }
 
-        alert("Reporte creado con folio: " + data.folio);
+        showToast("Reporte creado con folio: " + data.folio, "success");
         return data;
 
     } catch (error) {
         console.error("Error:", error);
-        alert("Error al enviar el reporte");
+        showToast("Error al enviar el reporte", "error");
     }
 }
 

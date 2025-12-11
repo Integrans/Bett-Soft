@@ -8,20 +8,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const sexoSelect = document.getElementById("select-sexo");
     const form = document.getElementById("reporte-form");
 
-    // Cámara / preview elements (según tu reportar.html)
     const video = document.getElementById("video");
     const canvas = document.getElementById("canvas");
     const btnStart = document.getElementById("btn-start");
     const btnTake = document.getElementById("btn-take");
     const btnRetake = document.getElementById("btn-retake");
     const btnConfirm = document.getElementById("btn-confirm");
-    const fileFallback = document.getElementById("file-fallback"); // input name="file_upload"
+    const fileFallback = document.getElementById("file-fallback");
 
     // Estado de la cámara
     let stream = null;
     let currentPhotoBlob = null; // Blob de la foto confirmada (si la hay)
 
-    // reglas de edificios -> qué sexo hay en cada nivel
     const reglas = {
         "A1-A2": { niveles: { 1: "M", 2: "H" } },
         "A3-A4": { niveles: { 1: "M", 2: "H" } },
@@ -139,7 +137,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (btnRetake) btnRetake.classList.remove("hidden");
     }
 
-    // Inicia stream desde cámara (permite cámara trasera con facingMode 'environment')
     async function startCamera() {
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
             console.warn("getUserMedia no soportado en este navegador");
@@ -190,8 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }, "image/jpeg", quality);
         });
     }
-
-    // ---------- Wiring de botones (si existen en DOM) ----------
+    // ---------- Cámara: listeners ----------
     if (btnStart) {
         btnStart.addEventListener("click", async () => {
             await startCamera();
@@ -291,7 +287,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Validación mínima (backend también valida)
         if (!tipoProblema || !edificio || nivel === "" || !sexo) {
-            alert("Por favor llena todos los campos obligatorios.");
+            showToast("Por favor llena todos los campos obligatorios.", "error");
             return;
         }
 
@@ -325,7 +321,9 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             if (resp.ok) {
-                alert("Reporte enviado con éxito.");
+                const responseData = await resp.json();
+                const folio = responseData.folio || "N/A";
+                showToast(`Reporte #${folio} enviado con éxito.`, "success");
                 // limpiar estado UI
                 form.reset();
                 currentPhotoBlob = null;
@@ -346,11 +344,11 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 const txt = await resp.text().catch(()=>null);
                 console.error("Error del servidor:", txt || resp.status);
-                alert("Error al enviar reporte. Revisa la consola para más detalle.");
+                showToast("Error al enviar reporte. Revisa la consola para más detalle.", "error");
             }
         } catch (err) {
             console.error("Error al enviar:", err);
-            alert("No se pudo conectar con el servidor.");
+            showToast("No se pudo conectar con el servidor.", "error");
         }
     });
 

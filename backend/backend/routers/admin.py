@@ -9,7 +9,6 @@ from schemas.admin_schema import AdminCreate, AdminLogin, AdminResponse
 from utils.password_utils import hash_password, verify_password
 from datetime import datetime
 
-# YA NO LLEVA PREFIX AQUÍ
 router = APIRouter(tags=["Administrador"])
 
 

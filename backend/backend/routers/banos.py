@@ -4,7 +4,6 @@ from database.connection import SessionLocal
 from database.models import Bano
 from schemas.banos_schema import BanoResponse
 
-# YA NO LLEVA prefix AQUÍ
 router = APIRouter(prefix="/banos", tags=["Baños"])
 
 def get_db():

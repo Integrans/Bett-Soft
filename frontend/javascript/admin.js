@@ -1,467 +1,335 @@
-document.addEventListener("DOMContentLoaded", () => {
-  // =============================
-  //   MAPEOS Y UTILIDADES
-  // =============================
+document.addEventListener("DOMContentLoaded", async () => {
 
-  const mapEdificioNombre = {
-  "A1-A2": "Edificio A-1 / A-2",
-  "A3-A4": "Edificio A-3 / A-4",
-  "A5-A6": "Edificio A-5 / A-6",
-  "A7-A8": "Edificio A-7 / A-8",
-  "A9-A10": "Edificio A-9 / A-10",
-  "A11-A12": "Edificio A-11 / A-12",
-  Idiomas: "Idiomas (A-13 / A-14)",
-  A15: "Edificio A-15",
-  CEDETEC: "CEDETEC",
-  Posgrado: "Posgrado",
-  CEMM: "CEMM",
-};
-
-const prioridadLegible = {
-    "PrioridadEnum.baja": "Baja",
-    "PrioridadEnum.media": "Media",
-    "PrioridadEnum.alta": "Alta"
-};
-
-function mostrarEdificio(code) {
-  if (!code) return "-";
-  return mapEdificioNombre[code] || code;
-}
-
-  // id_estado → texto
-  const mappingTextoNum = {
-    //1: "Pendiente",
-    1: "En proceso",
-    2: "Resuelto",
-    3: "Descartado",
-  };
-
-  // Texto de estado → clases de Tailwind
-  const clasesEstado = {
-    Pendiente: "bg-slate-100 text-slate-800",
-    "En proceso": "bg-yellow-100 text-yellow-800",
-    Resuelto: "bg-green-100 text-green-800",
-    Descartado: "bg-slate-300 text-slate-800",
-  };
-
-  // id_estado → valor del select
-  function valorSelectEstado(id_estado) {
-    switch (id_estado) {
-      case 1:
-        return "en_proceso";
-      case 2:
-        return "resuelto";
-      case 3:
-        return "descartado";
-      default:
-        return ""; // pendiente no tiene opción en el select
-    }
-  }
-
-  // Tipo de problema “bonito”
-  function mapTipoProblema(code) {
-    if (!code) return "-";
-
-    const map = {
-      no_papel: "Falta de papel",
-      taza_tapada: "WC tapado",
-      fuga: "Fuga de agua",
-      sanitario_sucio: "Sanitario sucio",
-      orinal_tapado: "Mingitorio tapado",
-      no_jabon: "Falta de jabón",
+    // Mapeo de estados segun su número en la BD
+    const mappingTextoNum = {
+        1: "Pendiente",
+        2: "En proceso",
+        3: "Resuelto",
+        4: "Descartado"
     };
 
-    if (map[code]) return map[code];
+    // Colores de etiquetas según estado
+    const clasesEstado = {
+        "Pendiente": "bg-slate-100 text-slate-800",
+        "En proceso": "bg-yellow-100 text-yellow-800",
+        "Resuelto": "bg-green-100 text-green-800",
+        "Descartado": "bg-slate-300 text-slate-800"
+    };
 
-    // fallback: "taza_tapada" → "Taza Tapada"
-    return code
-      .replace(/_/g, " ")
-      .replace(/\b\w/g, (c) => c.toUpperCase());
-  }
-
-  function formatearFecha(fechaStr) {
-    const f = new Date(fechaStr);
-    return f.toLocaleDateString("es-ES");
-  }
-
-  function formatearHora(fechaStr) {
-    const f = new Date(fechaStr);
-    return f.toLocaleTimeString("es-ES", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  }
-
-  // Array con TODOS los reportes traídos del backend
-  let todosReportes = [];
-
-  // =============================
-  //   RENDER DE TARJETAS
-  // =============================
-  function renderReportes(lista) {
-    const contenedor = document.getElementById("lista-reportes");
-    if (!contenedor) return;
-
-    contenedor.innerHTML = "";
-
-    if (!lista || lista.length === 0) {
-      contenedor.innerHTML =
-        '<p class="text-center text-slate-500 text-sm">No hay reportes para mostrar con los filtros actuales.</p>';
-      return;
+    // Formatear fecha
+    function formatearFecha(fechaStr) {
+        const fecha = new Date(fechaStr);
+        return fecha.toLocaleDateString("es-ES");
     }
 
-    lista.forEach((rep) => {
-      const estadoTexto = mappingTextoNum[rep.id_estado] || "Pendiente";
-      const estadoClase = clasesEstado[estadoTexto];
-      const tipoProblemaLegible = mapTipoProblema(rep.tipo_reporte);
-      const valorSelect = valorSelectEstado(rep.id_estado);
-
-      const item = `
-        <article class="rounded-xl border border-slate-200 bg-white px-6 py-4 shadow-sm mb-4">
-          <div class="flex flex-col gap-3">
-            
-            <!-- Fila superior: título + estado + dropdown -->
-            <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-              <div>
-                <h2 class="text-base font-semibold text-slate-900">
-                  Reporte #${rep.folio}
-                </h2>
-                <p class="text-xs text-slate-500">ID interno: ${rep.id_reporte}</p>
-              </div>
-
-              <div class="flex items-center gap-3 self-start md:self-auto">
-                <span
-                  class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${estadoClase}"
-                >
-                  ${estadoTexto}
-                </span>
-
-                <!-- Select para cambiar estado -->
-                <select
-                  class="estado-select block w-28 rounded-full border border-slate-300 px-3 py-1 text-xs focus:border-blue-500 focus:ring-blue-500"
-                  onchange="cambiarEstado(${rep.id_reporte}, this.value)"
-                >
-                  <option value="">Cambiar…</option>
-                  <option value="en_proceso" ${
-                    valorSelect === "en_proceso" ? "selected" : ""
-                  }>En proceso</option>
-                  <option value="resuelto" ${
-                    valorSelect === "resuelto" ? "selected" : ""
-                  }>Resuelto</option>
-                  <option value="descartado" ${
-                    valorSelect === "descartado" ? "selected" : ""
-                  }>Descartado</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- Detalles del reporte -->
-            <div class="mt-2 grid gap-4 text-sm md:grid-cols-3">
-              <div>
-                <p class="font-medium text-slate-700">Fecha</p>
-                <p class="text-slate-600">
-                  ${formatearFecha(rep.fecha_creacion)} — ${formatearHora(
-        rep.fecha_creacion
-      )}
-                </p>
-
-                <p class="mt-3 font-medium text-slate-700">Prioridad</p>
-                <p class="text-slate-600 capitalize">
-                    ${prioridadLegible[rep.prioridad_asignada] || "-"}
-                </p>
-
-              </div>
-
-              <div>
-                <p class="font-medium text-slate-700">Tipo de problema</p>
-                <p class="text-slate-600">${tipoProblemaLegible}</p>
-
-                <p class="mt-3 font-medium text-slate-700">Número de cuenta</p>
-                <p class="text-slate-600">${rep.numero_cuenta || "-"}</p>
-              </div>
-
-              <div>
-                <p class="font-medium text-slate-700">Ubicación</p>
-                <p class="text-slate-600">
-                    ${mostrarEdificio(rep.edificio)}<br />
-                    Género: ${rep.sexo || "-"}
-                </p>
-
-
-            <!-- Botón de ver detalles -->
-            <div class="pt-3 flex justify-end">
-              <button
-                class="text-xs font-medium text-primary hover:underline"
-                onclick="verDetalles('${rep.folio}')"
-              >
-                Ver detalles
-              </button>
-            </div>
-          </div>
-        </article>
-      `;
-
-      contenedor.innerHTML += item;
-    });
-  }
-
-  // =============================
-  //   FILTROS (folio/estado/edificio/fecha)
-  // =============================
-  function aplicarFiltros() {
-    if (!todosReportes.length) {
-      renderReportes([]);
-      return;
+    // Formatear hora
+    function formatearHora(fechaStr) {
+        const fecha = new Date(fechaStr);
+        return fecha.toLocaleTimeString("es-ES", { hour: '2-digit', minute: '2-digit' });
     }
 
-    const inputFolio = document.getElementById("search-folio");
-    const selectEstado = document.getElementById("filter-estado");
-    const selectEdificio = document.getElementById("filter-edificio");
-    const selectFecha = document.getElementById("filter-fecha");
+    // =============================
+    //   CARGAR LISTA DE REPORTES
+    // =============================
+    async function cargarReportes() {
+        try {
+            const response = await fetch(apiConfig.endpoint('/reportes'));
+            if (!response.ok) throw new Error("No se pudieron cargar los reportes");
 
-    const folioValue = inputFolio ? inputFolio.value.trim().toLowerCase() : "";
-    const estadoValue = selectEstado ? selectEstado.value : "todos";
-    const edificioValue = selectEdificio ? selectEdificio.value : "todos";
-    const fechaValue = selectFecha ? selectFecha.value : "todas";
+            const reportes = await response.json();
+            console.log("Reportes cargados:", reportes);
 
-    // calculamos "desde" según la opción de fecha
-    let desde = null;
-    if (fechaValue === "hoy") {
-      const hoy = new Date();
-      hoy.setHours(0, 0, 0, 0);
-      desde = hoy;
-    } else if (fechaValue === "ultima_semana") {
-      const d = new Date();
-      d.setDate(d.getDate() - 7);
-      d.setHours(0, 0, 0, 0);
-      desde = d;
-    } else if (fechaValue === "ultimo_mes") {
-      const d = new Date();
-      d.setMonth(d.getMonth() - 1);
-      d.setHours(0, 0, 0, 0);
-      desde = d;
+            const contenedor = document.getElementById("lista-reportes");
+            contenedor.innerHTML = "";
+
+            reportes.forEach(rep => {
+
+                const estadoTexto = mappingTextoNum[rep.id_estado] || "Pendiente";
+                const estadoClase = clasesEstado[estadoTexto];
+
+                const item = `
+                <article class="bg-white rounded-lg shadow-sm overflow-hidden">
+
+                    <header class="p-4 border-b border-slate-200 flex justify-between items-center">
+                        <h2 class="font-semibold text-slate-900">
+                            Reporte ${rep.folio}
+                        </h2>
+                        <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${estadoClase}">
+                            ${estadoTexto}
+                        </span>
+                    </header>
+
+                    <div class="p-4 grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+                        <div>
+                            <p class="font-medium text-slate-500">Fecha</p>
+                            <p>${formatearFecha(rep.fecha_creacion)}</p>
+                        </div>
+
+                        <div>
+                            <p class="font-medium text-slate-500">Hora</p>
+                            <p>${formatearHora(rep.fecha_creacion)}</p>
+                        </div>
+
+                        <div>
+                            <p class="font-medium text-slate-500">Problema</p>
+                            <p>${rep.tipo_reporte}</p>
+                        </div>
+
+                        <div>
+                            <p class="font-medium text-slate-500">Ubicación</p>
+                            <p>${rep.edificio}, ${rep.sexo}</p>
+                        </div>
+                    </div>
+
+                    <footer class="px-4 py-3 bg-slate-50 flex justify-between items-center text-sm">
+                        <button class="font-medium text-primary hover:underline" onclick="verDetalles('${rep.folio}')">
+                            Ver detalles
+                        </button>
+
+                        <div class="flex items-center gap-2">
+                            <button onclick="cambiarEstado(${rep.id_reporte}, 'en_proceso')"
+                                class="px-2 py-1 rounded bg-yellow-200 text-yellow-800 hover:bg-yellow-300 text-xs">
+                                En proceso
+                            </button>
+
+                            <button onclick="cambiarEstado(${rep.id_reporte}, 'resuelto')"
+                                class="px-2 py-1 rounded bg-green-200 text-green-800 hover:bg-green-300 text-xs">
+                                Resuelto
+                            </button>
+
+                            <button onclick="cambiarEstado(${rep.id_reporte}, 'descartado')"
+                                class="px-2 py-1 rounded bg-slate-200 text-slate-800 hover:bg-slate-300 text-xs">
+                                Descartado
+                            </button>
+                        </div>
+                    </footer>
+                </article>
+                `;
+
+                contenedor.innerHTML += item;
+            });
+
+        } catch (err) {
+            console.error(err);
+            showToast("Error al cargar reportes", "error");
+        }
     }
 
-    let filtrados = todosReportes.filter((r) => {
-      // folio
-      if (folioValue && !r.folio.toLowerCase().includes(folioValue)) {
-        return false;
-      }
-
-      // estado
-      if (estadoValue !== "todos" && r.id_estado !== Number(estadoValue)) {
-        return false;
-      }
-
-      // edificio
-      if (edificioValue !== "todos" && r.edificio !== edificioValue) {
-        return false;
-      }
-
-      // fecha mínima
-      if (desde) {
-        const fechaRep = new Date(r.fecha_creacion);
-        if (fechaRep < desde) return false;
-      }
-
-      return true;
-    });
-
-    // ordenar del más reciente al más antiguo
-    filtrados.sort(
-      (a, b) =>
-        new Date(b.fecha_creacion).getTime() -
-        new Date(a.fecha_creacion).getTime()
-    );
-
-    renderReportes(filtrados);
-  }
-
-  // =============================
-  //   PETICIONES AL BACKEND
-  // =============================
-  async function cargarReportes() {
-    try {
-      const res = await fetch("http://127.0.0.1:8000/reportes");
-      if (!res.ok) throw new Error("No se pudieron cargar los reportes");
-
-      todosReportes = await res.json();
-      console.log("Reportes cargados:", todosReportes);
-      aplicarFiltros();
-    } catch (err) {
-      console.error(err);
-      const contenedor =
-        document.getElementById("lista-reportes") ||
-        document.getElementById("reports-container");
-      if (contenedor) {
-        contenedor.innerHTML =
-          '<p class="text-center text-red-500 text-sm">Error al cargar reportes. Revisa el servidor.</p>';
-      }
-    }
-  }
-
-  // =============================
-  //   EVENTOS DE FILTROS
-  // =============================
-  const inputFolio = document.getElementById("search-folio");
-  const selectEstado = document.getElementById("filter-estado");
-  const selectEdificio = document.getElementById("filter-edificio");
-  const selectFecha = document.getElementById("filter-fecha");
-  const btnLimpiar = document.getElementById("btn-limpiar-filtros");
-
-  if (inputFolio) inputFolio.addEventListener("input", aplicarFiltros);
-  if (selectEstado) selectEstado.addEventListener("change", aplicarFiltros);
-  if (selectEdificio) selectEdificio.addEventListener("change", aplicarFiltros);
-  if (selectFecha) selectFecha.addEventListener("change", aplicarFiltros);
-
-  if (btnLimpiar) {
-    btnLimpiar.addEventListener("click", () => {
-      if (inputFolio) inputFolio.value = "";
-      if (selectEstado) selectEstado.value = "todos";
-      if (selectEdificio) selectEdificio.value = "todos";
-      if (selectFecha) selectFecha.value = "todas";
-      aplicarFiltros();
-    });
-  }
-
-  // Cargar reportes al abrir
-  cargarReportes();
+    // Cargar reportes al abrir
+    cargarReportes();
 });
+
 
 // =============================
 //    CAMBIAR ESTADO REPORTE
 // =============================
 async function cambiarEstado(id_reporte, estadoTexto) {
-  if (!estadoTexto) return;
 
-  const bodyData = { estado: estadoTexto };
+    const estados = {
+        "en_proceso": 2,
+        "resuelto": 3,
+        "descartado": 4
+    };
 
-  try {
-    const response = await fetch(
-      `http://127.0.0.1:8000/reportes/${id_reporte}/estado-simple`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(bodyData),
-      }
-    );
+    const nuevoEstado = estados[estadoTexto];
 
-    if (!response.ok) {
-      const error = await response.text();
-      console.error("Error al cambiar estado:", error);
-      return;
+    try {
+        const response = await fetch(apiConfig.endpoint(`/reportes/${id_reporte}/estado-simple`), {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nuevo_estado: nuevoEstado })
+        });
+
+        if (!response.ok) {
+            const text = await response.text();
+            console.error("Error response:", text);
+            showToast("Error al cambiar estado", "error");
+            return;
+        }
+
+        showToast("Estado actualizado correctamente", "success");
+        location.reload();
+
+    } catch (err) {
+        console.error(err);
+        showToast("Error en la solicitud", "error");
     }
-
-    console.log("Estado actualizado correctamente");
-    location.reload();
-  } catch (err) {
-    console.error("Error en la solicitud:", err);
-  }
 }
+
 
 // =============================
 //      VER DETALLES (MODAL)
 // =============================
 async function verDetalles(folio) {
-  try {
-    const res = await fetch(
-      `http://127.0.0.1:8000/reportes/folio/${folio}`
-    );
+    try {
+        const res = await fetch(apiConfig.endpoint(`/reportes/folio/${folio}`));
+        if (!res.ok) throw new Error("No se pudo cargar el reporte");
 
-    if (!res.ok) {
-      const txt = await res.text();
-      console.error("Error HTTP al obtener detalles:", res.status, txt);
-      alert("Error al cargar detalles");
-      return;
-    }
+        const rep = await res.json();
 
-    let data = await res.json();
-    // Por si el backend regresa una lista en lugar de un solo objeto
-    const rep = Array.isArray(data) ? data[0] : data;
+        const modal = document.getElementById("modal-detalle");
+        const cont = document.getElementById("contenido-detalle");
 
-    if (!rep) {
-      console.error("No se encontró el reporte para el folio", folio);
-      alert("No se encontró el reporte");
-      return;
-    }
-
-    const modal = document.getElementById("modal-detalle");
-    const cont = document.getElementById("contenido-detalle");
-    if (!modal || !cont) {
-      console.error("No se encontró el modal o el contenedor de detalles");
-      return;
-    }
-
-    // Construir URL de imagen
-    let imagenHTML = "";
-    if (rep.imagen_url) {
-      let imgUrl = rep.imagen_url;
-
-      // Si no viene una URL absoluta, armamos una
-      if (!imgUrl.startsWith("http")) {
-        if (imgUrl.startsWith("uploads/")) {
-          // Ya trae la carpeta
-          imgUrl = `http://127.0.0.1:8000/${imgUrl}`;
-        } else {
-          // Solo guardaron el nombre del archivo
-          imgUrl = `http://127.0.0.1:8000/uploads/${imgUrl}`;
+        // Construimos la URL completa SOLO si existe una imagen
+        let imagenHTML = "";
+        if (rep.imagen_url) {
+            const urlCompleta = apiConfig.endpoint(`/uploads/${rep.imagen_url}`);
+            imagenHTML = `<img src="${urlCompleta}" class="w-full rounded mt-3 border shadow">`;
         }
-      }
 
-      imagenHTML = `
-        <div class="mt-4">
-          <p class="font-medium text-slate-700 mb-1">Imagen adjunta:</p>
-          <img
-            src="${imgUrl}"
-            alt="Imagen del reporte"
-            class="w-full max-h-80 object-contain rounded-lg border border-slate-200 shadow-sm"
-          />
-        </div>
-      `;
+        cont.innerHTML = `
+            <p><strong>Folio:</strong> ${rep.folio}</p>
+            <p><strong>Problema:</strong> ${rep.tipo_reporte}</p>
+            <p><strong>Edificio:</strong> ${rep.edificio}</p>
+            <p><strong>Pasillo:</strong> ${rep.pasillo}</p>
+            <p><strong>Sexo:</strong> ${rep.sexo}</p>
+            <p><strong>Fecha:</strong> ${rep.fecha_creacion}</p>
+
+            ${imagenHTML}
+        `;
+
+        modal.classList.remove("hidden");
+
+    } catch (err) {
+        console.error(err);
+        showToast("Error al cargar detalles", "error");
     }
-
-    // Utilidad simple para el tipo de problema
-    const tipoLegible = (code) => {
-      if (!code) return "-";
-      const map = {
-        no_papel: "Falta de papel",
-        taza_tapada: "WC tapado",
-        fuga: "Fuga de agua",
-        sanitario_sucio: "Sanitario sucio",
-        orinal_tapado: "Mingitorio tapado",
-        no_jabon: "Falta de jabón",
-      };
-      if (map[code]) return map[code];
-      return code
-        .replace(/_/g, " ")
-        .replace(/\b\w/g, (c) => c.toUpperCase());
-    };
-
-    cont.innerHTML = `
-      <p><strong>Folio:</strong> ${rep.folio}</p>
-      <p><strong>Tipo de problema:</strong> ${tipoLegible(
-        rep.tipo_reporte || rep.tipo_problema
-      )}</p>
-      <p><strong>Edificio:</strong> ${rep.edificio || "-"}</p>
-      <p><strong>Baño:</strong> ${rep.sexo || "-"}</p>
-      <p><strong>Fecha:</strong> ${rep.fecha_creacion || "-"}</p>
-      <p><strong>Número de cuenta:</strong> ${
-        rep.numero_cuenta || "ANONIMO"
-      }</p>
-      ${imagenHTML}
-    `;
-
-    modal.classList.remove("hidden");
-  } catch (err) {
-    console.error("Error al cargar detalles:", err);
-    alert("Error al cargar detalles");
-  }
 }
+
+
 
 // =============================
 //          CERRAR MODAL
 // =============================
 function cerrarModal() {
-  const modal = document.getElementById("modal-detalle");
-  if (modal) modal.classList.add("hidden");
+    document.getElementById("modal-detalle").classList.add("hidden");
+}
+
+// =============================
+//   DESCARGAR REPORTES EXCEL
+// =============================
+async function descargarReportesExcel(tipo) {
+    try {
+        let url = apiConfig.endpoint('/reportes/descargar/');
+        
+        if (tipo === "todos") {
+            url += "todos";
+        } else if (tipo === "edificio") {
+            const edificio = document.getElementById("edificio-descarga").value;
+            if (!edificio) {
+                showToast("Por favor selecciona un edificio", "error");
+                return;
+            }
+            url += `edificio/${edificio}`;
+        } else if (tipo === "prioridad") {
+            const prioridad = document.getElementById("prioridad-descarga").value;
+            if (!prioridad) {
+                showToast("Por favor selecciona una prioridad", "error");
+                return;
+            }
+            url += `prioridad/${prioridad}`;
+        } else if (tipo === "fecha") {
+            const fecha = document.getElementById("fecha-descarga").value;
+            if (!fecha) {
+                showToast("Por favor selecciona una fecha", "error");
+                return;
+            }
+            url += `fecha/${fecha}`;
+        }
+
+        // Descargar el archivo
+        const response = await fetch(url);
+        if (!response.ok) {
+            const errorText = await response.text();
+            showToast("Error: " + (errorText || "No se pudo descargar el archivo"), "error");
+            return;
+        }
+
+        // Crear blob y descargar
+        const blob = await response.blob();
+        const urlBlob = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = urlBlob;
+        
+        // Generar nombre de archivo con fecha/hora
+        const ahora = new Date().toLocaleString("es-ES").replace(/[/:,\s]/g, "_");
+        let nombreArchivo = "reportes.xlsx";
+        
+        if (tipo === "todos") {
+            nombreArchivo = `reportes_todos_${ahora}.xlsx`;
+        } else if (tipo === "edificio") {
+            const edificio = document.getElementById("edificio-descarga").value;
+            nombreArchivo = `reportes_${edificio}_${ahora}.xlsx`;
+        } else if (tipo === "prioridad") {
+            const prioridad = document.getElementById("prioridad-descarga").value;
+            nombreArchivo = `reportes_prioridad_${prioridad}_${ahora}.xlsx`;
+        } else if (tipo === "fecha") {
+            const fecha = document.getElementById("fecha-descarga").value;
+            nombreArchivo = `reportes_fecha_${fecha}_${ahora}.xlsx`;
+        }
+        
+        a.download = nombreArchivo;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(urlBlob);
+        document.body.removeChild(a);
+
+            showToast("Archivo descargado exitosamente", "success");
+
+    } catch (err) {
+        console.error(err);
+        showToast("Error al descargar el archivo", "error");
+    }
+}
+
+
+// =============================
+//          TOASTS (NOTIFICACIONES)
+// =============================
+function showToast(message, type = "success", duration = 4000) {
+    // Crear contenedor si no existe
+    let container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        container.className = 'fixed top-6 right-6 z-50 flex flex-col gap-3 items-end';
+        document.body.appendChild(container);
+    }
+
+    const colorMap = {
+        success: 'bg-green-600 text-white',
+        error: 'bg-red-600 text-white',
+        info: 'bg-slate-700 text-white'
+    };
+
+    const toast = document.createElement('div');
+    toast.className = `${colorMap[type] || colorMap.info} px-4 py-2 rounded-lg shadow-lg max-w-xs transform transition-all duration-300`;
+    toast.style.opacity = '0';
+    toast.style.marginTop = '6px';
+
+    toast.innerHTML = `
+        <div class="flex items-center gap-3">
+            <div class="flex-shrink-0">
+                ${type === 'success' ? '<span class="material-icons">check_circle</span>' : '<span class="material-icons">error</span>'}
+            </div>
+            <div class="text-sm">${message}</div>
+        </div>
+    `;
+
+    container.appendChild(toast);
+
+    // force reflow then show
+    requestAnimationFrame(() => {
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateY(0)';
+    });
+
+    // Remover después del tiempo
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-10px)';
+        setTimeout(() => {
+            if (toast && toast.parentNode) toast.parentNode.removeChild(toast);
+        }, 300);
+    }, duration);
 }
