@@ -50,11 +50,8 @@ def generar_folio(db: Session):
     ).count()
     consecutivo = str(count + 1).zfill(4)
     return f"INC-{fecha}-{consecutivo}"
-
-
-# Si en el frontend envías grupos (A1-A2 etc.) y en tu BD también hay filas
-# con esos mismos strings, podemos mapearlos directamente.
-# Si en algún momento prefieres mapear "A1-A2" -> ["A-1","A-2"] hazlo aquí.
+    
+# Mapeo de grupos de edificios a edificios individuales
 GRUPOS_A_EDIFICIOS = {
     "A1-A2": ["A1-A2"],
     "A3-A4": ["A3-A4"],

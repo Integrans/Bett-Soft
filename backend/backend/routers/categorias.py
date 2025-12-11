@@ -4,7 +4,6 @@ from database.connection import SessionLocal
 from database.models import CategoriaIncidente
 from schemas.categorias_schema import CategoriaResponse
 
-# YA NO LLEVA prefix AQUÍ
 router = APIRouter(prefix="/categorias", tags=["Categorías"])
 
 # --------------------------------------------

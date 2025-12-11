@@ -8,20 +8,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const sexoSelect = document.getElementById("select-sexo");
     const form = document.getElementById("reporte-form");
 
-    // Cámara / preview elements (según tu reportar.html)
     const video = document.getElementById("video");
     const canvas = document.getElementById("canvas");
     const btnStart = document.getElementById("btn-start");
     const btnTake = document.getElementById("btn-take");
     const btnRetake = document.getElementById("btn-retake");
     const btnConfirm = document.getElementById("btn-confirm");
-    const fileFallback = document.getElementById("file-fallback"); // input name="file_upload"
+    const fileFallback = document.getElementById("file-fallback");
 
     // Estado de la cámara
     let stream = null;
     let currentPhotoBlob = null; // Blob de la foto confirmada (si la hay)
 
-    // reglas de edificios -> qué sexo hay en cada nivel
     const reglas = {
         "A1-A2": { niveles: { 1: "M", 2: "H" } },
         "A3-A4": { niveles: { 1: "M", 2: "H" } },
@@ -139,7 +137,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (btnRetake) btnRetake.classList.remove("hidden");
     }
 
-    // Inicia stream desde cámara (permite cámara trasera con facingMode 'environment')
     async function startCamera() {
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
             console.warn("getUserMedia no soportado en este navegador");
@@ -190,8 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }, "image/jpeg", quality);
         });
     }
-
-    // ---------- Wiring de botones (si existen en DOM) ----------
+    // ---------- Cámara: listeners ----------
     if (btnStart) {
         btnStart.addEventListener("click", async () => {
             await startCamera();

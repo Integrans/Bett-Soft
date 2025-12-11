@@ -17,8 +17,7 @@ app = FastAPI(
     description="API para reportes de baños en la FES Acatlán",
     version="1.0.0"
 )
-
-# 🔥 SERVIR ARCHIVOS ESTÁTICOS (IMÁGENES)
+# Servir archivos estáticos (uploads)
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 # CORS

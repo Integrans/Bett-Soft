@@ -1,6 +1,5 @@
 from passlib.context import CryptContext
 
-# Usar argon2 instead of bcrypt to avoid compatibility issues
 pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 
 def hash_password(password: str) -> str:

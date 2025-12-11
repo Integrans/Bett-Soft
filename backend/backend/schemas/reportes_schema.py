@@ -15,7 +15,6 @@ class ReporteCreate(BaseModel):
     pasillo: str
     numero_cuenta: Optional[str] = None
     es_anonimo: bool = False
-    # file_upload se maneja directamente en FastAPI, no aquí
 
 # ---------------------------------------------------------
 # Schema de salida (respuesta)
