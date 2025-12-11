@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         } catch (err) {
             console.error(err);
-            alert("Error al cargar reportes");
+            showToast("No se pudieron cargar los reportes.", "error");
         }
     }
 
@@ -143,16 +143,16 @@ async function cambiarEstado(id_reporte, estadoTexto) {
         if (!response.ok) {
             const text = await response.text();
             console.error("Error response:", text);
-            alert("Error al cambiar estado");
+            showToast("No se pudo cambiar el estado del reporte.", "error");
             return;
         }
 
-        alert("Estado actualizado correctamente");
+        showToast("Estado actualizado correctamente.", "success");
         location.reload();
 
     } catch (err) {
         console.error(err);
-        alert("Error en la solicitud");
+        showToast("Ocurrió un error al comunicarse con el servidor.", "error");
     }
 }
 
@@ -192,7 +192,7 @@ async function verDetalles(folio) {
 
     } catch (err) {
         console.error(err);
-        alert("Error al cargar detalles");
+        showToast("No se pudieron cargar los detalles del reporte.", "error");
     }
 }
 
