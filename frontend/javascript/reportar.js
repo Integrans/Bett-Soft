@@ -321,7 +321,9 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             if (resp.ok) {
-                showToast("Reporte enviado con éxito.", "success");
+                const responseData = await resp.json();
+                const folio = responseData.folio || "N/A";
+                showToast(`Reporte #${folio} enviado con éxito.`, "success");
                 // limpiar estado UI
                 form.reset();
                 currentPhotoBlob = null;

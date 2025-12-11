@@ -10,22 +10,46 @@ function showToast(message, type = "success", duration = 4000) {
     }
 
     const colorMap = {
-        success: 'bg-green-600 text-white',
-        error: 'bg-red-600 text-white',
-        info: 'bg-slate-700 text-white'
+        success: {
+            bg: 'bg-emerald-50',
+            border: 'border-l-4 border-emerald-500',
+            text: 'text-emerald-900',
+            icon: 'text-emerald-600',
+            iconBg: 'bg-emerald-100'
+        },
+        error: {
+            bg: 'bg-red-50',
+            border: 'border-l-4 border-red-500',
+            text: 'text-red-900',
+            icon: 'text-red-600',
+            iconBg: 'bg-red-100'
+        },
+        info: {
+            bg: 'bg-blue-50',
+            border: 'border-l-4 border-blue-500',
+            text: 'text-blue-900',
+            icon: 'text-blue-600',
+            iconBg: 'bg-blue-100'
+        }
     };
 
+    const colors = colorMap[type] || colorMap.info;
     const toast = document.createElement('div');
-    toast.className = `${colorMap[type] || colorMap.info} px-4 py-2 rounded-lg shadow-lg max-w-xs transform transition-all duration-300`;
+    toast.className = `${colors.bg} ${colors.border} ${colors.text} px-5 py-4 rounded-md shadow-xl shadow-black/20 max-w-sm transform transition-all duration-300 backdrop-blur-sm border border-opacity-20 ${colors.border.split(' ')[1].split('-')[0] === 'border' ? '' : ''}`;
     toast.style.opacity = '0';
     toast.style.marginTop = '6px';
+    toast.style.boxShadow = '0 10px 35px rgba(0, 0, 0, 0.15)';
 
     toast.innerHTML = `
-        <div class="flex items-center gap-3">
-            <div class="flex-shrink-0">
-                ${type === 'success' ? '<span class="material-icons">check_circle</span>' : '<span class="material-icons">error</span>'}
+        <div class="flex items-start gap-4">
+            <div class="flex-shrink-0 ${colors.iconBg} rounded-full p-2.5 mt-0.5">
+                <span class="material-icons text-lg ${colors.icon}">
+                    ${type === 'success' ? 'check_circle' : type === 'error' ? 'error' : 'info'}
+                </span>
             </div>
-            <div class="text-sm">${message}</div>
+            <div class="flex-1">
+                <p class="text-sm font-medium">${message}</p>
+            </div>
         </div>
     `;
 
