@@ -14,12 +14,12 @@ async function enviarReporte(formData) {
             throw new Error(data.detail || "Error al enviar el reporte");
         }
 
-        alert("Reporte creado con folio: " + data.folio);
+        showToast("Reporte creado con folio: " + data.folio, "success");
         return data;
 
     } catch (error) {
         console.error("Error:", error);
-        alert("Error al enviar el reporte");
+        showToast("Error al enviar el reporte", "error");
     }
 }
 

@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         } catch (err) {
             console.error(err);
-            alert("Error al cargar reportes");
+            showToast("Error al cargar reportes", "error");
         }
     }
 
@@ -143,16 +143,16 @@ async function cambiarEstado(id_reporte, estadoTexto) {
         if (!response.ok) {
             const text = await response.text();
             console.error("Error response:", text);
-            alert("Error al cambiar estado");
+            showToast("Error al cambiar estado", "error");
             return;
         }
 
-        alert("Estado actualizado correctamente");
+        showToast("Estado actualizado correctamente", "success");
         location.reload();
 
     } catch (err) {
         console.error(err);
-        alert("Error en la solicitud");
+        showToast("Error en la solicitud", "error");
     }
 }
 
@@ -192,7 +192,7 @@ async function verDetalles(folio) {
 
     } catch (err) {
         console.error(err);
-        alert("Error al cargar detalles");
+        showToast("Error al cargar detalles", "error");
     }
 }
 
@@ -217,21 +217,21 @@ async function descargarReportesExcel(tipo) {
         } else if (tipo === "edificio") {
             const edificio = document.getElementById("edificio-descarga").value;
             if (!edificio) {
-                alert("Por favor selecciona un edificio");
+                showToast("Por favor selecciona un edificio", "error");
                 return;
             }
             url += `edificio/${edificio}`;
         } else if (tipo === "prioridad") {
             const prioridad = document.getElementById("prioridad-descarga").value;
             if (!prioridad) {
-                alert("Por favor selecciona una prioridad");
+                showToast("Por favor selecciona una prioridad", "error");
                 return;
             }
             url += `prioridad/${prioridad}`;
         } else if (tipo === "fecha") {
             const fecha = document.getElementById("fecha-descarga").value;
             if (!fecha) {
-                alert("Por favor selecciona una fecha");
+                showToast("Por favor selecciona una fecha", "error");
                 return;
             }
             url += `fecha/${fecha}`;
@@ -241,7 +241,7 @@ async function descargarReportesExcel(tipo) {
         const response = await fetch(url);
         if (!response.ok) {
             const errorText = await response.text();
-            alert("Error: " + errorText || "No se pudo descargar el archivo");
+            showToast("Error: " + (errorText || "No se pudo descargar el archivo"), "error");
             return;
         }
 
@@ -274,10 +274,62 @@ async function descargarReportesExcel(tipo) {
         window.URL.revokeObjectURL(urlBlob);
         document.body.removeChild(a);
 
-        alert("✅ Archivo descargado exitosamente");
+            showToast("Archivo descargado exitosamente", "success");
 
     } catch (err) {
         console.error(err);
-        alert("❌ Error al descargar el archivo");
+        showToast("Error al descargar el archivo", "error");
     }
+}
+
+
+// =============================
+//          TOASTS (NOTIFICACIONES)
+// =============================
+function showToast(message, type = "success", duration = 4000) {
+    // Crear contenedor si no existe
+    let container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        container.className = 'fixed top-6 right-6 z-50 flex flex-col gap-3 items-end';
+        document.body.appendChild(container);
+    }
+
+    const colorMap = {
+        success: 'bg-green-600 text-white',
+        error: 'bg-red-600 text-white',
+        info: 'bg-slate-700 text-white'
+    };
+
+    const toast = document.createElement('div');
+    toast.className = `${colorMap[type] || colorMap.info} px-4 py-2 rounded-lg shadow-lg max-w-xs transform transition-all duration-300`;
+    toast.style.opacity = '0';
+    toast.style.marginTop = '6px';
+
+    toast.innerHTML = `
+        <div class="flex items-center gap-3">
+            <div class="flex-shrink-0">
+                ${type === 'success' ? '<span class="material-icons">check_circle</span>' : '<span class="material-icons">error</span>'}
+            </div>
+            <div class="text-sm">${message}</div>
+        </div>
+    `;
+
+    container.appendChild(toast);
+
+    // force reflow then show
+    requestAnimationFrame(() => {
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateY(0)';
+    });
+
+    // Remover después del tiempo
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-10px)';
+        setTimeout(() => {
+            if (toast && toast.parentNode) toast.parentNode.removeChild(toast);
+        }, 300);
+    }, duration);
 }

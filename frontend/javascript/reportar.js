@@ -291,7 +291,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Validación mínima (backend también valida)
         if (!tipoProblema || !edificio || nivel === "" || !sexo) {
-            alert("Por favor llena todos los campos obligatorios.");
+            showToast("Por favor llena todos los campos obligatorios.", "error");
             return;
         }
 
@@ -325,7 +325,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             if (resp.ok) {
-                alert("Reporte enviado con éxito.");
+                showToast("Reporte enviado con éxito.", "success");
                 // limpiar estado UI
                 form.reset();
                 currentPhotoBlob = null;
@@ -346,11 +346,11 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 const txt = await resp.text().catch(()=>null);
                 console.error("Error del servidor:", txt || resp.status);
-                alert("Error al enviar reporte. Revisa la consola para más detalle.");
+                showToast("Error al enviar reporte. Revisa la consola para más detalle.", "error");
             }
         } catch (err) {
             console.error("Error al enviar:", err);
-            alert("No se pudo conectar con el servidor.");
+            showToast("No se pudo conectar con el servidor.", "error");
         }
     });
 

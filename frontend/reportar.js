@@ -87,39 +87,37 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log("Respuesta backend:", respuestaJson);
 
       if (!response.ok) {
-  let mensajeError = "Error al enviar el reporte. Revisa la consola.";
+      let mensajeError = "Error al enviar el reporte. Revisa la consola.";
 
-  if (respuestaJson && respuestaJson.detail) {
-    // detail puede ser string o lista (FastAPI/Pydantic)
-    const detalle =
-      typeof respuestaJson.detail === "string"
-        ? respuestaJson.detail
-        : JSON.stringify(respuestaJson.detail);
+      if (respuestaJson && respuestaJson.detail) {
+        const detalle =
+          typeof respuestaJson.detail === "string"
+            ? respuestaJson.detail
+            : JSON.stringify(respuestaJson.detail);
 
-    // Si el backend mandó "Baño no válido"
-    if (detalle.toLowerCase().includes("baño no válido") ||
-        detalle.toLowerCase().includes("baño no valido")) {
-      mensajeError = "Baño no válido. Verifica el edificio y el baño seleccionados.";
-    } else {
-      // Si quieres mostrar cualquier otro detail:
-      mensajeError = detalle;
+        if (detalle.toLowerCase().includes("baño no válido") ||
+            detalle.toLowerCase().includes("baño no valido")) {
+          mensajeError = "Baño no válido. Verifica el edificio y el baño seleccionados.";
+        } else {
+          mensajeError = detalle;
+        }
+      }
+
+      showToast(mensajeError, "error");
+      return;
     }
-  }
-
-  alert(mensajeError);
-  return;
-}
 
 
       const folio = respuestaJson?.folio || "SIN_FOLIO";
-      alert(`Reporte enviado correctamente. Folio: ${folio}`);
+      showToast(`Reporte enviado correctamente. Folio: ${folio}`, "success");
 
       // Limpiar formulario
       form.reset();
     } catch (error) {
       console.error("Error de conexión:", error);
-      alert(
-        "No se pudo conectar con el servidor. ¿Está corriendo en 127.0.0.1:8000?"
+      showToast(
+        "No se pudo conectar con el servidor. ¿Está corriendo en 127.0.0.1:8000?",
+        "error"
       );
     }
   });

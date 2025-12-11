@@ -3,6 +3,7 @@ from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 from typing import List
 from datetime import datetime
+from enum import Enum as PyEnum
 import os
 
 def generar_excel_reportes(reportes: List, nombre_archivo: str = None) -> str:
@@ -62,6 +63,34 @@ def generar_excel_reportes(reportes: List, nombre_archivo: str = None) -> str:
     # Ajustar altura de encabezado
     ws.row_dimensions[1].height = 25
     
+    # Helper para formatear valores que no son directamente compatibles con openpyxl
+    def _format_cell_value(value):
+        if value is None:
+            return ""
+        # datetime -> string legible
+        if isinstance(value, datetime):
+            return value.strftime("%Y-%m-%d %H:%M:%S")
+        # Enums (Python enum.Enum) -> su valor o nombre
+        if isinstance(value, PyEnum):
+            return value.value if hasattr(value, 'value') else str(value)
+        # Algunos ORM devuelven objetos con atributo .value
+        if hasattr(value, 'value') and not isinstance(value, (str, int, float, bool)):
+            try:
+                return value.value
+            except Exception:
+                pass
+        # booleanos a Sí/No para legibilidad (opcional)
+        if isinstance(value, bool):
+            return "Sí" if value else "No"
+        # bytes -> decodificar
+        if isinstance(value, (bytes, bytearray)):
+            try:
+                return value.decode('utf-8')
+            except Exception:
+                return str(value)
+        # fallback
+        return value
+
     # Llenar datos
     for row_num, reporte in enumerate(reportes, 2):
         datos = [
@@ -78,10 +107,10 @@ def generar_excel_reportes(reportes: List, nombre_archivo: str = None) -> str:
             getattr(reporte, 'estado', ''),
             getattr(reporte, 'observaciones', '')
         ]
-        
+
         for col_num, valor in enumerate(datos, 1):
             celda = ws.cell(row=row_num, column=col_num)
-            celda.value = valor
+            celda.value = _format_cell_value(valor)
             celda.alignment = Alignment(horizontal="left", vertical="center")
             celda.border = borde
     

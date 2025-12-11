@@ -77,15 +77,16 @@ async function actualizarEstado(folio, nuevoEstado) {
         resp.status,
         await resp.text()
       );
-      alert("No se pudo actualizar el estado del reporte. Intenta nuevamente.");
+      showToast("No se pudo actualizar el estado del reporte. Intenta nuevamente.", "error");
       return false;
     }
 
     return true;
-  } catch (err) {
+    } catch (err) {
     console.error("Error de conexión al actualizar estado:", err);
-    alert(
-      "Error de conexión con el servidor al actualizar estado. Verifica el backend."
+    showToast(
+      "Error de conexión con el servidor al actualizar estado. Verifica el backend.",
+      "error"
     );
     return false;
   }
@@ -249,9 +250,9 @@ function aplicarFiltros() {
 async function cargarReportes() {
   try {
     const resp = await fetch(`${API_BASE}/admin/reportes`);
-    if (!resp.ok) {
+      if (!resp.ok) {
       console.error("Error al cargar reportes:", resp.status, await resp.text());
-      alert("Ocurrió un error al cargar los reportes.");
+      showToast("Ocurrió un error al cargar los reportes.", "error");
       return;
     }
 
@@ -259,10 +260,11 @@ async function cargarReportes() {
     allReportes = Array.isArray(data) ? data : [];
 
     aplicarFiltros();
-  } catch (err) {
+    } catch (err) {
     console.error("Error de conexión al cargar reportes:", err);
-    alert(
-      "No se pudo conectar con el servidor al cargar reportes. Verifica que el backend esté encendido."
+    showToast(
+      "No se pudo conectar con el servidor al cargar reportes. Verifica que el backend esté encendido.",
+      "error"
     );
   }
 }

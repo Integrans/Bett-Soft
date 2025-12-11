@@ -40,6 +40,7 @@
       },
     };
   </script>
+  <script src="./javascript/toasts.js"></script>
 </head>
 
 <body class="font-display bg-background-light text-slate-800 antialiased">
@@ -175,15 +176,15 @@
 
       const folio = inputFolio.value.trim();
       if (!folio) {
-        alert("Ingresa un folio");
+        showToast("Ingresa un folio", "error");
         return;
       }
 
       try {
         const response = await fetch(`http://127.0.0.1:8000/reportes/${folio}`);
         if (!response.ok) {
-          if (response.status === 404) alert("Reporte no encontrado");
-          else alert("Error al consultar reporte");
+          if (response.status === 404) showToast("Reporte no encontrado", "info");
+          else showToast("Error al consultar reporte", "error");
           return;
         }
 
@@ -242,7 +243,7 @@
 
       } catch (err) {
         console.error(err);
-        alert("Error al consultar reporte");
+        showToast("Error al consultar reporte", "error");
       }
     });
   </script>
